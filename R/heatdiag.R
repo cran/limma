@@ -3,7 +3,7 @@
 heatDiagram <- function(results,coef,primary=1,names=NULL,treatments=colnames(coef),limit=NULL,orientation="landscape",cex=1,low="green",high="red",ncolors=123,...) {
 #	Heat diagram to display fold changes of genes under different conditions
 #	Gordon Smyth
-#	27 Oct 2002. Last revised 25 Feb 2004.
+#	27 Oct 2002. Last revised 18 Sep 2004.
 
 #	Check input
 	results <- as.matrix(results)
@@ -46,6 +46,10 @@ heatDiagram <- function(results,coef,primary=1,names=NULL,treatments=colnames(co
 	coef <- coef[ord,,drop=FALSE]
 	names <- names[ord]
 	out <- data.frame(Name=names,coef)
+#	Insert white space between up and down
+	nup <- sum(coef[,primary]>=0)
+	coef <- rbind(coef[1:nup,,drop=FALSE],matrix(NA,1,nt),coef[(nup+1):ng,,drop=FALSE])
+	names <- c(names[1:nup],"",names[(nup+1):ng])
 	if(orientation=="portrait") {
 		coef <- t(coef)
 		coef <- coef[,ng:1,drop=FALSE]

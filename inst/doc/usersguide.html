@@ -14,12 +14,13 @@
 <p align="center">Gordon Smyth, Natalie Thorne and James Wettenhall<br>
 The
 Walter and Eliza Hall Institute of Medical Research<br>
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->06 September 2004<!--webbot bot="Timestamp" i-checksum="39501" endspan --></p>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->18 September 2004<!--webbot bot="Timestamp" i-checksum="39506" endspan --></p>
 
 <h2>Table of Contents</h2>
 
 <ol>
   <li><a href="#Introduction">Introduction</a></li>
+  <li>Installation</li>
   <li><a href="#RPreliminaries">A Few Preliminaries on R</a></li>
   <li><a href="#QuickStart">Quick Start</a></li>
   <li><a href="#ReadingInData">Reading Data into Limma</a><ol>
@@ -89,31 +90,6 @@ Bioconductor package affy provides functions for reading and normalizing Affymet
 microarray data. If you are using the affy package, see Section 7.2 and the 
 relevant case studies.</p>
 
-<p>This tutorial was prepared using R Version 1.9.0 for Windows and limma version 1.6.7.
-The latest version of limma, built for the current version of R, is always available from
-<a href="http://bioinf.wehi.edu.au/limma/">http://bioinf.wehi.edu.au/limma</a>. If you are using R on a system with a suitable internet connection and with 
-installation privileges on your computer, you should be able to install limma for the current version of R using</p>
-
-<pre> install.packages(&quot;limma&quot;,contriburl=&quot;http://bioinf.wehi.edu.au/limma&quot;)</pre>
-<p>at the R prompt. The latest version of limma, built for the development version of R, is always available from
-<a href="http://www.bioconductor.org">http://www.bioconductor.org</a> under 
-&quot;Developmental Packages&quot;. Limma is updated frequently, often a couple 
-of times a week. The change-log is the file changelog.txt in the /doc directory 
-of the limma package installation. To display the first 20 lines of the 
-change-log, type the following at the R prompt:<pre>  writeLines(readLines(file.path(.find.package(&quot;limma&quot;),&quot;doc&quot;,&quot;changelog.txt&quot;),n=20))</pre>
-<p>If you 
-are using Windows, you can install the last official Bioconductor release of limma from the  drop-down menu 
-in R, simply 
-select <code>Packages</code> then <code>Install package(s) from Bioconductor...</code>. 
-Note however that this is updated only once every 6 months.</p>
-
-<p>The data sets used in the 
-case study examples can be downloaded from
-<a href="http://bioinf.wehi.edu.au/marray/genstat2002/">
-http://bioinf.wehi.edu.au/marray/genstat2002/</a>. Help with limma is available 
-by sending questions or problems to <a href="mailto:bioconductor@stat.math.ethz.ch">
-bioconductor@stat.math.ethz.ch</a>.</p>
-
 <p>This guide describes limma as a command-driven package. Packages limmaGUI and 
 affylmGUI are also available which provides graphical user interfaces to the most commonly used functions in limma 
 (Wettenhall and Smyth, 2004). Both packages are available from Bioconductor or 
@@ -121,11 +97,50 @@ from <a href="http://bioinf.wehi.edu.au/limmaGUI">
 http://bioinf.wehi.edu.au/limmaGUI</a>. The package limmaGUI is for use with 
 two-color data while afflmGUI is for Affymetrix data.</p>
 
-<h2><a name="RPreliminaries">2. A Few Preliminaries on R</a></h2>
+<p>This tutorial was prepared using R Version 1.9.0 for Windows and limma 
+version 1.6.7. </p>
+
+<h2>2. Installation</h2>
+
+<p>Limma is a package for the R computing environment and it is assumed that you 
+have already installed R. See the R project at
+<a href="http://www.r-project.org">http://www.r-project.org</a>.</p>
+
+<p>Limma is available from the R Project CRAN site. If you are using R on a 
+system with a suitable internet connection and with installation privileges on 
+your computer, you should be able to install it via</p>
+
+<pre>&gt; install.packages(&quot;limma&quot;)</pre>
+<p>at the R prompt from an internet-connected computer. If you are using 
+Windows, use the drop-down menu [Packages &gt; Install package(s) from CRAN ...]. 
+This is recommend way to obtain limma.</p>
+
+<p>The limma home page is
+<a href="http://bioinf.wehi.edu.au/limma/">http://bioinf.wehi.edu.au/limma</a>, 
+and the latest version of the package is always available from this page. If you 
+are using the most recent release of R (not the development version).  you should be able to install limma 
+from the home page using</p>
+
+<pre>&gt; install.packages(&quot;limma&quot;,contriburl=&quot;http://bioinf.wehi.edu.au/limma&quot;)</pre>
+<p>at the R prompt. Limma is updated frequently, often a couple 
+of times a week. The change-log is the file changelog.txt in the /doc directory 
+of the limma package installation. To display the first 20 lines of the 
+change-log, type the following at the R prompt:<pre>  writeLines(readLines(file.path(.find.package(&quot;limma&quot;),&quot;doc&quot;,&quot;changelog.txt&quot;),n=20))</pre>
+<p>Limma is also available as part of the Bioconductor project at
+<a href="http://www.bioconductor.org">http://www.bioconductor.org</a>. Note 
+however that Bioconductor is updated only once every six months, unless you are 
+using the developmental version R.<p>The data sets used in the 
+case study examples can be downloaded from
+<a href="http://bioinf.wehi.edu.au/marray/genstat2002/">
+http://bioinf.wehi.edu.au/marray/genstat2002/</a>. Help with limma is available 
+by sending questions or problems to <a href="mailto:bioconductor@stat.math.ethz.ch">
+bioconductor@stat.math.ethz.ch</a>.</p>
+
+<h2>3<a name="RPreliminaries">. A Few Preliminaries on R</a></h2>
 
 <p>R is a program for statistical computing. It is a command-driven language 
 meaning that you have to type commands into it rather than pointing and 
-clicking. A good way to get started is to type</p>
+clicking using a mouse. A good way to get started is to type</p>
 
 <pre>  <code>help.start()</code></pre>
 <p>at the 
@@ -159,7 +174,7 @@ for in limma or in the other Bioconductor packages. For more details about the R
 language see <i>An 
 Introduction to R</i> which is available from the online help.</p>
 
-<h2><a name="QuickStart">3. Quick Start</a></h2>
+<h2>4<a name="QuickStart">. Quick Start</a></h2>
 <p>For those who want to see very quickly what a limma analysis might look like 
 for cDNA data, here is a quick analysis of four replicate arrays (including two 
 dye-swaps). The data has been scanned using an Axon scanner, producing a GenePix 
@@ -211,7 +226,7 @@ Data example below.</p>
 1146     3   4     18 fb22a12  2-I23  1.05 13.7  10.2 0.004242 3.76
 157      1   7     13 fb38a01   6-I1 -1.82 10.8 -10.2 0.004242 3.75</pre>
 
-<h2><a name="ReadingInData">4. Reading Data into Limma</a></h2>
+<h2>5<a name="ReadingInData">. Reading Data into Limma</a></h2>
 
 <p>This chapter is for two-color arrays. If you are using Affymetrix arrays, you 
 should use the affy or affyPLM packages to read and normalize the data. If you 
@@ -220,7 +235,7 @@ intensity data into your R session yourself using the basic R read functions
 such as <code>read.table</code>. You will need to create a matrix containing the 
 log-intensities with rows for probes and columns are arrays.</p>
 
-<h3><a name="RecommendedFiles">4.1 Recommended Files</a></h3>
+<h3>5<a name="RecommendedFiles">.1 Recommended Files</a></h3>
 
 <p>We assume that an experiment has been conducted with one or more microarrays, 
 all printed with the same library of probes. Each array has been scanned to produce a TIFF image. The TIFF images 
@@ -237,7 +252,7 @@ also desirable to have a <i>Targets File</i> which describes which RNA sample
 was hybridized to each channel of each array. A further optional file is the <i>
 Spot Types</i> file which identifies special probes such as control spots.</p>
 
-<h3><a name="ReadingIntensityData">4.2 Reading in Intensity Data</a></h3>
+<h3>5<a name="ReadingIntensityData">.2 Reading in Intensity Data</a></h3>
 
 <p>Let <code>files</code> be a character vector containing the names of the 
 image analysis output files. The foreground and background intensities can be 
@@ -286,7 +301,7 @@ then</p>
 <p>will combine them into one large data set. Data sets can also be subsetted. 
 For example <code>RG[,1]</code> is the data for the first array while <code>
 RG[1:100,]</code> is the data on the first 100 genes. </p>
-<h3><a name="SpotQualityWeights">4.3. Spot Quality Weights</a></h3>
+<h3>5<a name="SpotQualityWeights">.3. Spot Quality Weights</a></h3>
 <p>It is desirable to use the image analysis to compute a weight for each spot 
 between 0 and 1 which indicates the reliability of the acquired intensities at 
 that spot. For example, if the SPOT image analysis program is used and the size 
@@ -330,7 +345,7 @@ RG &lt;- read.maimages(files, source=&quot;genepix&quot;, wt.fun=myfun)</pre>
 to flagging them out. The definition of <code>myfun</code> here could be 
 replaced with any other code to compute weights using the columns in the GenePix 
 output files.</p>
-<h3><a name="TargetsFile">4.4 The Targets File</a></h3>
+<h3>5<a name="TargetsFile">.4 The Targets File</a></h3>
 <p>Although not strictly necessary, it is usually a good idea to construct a 
 Targets File which lists the RNA target hybridized to each channel of each 
 array.&nbsp;  The Targets File is normally in tab-delimited text format.  It should contain a  row for each microarray 
@@ -373,7 +388,7 @@ names, e.g.,</p>
 <pre>&gt; targets &lt;- readTargets()
 &gt; RG &lt;- read.maimages(targets$FileName)
 </pre>
-<h3><a name="ReadingGeneList">4.5 Reading the Gene List</a></h3>
+<h3>5<a name="ReadingGeneList">.5 Reading the Gene List</a></h3>
 <p>If the arrays have been scanned with an Axon scanner, then the gene names 
 will be available in a GenePix Array List (GAL) file. If the GAL file has 
 extension &quot;gal&quot; and is in the current working directory, then it may be read 
@@ -385,7 +400,7 @@ into a data.frame by</p>
 from R base. If you have Imagene or SMD image analysis output, then the gene 
 list will be extracted from the image analysis output files by <code>read.images</code>.</p>
 
-<h3><a name="SpotTypesFile">4.6 The Spot Types File</a></h3>
+<h3>5<a name="SpotTypesFile">.6 The Spot Types File</a></h3>
 <p>The Spot Types file (STF) is another optional tab-delimited text file which 
 allows you to identify different types of spots from the gene list. The STF is 
 typically used to distinguish control spots from those corresponding to genes of 
@@ -437,7 +452,7 @@ Then</p>
 <pre>&gt; plotMA(RG)</pre>
 <p>will produce an MA-Plot with colors, symbols and sizes and given in the STF.<br>
 </p>
-<h2><a name="DataExploration">5. Data Exploration</a></h2>
+<h2>6<a name="DataExploration">. Data Exploration</a></h2>
 <p>It is advisable to display your data in various ways as a quality check and 
 to check for unexpected effects. We recommend an imageplot of the raw log-ratios 
 and an MA-plot of the raw data for each array as a minimum routine displays. The 
@@ -449,7 +464,7 @@ down-regulated spike-in control spots as well as negative controls and
 calibration or sensitivity controls. See the Swirl data case study for other 
 examples.</p>
 <p align="center"><img border="0" src="other/maplotwst.png" width="796" height="722"></p>
-<h2><a name="Normalization">6. Normalization and Background Correction</a></h2>
+<h2>7<a name="Normalization">. Normalization and Background Correction</a></h2>
 <p>Limma implements a range of normalization methods for spotted microarrays. 
 Smyth and Speed (2003) describe some of the mostly commonly used methods. Most of the 
 examples given in this manual use print-tip loess normalization as the major 
@@ -469,8 +484,8 @@ intensities.</p>
 <p>Limma contains some more sophisticated normalization methods. Normalization 
 of absolute expression levels as well as just log-ratios is covered in Section 
 11 of this guide.</p>
-<h2><a name="DifferentialExpression">7. Differential Expression</a></h2>
-<h3><a name="LinearModels">7.1 Linear Models</a></h3>
+<h2>8<a name="DifferentialExpression">. Differential Expression</a></h2>
+<h3>8<a name="LinearModels">.1 Linear Models</a></h3>
 <p>The package limma uses an approach called <i>linear models</i> to analyse 
 designed microarray experiments. This approach allows very general experiments 
 to be analysed just as easily as a simple replicated experiment. The approach is 
@@ -495,7 +510,7 @@ changes. This results in more stable inference and improved power, especially
 for experiments with small numbers of arrays (Smyth, 2004). For arrays with 
 within-array replicate spots, limma uses a pooled correlation method to make 
 full use of the duplicate spots (Smyth et al, 2003).</p>
-<h3><a name="AffymetrixDesigns">7.2  Affymetrix and Other Single-Channel Designs</a></h3>
+<h3>8<a name="AffymetrixDesigns">.2  Affymetrix and Other Single-Channel Designs</a></h3>
 <p>Affymetrix data will usually be normalized using the affy package. We will 
 assume here that the data is available as an <code>exprSet</code> object called <code>
 eset</code>. Such an object will have an slot containing the log-expression 
@@ -533,7 +548,7 @@ obtained from</p>
 obtained from</p>
 
 <pre>&gt; vennDiagram(clas)</pre>
-<h3><a name="CommonReferenceDesigns">7.3  Common Reference Designs</a></h3>
+<h3>8<a name="CommonReferenceDesigns">.3 Common Reference Designs</a></h3>
 <p>Now consider two-color microarray experiments in which a common reference has 
 been used on all the arrays. Such experiments can be analysed very similarly to 
 Affymetrix experiments except that allowance must be made for dye-swaps. The 
@@ -595,7 +610,7 @@ CBFb         0    1         0                0               -1</pre>
 computed:</p>
 <pre>&gt; fit2 &lt;- contrasts.fit(fit, contrasts.matrix)
 &gt; fit2 &lt;- eBayes(fit2)</pre>
-<h3><a name="DirectDesigns">7.4 Direct Two-Color Designs</a></h3>
+<h3>8<a name="DirectDesigns">.4 Direct Two-Color Designs</a></h3>
 <p>Two-colour designs without a common reference require the most statistical 
 knowledge to choose the appropriate design matrix. As an example, we consider an 
 experiment conducted by Dr Mireille Lahoud at the Walter and Eliza Hall 
@@ -647,7 +662,7 @@ DN-CD4        0      1     -1</pre>
 compute empirical Bayes statistics:</p>
 <pre>&gt; fit2 &lt;- constrast.fit(fit, contrast.matrix)
 &gt; fit2 &lt;- eBayes(fit2)</pre>
-<h3>7.5 Other Designs</h3>
+<h3>8.5 Other Designs</h3>
 <p>There is an enormous variety of possible experimental designs and it isn't 
 possible to give prescriptive rules that will cover all possibilities. Here we 
 consider a less standard design in which three mutant mice are to be compared 
@@ -698,8 +713,8 @@ the average difference between the mutant and wild-type mice, which is the
 comparison of interest.</p>
 <p>This general approach is applicable to many medium-sized studies involving 
 biological replicates.</p>
-<h2><a name="CaseStudies">8. Case Studies</a></h2>
-<h3><a name="Swirl">8.1. Swirl Zebrafish: A Single-Sample Experiment</a></h3>
+<h2>9<a name="CaseStudies">. Case Studies</a></h2>
+<h3>9<a name="Swirl">.1. Swirl Zebrafish: A Single-Sample Experiment</a></h3>
 
 <p>In this section we consider a case study in which two RNA sources are 
 compared directly on a set of replicate or dye-swap arrays. The case study 
@@ -991,9 +1006,7 @@ expressed. We will obtain a summary table of some key statistics for the top gen
 positive controls also appear in the top 30 genes in terms.</p>
 <p>In the table, t is the empirical Bayes moderated t-statistic, the 
 corresponding P-values have been adjusted to control the false discovery rate 
-and B is the empirical Bayes log odds of differential expression. Beware that 
-the Benjamini and Hochberg method used to control the false discovery rate 
-assumes independent statistics which we do not have here (see <code>help(p.adjust)</code>).</p>
+and B is the empirical Bayes log odds of differential expression.  </p>
 <pre>&gt; ord &lt;- order(fit$lods,decreasing=TRUE)
 &gt; top30 &lt;- ord[1:30]
 &gt; plot(A,M,pch=16,cex=0.2)
@@ -1001,11 +1014,24 @@ assumes independent statistics which we do not have here (see <code>help(p.adjus
 </pre>
 <p align="center">
 <img border="0" src="swirl/avemaplot.png" width="795" height="706"></p>
-<h3><a name="ApoAI">8.2 ApoAI Knockout Data: A Two-Sample Experiment</a></h3>
+<p>
+<b>A warning on distributional assumptions</b>. Beware that the p-values given 
+here are intended to be a guide only. In the microarray context it is difficult 
+to verify distributional assumptions, such as normality of the M-values, that 
+the p-values are based on. This is a limitation of all model-based methods for 
+micoarray data. Also beware that 
+the Benjamini and Hochberg method used to control the false discovery rate 
+does assume that the t-statistics for different probes are independent, whereas 
+the t-statistics for different probes are actually somewhat dependent as a 
+result of being based on observations made on the same set of arrays. Rainer et 
+al (2003) have argued that the Benjamini and Hochberg approach is actually quite 
+stable with respect to dependence between the probes, but this remains a 
+somewhat controversial point.</p>
+<h3>9<a name="ApoAI">.2 ApoAI Knockout Data: A Two-Sample Experiment</a></h3>
 <p>In this section we consider a case study where two RNA sources are compared 
 through a common reference RNA. The analysis of the log-ratios involves a 
 two-sample comparison of means for each gene.</p>
-<p>In this example we assume that the data is available as an RG list in the 
+<p>In this example we assume that the data is available as an RGList in the 
 data file <code>ApoAI.RData</code>.</p>
 <p><b>Background</b>. The data is from a study of lipid metabolism by Callow et 
 al (2000). The apolipoprotein AI (ApoAI) gene is known to play a pivotal role in 
@@ -1056,46 +1082,65 @@ rather than directly as for the swirl experiment makes this, for each gene, a
 two-sample rather than a single-sample setup.</p>
 <pre>&gt; load(&quot;ApoAI.RData&quot;)
 &gt; objects()
-[1] &quot;design&quot;   &quot;genelist&quot; &quot;layout&quot;   &quot;RG&quot;
-&gt; RG$R[1:4,]
-       c1      c2      c3      c4      c5      c6      c7     c8      k1      k2      k3
-1 2765.58 1768.22 1440.54  763.06 2027.94  864.05  958.68 644.58  747.11 1388.79 1588.76
-2 2868.43 2277.18 1599.92 1238.33 1513.43 1079.33 1228.66 757.33 1930.25 2093.00 1369.81
-3 1236.32 1546.84 2639.45  999.48 3689.67 1505.20  785.10 994.86  753.52 1300.00 1301.61
-4  383.62  532.50  323.55  585.14  250.74  566.58  409.18 417.79  829.82  402.84  513.91
-       k4      k5      k6      k7      k8
-1 1280.17 1881.72 1733.53 1170.84 1512.45
-2 1071.17 3218.58 2451.04 1605.00 1700.82
-3 3292.26 1149.23 3424.30 1901.06 2200.82
-4  459.69  391.09  601.00  438.03  507.25
-&gt; MA &lt;- normalizeWithinArrays(RG,layout)
-&gt; boxplot(MA$M~col(MA$M),names=colnames(RG$R))</pre>
-<p align="center">
-<img border="0" src="apoai/scalebox.png" width="790" height="695"></p>
-<p>The differences in scale are moderate, so we won't scale normalize between 
-arrays.</p>
+[1] &quot;RG&quot;
+&gt; names(RG)
+[1] &quot;R&quot; &quot;G&quot; &quot;Rb&quot; &quot;Gb&quot; &quot;printer&quot; &quot;genes&quot; &quot;targets&quot;
+&gt; RG$targets
+      FileName  Cy3     Cy5
+c1 a1koc1.spot Pool C57BL/6
+c2 a1koc2.spot Pool C57BL/6
+c3 a1koc3.spot Pool C57BL/6
+c4 a1koc4.spot Pool C57BL/6
+c5 a1koc5.spot Pool C57BL/6
+c6 a1koc6.spot Pool C57BL/6
+c7 a1koc7.spot Pool C57BL/6
+c8 a1koc8.spot Pool C57BL/6
+k1 a1kok1.spot Pool ApoAI-/-
+k2 a1kok2.spot Pool ApoAI-/-
+k3 a1kok3.spot Pool ApoAI-/-
+k4 a1kok4.spot Pool ApoAI-/-
+k5 a1kok5.spot Pool ApoAI-/-
+k6 a1kok6.spot Pool ApoAI-/-
+k7 a1kok7.spot Pool ApoAI-/-
+k8 a1kok8.spot Pool ApoAI-/-
+&gt; MA &lt;- normalizeWithinArrays(RG)
+&gt; cols &lt;- MA$targets$Cy5
+&gt; cols[cols==&quot;C57BL/6&quot;] &lt;- &quot;blue&quot;
+&gt; cols[cols==&quot;ApoAI-/-&quot;] &lt;- &quot;yellow&quot;
+&gt; boxplot(MA$M~col(MA$M),names=rownames(MA$targets),col=cols,xlab=&quot;Mouse&quot;,ylab=&quot;M-values&quot;)</pre>
+<div align="center">
+<pre><img border="0" src="apoai/boxplots.png" width="811" height="678"></pre>
+</div>
+<p>Since the common reference here is a pool of the control mice, we expect to 
+see more differences from the pool for the knock-out mice than for the control 
+mice. In terms of the above plot, this should translate into a wider range of 
+M-values for the knock-out mice arrays than for the control arrays, and we do 
+see this. Since the different arrays are not expected to have the same range of 
+M-values, between-array scale normalization of the M-values is not appropriate 
+here.</p>
 <p>Now we can go on to estimate the fold change between the two groups. In this 
 case the design matrix has two columns. The coefficient for the second column 
 estimates the parameter of interest, the log-ratio between knockout and control 
 mice.</p>
-<pre>&gt; design
-   Control-Ref KO-Control
-c1           1          0
-c2           1          0
-c3           1          0
-c4           1          0
-c5           1          0
-c6           1          0
-c7           1          0
-c8           1          0
-k1           1          1
-k2           1          1
-k3           1          1
-k4           1          1
-k5           1          1
-k6           1          1
-k7           1          1
-k8           1          1
+<pre>> design <- cbind("Control-Ref"=1,"KO-Control"=MA$targets$Cy5=="ApoAI-/-")
+> design
+      Control-Ref KO-Control
+ [1,]           1          0
+ [2,]           1          0
+ [3,]           1          0
+ [4,]           1          0
+ [5,]           1          0
+ [6,]           1          0
+ [7,]           1          0
+ [8,]           1          0
+ [9,]           1          1
+[10,]           1          1
+[11,]           1          1
+[12,]           1          1
+[13,]           1          1
+[14,]           1          1
+[15,]           1          1
+[16,]           1          1
 &gt; fit &lt;- lmFit(MA, design)
 &gt; fit$coef[1:5,]
      Control-Ref KO-Control
@@ -1134,7 +1179,7 @@ to be differentially expressed in the knockout versus the control line.</p>
 &gt; text(fit$coef[top8,2],fit$lods[top8,2],labels=substring(genelist[top8,&quot;NAME&quot;],1,5),cex=0.8,col=&quot;blue&quot;)</pre>
 <p align="center">
 <img border="0" src="apoai/bayes.png" width="693" height="743"></p>
-<h3><a name="ecoli">8.3 Ecoli Lrp Data: Affymetrix Data with Two Targets</a></h3>
+<h3>9<a name="ecoli">.3 Ecoli Lrp Data: Affymetrix Data with Two Targets</a></h3>
 <p>The data are from experiments reported in Hung et al (2002) and are available 
 from the www site </p>
 <p>&nbsp; <a href="http://visitor.ics.uci.edu/genex/cybert/tutorial/index.html">http://visitor.ics.uci.edu/genex/cybert/tutorial/index.html</a></p>
@@ -1254,7 +1299,7 @@ values mean that it is repressed.</p>
 knock-out gene itself is in position four. Many of the genes in the above table, 
 including the ser, glt, liv, opp, lys, ilv and fim families, are known targets 
 of lrp. </p>
-<h3><a name="Estrogen">8.4 Estrogen Data: A 2x2 Factorial Experiment with Affymetrix Arrays</a></h3>
+<h3>9<a name="Estrogen">.4 Estrogen Data: A 2x2 Factorial Experiment with Affymetrix Arrays</a></h3>
 <p>This data is from the estrogen package on Bioconductor. A subset of the data 
 is also analysed in the factDesign package vignette. To repeat this case study 
 you will need to have the R packages affy, estrogen and hgu95av2cdf installed.</p>
@@ -1394,7 +1439,7 @@ which is the highly conservative Holm's method.</p>
 6053   35995_at  2.76  8.87  12.7 1.05e-02  6.46
 12455    893_at  1.54 10.95  12.7 1.06e-02  6.45
 10175  40079_at -2.41  8.23 -12.6 1.09e-02  6.42</pre>
-<h3><a name="Weaver">8.5 Weaver Mutant Data: A 2x2 Factorial Experiment with 
+<h3>9<a name="Weaver">.5 Weaver Mutant Data: A 2x2 Factorial Experiment with 
 Two-Color Data</a></h3>
 <p>This case study considers a more involved analysis in which the sources of 
 RNA have a factorial structure. In this example we assume that data is available as an 
@@ -1518,7 +1563,7 @@ those which have decreasing expression in the wild-type over time, and those
 which are down-regulated (green) in the mutant are those which increase over 
 time in the wild-type. The mutant is not participating in normal development 
 between 11 and 21 days in respect of these genes.</p>
-<h2><a name="DuplicateSpots">9. Within-Array Replicate Spots</a></h2>
+<h2>10<a name="DuplicateSpots">. Within-Array Replicate Spots</a></h2>
 <p>In this section we consider a case study in which all genes (ESTs and 
 controls) are printed more than once on the array. This means that there is both 
 within-array and between-array replication for each gene. The structure of the 
@@ -1650,7 +1695,7 @@ hour for a series of arrays.</p>
 &gt; plot(fit$coef,eb$lods,xlab=&quot;Log2 Fold Change&quot;,ylab=&quot;Log Odds&quot;,pch=16,cex=0.2)</pre>
 <p align="center">
 <img border="0" src="bob/volcano.png" width="890" height="590"></p>
-<h2><a name="marray">10. Using limma with the marray Packages</a></h2>
+<h2><a name="marray">11. Using limma with the marray Package</a></h2>
 <p>The package marray is 
 designed to read and normalize cDNA data. The marray package concentrates on location and scale normalization
 of M-values and provides some 
@@ -1669,7 +1714,7 @@ using the convert package. <code>marrayRaw</code> objects may be converted to
 objects:</p>
 <pre>&gt; library(convert)
 &gt; MA &lt;- as(Data, &quot;MAList&quot;)</pre>
-<h2><a name="SingleChannelNormalization">11. Single-Channel Normalization for Two-Color Arrays</a></h2>
+<h2><a name="SingleChannelNormalization">12. Single-Channel Normalization for Two-Color Arrays</a></h2>
 
 <p> We provide a short background on the topic of single-channel
 normalization for two color arrays. Throughout this section the ApoAI
@@ -1828,38 +1873,6 @@ first word should be an action while the second word is the name of a type of
 object on which the function acts.</p>
 
 
-<h2>Published Articles Using limma</h2>
-
-
-<ol>
-  <li>Golden, T., R., and Melov, S. (2004). Microarray analysis of gene expression 
-with age in individual nematodes. <i>Aging Cell</i> 3, 111-124. 
-  doi:10.1111/j.1474-9728.2004.00095.x Online:
-  <a href="http://www.blackwell-synergy.com/links/doi/10.1111/j.1474-9728.2004.00095.x">
-  http://www.blackwell-synergy.com/links/doi/10.1111/j.1474-9728.2004.00095.x</a> 
-  (Published June 2004) </li>
-  <li>Rodriguez, M. W., Paquet, A. C., Yang, Y. H., and Erle, D. J. (2004). 
-Differential gene expression by integrin &#946;7+ and &#946;7- memory T helper cells. <i>
-BMC Immunology</i> <b>5</b>, 13. Online: <a href="http://www.biomedcentral.com/1471-2172/5/13">http://www.biomedcentral.com/1471-2172/5/13</a>. 
-(Published 5 July 2004)</li>
-  <li>Renn, S. C. P., Aubin-Horth, N., and Hofmann, H. A. (2004). Biologically 
-  meaningful expression profiling across species using heterologous 
-  hybridization to a cDNA microarray. <i>BMC Genomics</i> <b>5</b>, 42, 
-  doi:10.1186/1471-2164-5-42 online:
-  <a href="http://www.biomedcentral.com/1471-2164/5/42">
-  http://www.biomedcentral.com/1471-2164/5/42</a>&nbsp; (Published 6 July 2004)</li>
-  <li>Boutros, P. C., Moffat, I. D., Franc, M. A., Tijet, N., Tuomisto, J., 
-  Pohjanvirta, R., and Okey, A. B. (2004). Identification of the DRE-II Gene 
-  Battery by Phylogenetic Footprinting. <i>Biochem Biophys Res Commun</i> <b>321</b>(3), 
-  707-715. (In press August 2004)</li>
-  <li>Christina Kendziorski, Rafael A. Irizarry, K. Chen, J.D. Haag and M. N. 
-  Gould (2004). To Pool or Not to Pool: A Question of Microarray Experimental 
-  Design. Johns Hopkins University, Dept. of Biostatistics Working Papers. 
-  Working Paper 46. Online: <a href="http://www.bepress.com/jhubiostat/paper46">
-  http://www.bepress.com/jhubiostat/paper46</a>. (Posted online 20 July 2004)</li>
-</ol>
-
-
 <h2>Acknowledgements</h2>
 <p>Thanks to Yee Hwa Yang and Sandrine Dudoit for the first three data sets. The Swirl zebrafish data were provided by Katrin Wuennenburg-Stapleton from the
 <a href="http://mcb.berkeley.edu/labs/ngai/">Ngai Lab</a> at UC Berkeley. 
@@ -1886,6 +1899,9 @@ protein. <i>Journal of Biological Chemistry</i> 277(43):40309-23.</li>
   Model-based analysis of oligonucleotide arrays: expression index computation 
   and outlier detection. <i>Proceedings of the 
   National Academy of Sciences</i> <b>98</b>, 31-36.</li>
+  <li>Reiner, A., Yekutieli, D., and Benjamini, Y. (2003). Identifying 
+  differentially expressed genes using false discovery rate controlling 
+  procedures.<i> Bioinformatics</i><b> 19<i>, </i></b>368-375.</li>
   <li>Smyth, G. K. (2004). Linear models and empirical Bayes methods for 
   assessing differential expression in microarray experiments. <i>Statistical 
   Applications in Genetics and Molecular Biology</i> <b>3</b>, No. 1, Article 3. (<a href="http://www.bepress.com/sagmb/vol3/iss1/art3/">Full 
@@ -1916,6 +1932,43 @@ protein. <i>Journal of Biological Chemistry</i> 277(43):40309-23.</li>
   Festschrift for Terry Speed</i>, IMS Lecture Notes - Monograph Series, Volume 
   40, pp. 403-418.</li>
 </ol>
+
+
+<h2>Published Articles Using limma</h2>
+
+
+<p>The following articles are not cited in the User's Guide but are examples of 
+biologically orientated publications which use the limma package.</p>
+
+
+<ol>
+  <li>Golden, T., R., and Melov, S. (2004). Microarray analysis of gene expression 
+with age in individual nematodes. <i>Aging Cell</i> 3, 111-124. 
+  doi:10.1111/j.1474-9728.2004.00095.x Online:
+  <a href="http://www.blackwell-synergy.com/links/doi/10.1111/j.1474-9728.2004.00095.x">
+  http://www.blackwell-synergy.com/links/doi/10.1111/j.1474-9728.2004.00095.x</a> 
+  (Published June 2004) </li>
+  <li>Rodriguez, M. W., Paquet, A. C., Yang, Y. H., and Erle, D. J. (2004). 
+Differential gene expression by integrin &#946;7+ and &#946;7- memory T helper cells. <i>
+BMC Immunology</i> <b>5</b>, 13. Online: <a href="http://www.biomedcentral.com/1471-2172/5/13">http://www.biomedcentral.com/1471-2172/5/13</a>. 
+(Published 5 July 2004)</li>
+  <li>Renn, S. C. P., Aubin-Horth, N., and Hofmann, H. A. (2004). Biologically 
+  meaningful expression profiling across species using heterologous 
+  hybridization to a cDNA microarray. <i>BMC Genomics</i> <b>5</b>, 42, 
+  doi:10.1186/1471-2164-5-42 online:
+  <a href="http://www.biomedcentral.com/1471-2164/5/42">
+  http://www.biomedcentral.com/1471-2164/5/42</a>&nbsp; (Published 6 July 2004)</li>
+  <li>Boutros, P. C., Moffat, I. D., Franc, M. A., Tijet, N., Tuomisto, J., 
+  Pohjanvirta, R., and Okey, A. B. (2004). Identification of the DRE-II Gene 
+  Battery by Phylogenetic Footprinting. <i>Biochem Biophys Res Commun</i> <b>321</b>(3), 
+  707-715. (In press August 2004)</li>
+  <li>Christina Kendziorski, Rafael A. Irizarry, K. Chen, J.D. Haag and M. N. 
+  Gould (2004). To Pool or Not to Pool: A Question of Microarray Experimental 
+  Design. Johns Hopkins University, Dept. of Biostatistics Working Papers. 
+  Working Paper 46. Online: <a href="http://www.bepress.com/jhubiostat/paper46">
+  http://www.bepress.com/jhubiostat/paper46</a>. (Posted online 20 July 2004)</li>
+</ol>
+
 
 </body>
 

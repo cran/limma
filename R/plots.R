@@ -3,7 +3,7 @@
 imageplot <- function(z, layout, low=NULL, high=NULL, ncolors=123, zerocenter=NULL, zlim=NULL, mar=c(2,1,1,1), legend=TRUE, ...) {
 #  Image plot of spotted microarray data
 #  Gordon Smyth
-#  20 Nov 2001.  Last revised 27 Aug 2004.
+#  20 Nov 2001.  Last revised 18 Sep 2004.
 
 #  Check input
 	gr <- layout$ngrid.r
@@ -28,6 +28,7 @@ imageplot <- function(z, layout, low=NULL, high=NULL, ncolors=123, zerocenter=NU
 
 #  Plot differential expression from "green" to "red" or plot one variable from "white" to "blue"?
 	zr <- range(z,na.rm=TRUE)
+	if(!all(is.finite(zr))) stop("Infinite values found: consider using finite zlim value")
 	zmax <- max(abs(zr))
 	zmin <- zr[1]
 	if(is.null(zerocenter)) zerocenter <- (zmin < 0)

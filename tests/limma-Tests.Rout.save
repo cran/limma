@@ -758,7 +758,7 @@ Attaching package 'statmod':
 > 
 > ### rlm.series
 > 
-> fit <- rlm.series(M,design)
+> fit <- mrlm(M,design)
 > fit$coef
               [,1]        [,2]
  [1,]  2.064402265  0.23453509

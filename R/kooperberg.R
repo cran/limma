@@ -1,11 +1,13 @@
+##  KOOPERBERG.R
+
 #  KOOPERBERG BACKGROUND ADUSTMENT FOR GENEPIX DATA
 
 kooperberg <- function(names, fg="mean", bg="median", a=TRUE, layout)
-#	  Kooperberg Bayesian background correction
-#	  Matt Ritchie 18 June 2003.
-#	  Modified by Gordon Smyth 16 June 2003.
-#		Last modified 7 June 2004.
-#	  Charles Kooperberg contributed 'a' estimation functions (.getas, .varaux1, .varaux2)
+#	Kooperberg Bayesian background correction
+#	Matt Ritchie 18 June 2003.
+#	Charles Kooperberg contributed 'a' estimation functions (.getas, .varaux1, .varaux2)
+#	Modified by Gordon Smyth 16 June 2003.
+#	Last modified 7 June 2004.
 {
 	choices <- c("mean","median")
 	fg <- choices[pmatch(fg,choices)]
@@ -27,6 +29,8 @@ kooperberg <- function(names, fg="mean", bg="median", a=TRUE, layout)
 }
 
 .bayesianAdjustedFG <- function(slide, meanfg=TRUE, meanbg=FALSE, a, layout)
+#	Matt Ritchie
+#	18 June 2003. Last modified 18 September 2004.
 {
 	ngenes <- dim(slide)[1]
 	Y <- rep(0, ngenes)
@@ -55,8 +59,16 @@ kooperberg <- function(names, fg="mean", bg="median", a=TRUE, layout)
 	Gsfg=aparams[1]*slide[,"F532.SD"]/sqrt(slide[,"F.Pixels"]) # column 11
 	Gsbg=aparams[1]*slide[,"B532.SD"]/sqrt(slide[,"B.Pixels"]) # column 14
 	for(i in 1:ngenes) { 
-		RG$R[i] <- .expectedBayesianAdjustedFG(fg=Rfg[i], bg=Rbg[i], sfg=Rsfg[i], sbg=Rsbg[i])
-		RG$G[i] <- .expectedBayesianAdjustedFG(fg=Gfg[i], bg=Gbg[i], sfg=Gsfg[i], sbg=Gsbg[i])
+		if(Rbg[i]>0) {
+			RG$R[i] <- .expectedBayesianAdjustedFG(fg = Rfg[i], bg = Rbg[i], sfg = Rsfg[i], sbg = Rsbg[i])	
+		} else{
+			RG$R[i] <- Rfg[i]
+		}
+		if(Gbg[i]>0){
+	            RG$G[i] <- .expectedBayesianAdjustedFG(fg = Gfg[i], bg = Gbg[i], sfg = Gsfg[i], sbg = Gsbg[i])
+		} else {
+			RG$G[i] <- Gfg[i]
+		}
 	}
 	RG$R[RG$R>2^16] <- NA
 	RG$G[RG$G>2^16] <- NA

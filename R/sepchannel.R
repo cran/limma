@@ -1,4 +1,4 @@
-#  SINGLE CHANNEL ANALYSIS
+#  SEPARATE CHANNEL ANALYSIS
 
 lmscFit <- function(object,design,correlation)
 #	Fit single channel linear model for each gene to a series of microarrays

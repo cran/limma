@@ -1,3 +1,15 @@
+- heatDiagram() now separates primary up and down genes with white space
+
+18 September 2004: limma 1.7.7
+
+- new section on Installation for User's Guide
+- bug fix to kooperberg() when background is zero
+- new function geneSetTest()
+- help doc for imageplot updated
+- imageplot() now traps infinite z values and issues an informative error
+- update to swirl example in User's Guide (warnings on p-values)
+- update to ApoAI example in User's Guide (comments on scale normalization, more recent version of data object)
+
 6 September 2004: limma 1.7.6
 
 - bug fixes to decideTests() for method="heirarchical" and method="nestedF"
