@@ -18,7 +18,7 @@ topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",res
   If not specified, this will be taken from the \code{genes} component of \code{fit}.}
   \item{A}{matrix of A-values or vector of average A-values.}
   \item{eb}{output list from \code{ebayes(fit)}}
-  \item{adjust.method}{method to use to adjust the P-values for multiple testing, e.g., "holm" or "fdr". See \code{\link[ctest]{p.adjust}} for the available options. If \code{"none"} then the P-values are not adjusted. A \code{NULL} value will result in the default adjustment method, which is \code{"holm"}.}
+  \item{adjust.method}{method to use to adjust the p-values for multiple testing.  Options are \code{"bonferroni"}, \code{"holm"}, \code{"hochberg"}, \code{"hommel"}, \code{"fdr"} and \code{"none"}. If \code{"none"} then the p-values are not adjusted. A \code{NULL} value will result in the default adjustment method, which is \code{"holm"}.}
   \item{sort.by}{character string specifying statistic to rank genes by.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"P"} or \code{"B"}.}
   \item{resort.by}{character string specifying statistic to sort the selected genes by in the output data.frame.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"P"} or \code{"B"}.}
   \item{...}{any other arguments are passed to \code{ebayes} if \code{eb} is \code{NULL}}
@@ -32,7 +32,13 @@ topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",res
   \item{B}{log odds that the gene is differentially expressed}
 }
 \details{
-This function summarizes a fit object produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{rlm.series} by selecting the top-ranked genes for any given contrast.
+This function summarizes a linear model fit object produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{rlm.series} by selecting the top-ranked genes for any given contrast.
+\code{topTable()} assumes that the linear model fit has already been processed by \code{eBayes()}.
+
+The p-values for the coefficient/contrast of interest are adjusted for multiple testing by a call to \code{\link[stats]{p.adjust}}.
+The \code{"holm"} method is the default because it is conservative and valid for any type of dependence between the p-values.
+In most microarray contexts however the less conservative Benjamini and Hochberg method \code{"fdr"} may be more suitable.
+See \code{help("p.adjust")} for more information.
 
 The \code{sort.by} argument is used to select the top genes.
 Normally the genes appear in order of selection in the output table.
@@ -51,7 +57,8 @@ M <- matrix(rnorm(100*6,sd=0.3),100,6)
 M[1,1:3] <- M[1,1:3] + 2
 #  Design matrix includes two treatments, one for first 3 and one for last 3 arrays
 design <- cbind(First3Arrays=c(1,1,1,0,0,0),Last3Arrays=c(0,0,0,1,1,1))
-fit <- lm.series(M,design=design)
-toptable(fit)
+fit <- lmFit(M, design=design)
+fit <- eBayes(fit)
+topTable(fit)
 }
 \keyword{htest}

@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 29 October 2004.
+#	30 June 2003.  Last modified 8 January 2005.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -54,8 +54,10 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 		if(!is.null(object$A)) fit$Amean <- rowMeans(unwrapdups(as.matrix(object$A),ndups=ndups,spacing=spacing),na.rm=TRUE)
 	}
 	if(is(object,"marrayNorm")) {
-		if(length(object@maGnames)) {
-			fit$genes <- uniquegenelist(data.frame(Labels=I(object@maGnames@maLabels),object@maGnames@maInfo),ndups=ndups,spacing=spacing)
+		if(length(object@maGnames@maInfo)) {
+			fit$genes <- object@maGnames@maInfo
+#			if(length(object@maLayout@maControls)>1) fit$genes$Status <- normdata@maLayout@maControls
+			fit$genes <- uniquegenelist(fit$genes,ndups=ndups,spacing=spacing)
 			attr(fit$genes, "Notes") <- object@maGnames@maNotes
 		}
 		if(length(object@maA)) fit$Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
@@ -99,7 +101,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	18 Apr 2002. Revised 22 Oct 2004.
+#	18 Apr 2002. Revised 9 January 2005.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -121,6 +123,21 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta,dimnames=list(rownames(M),colnames(design)))
 	sigma <- rep(NA,ngenes)
 	df.residual <- rep(0,ngenes)
+	NoWts <- !any(is.na(M)) && is.null(weights)
+	if(NoWts) {
+		fit <- lm.fit(design, t(M))
+		fit$sigma <- sqrt(colSums(fit$effects[(fit$rank + 1):narrays,]^2)/fit$df.residual)
+		fit$fitted.values <- fit$residuals <- fit$effects <- NULL
+		fit$coefficients <- t(fit$coefficients)
+		fit$cov.coefficients <- chol2inv(fit$qr$qr,size=fit$qr$rank)
+		est <- fit$qr$pivot[1:fit$qr$rank]
+		stdev.unscaled[,est] <- matrix(sqrt(diag(fit$cov.coefficients)),ngenes,fit$qr$rank,byrow = TRUE)
+		fit$stdev.unscaled <- stdev.unscaled
+		fit$df.residual <- rep.int(fit$df.residual,ngenes)
+		dimnames(fit$stdev.unscaled) <- dimnames(fit$stdev.unscaled) <- dimnames(fit$coefficients)
+		fit$pivot <- fit$qr$pivot
+		return(fit)
+	}
 	for (i in 1:ngenes) {
 		y <- as.vector(M[i,])
 		obs <- is.finite(y)

@@ -1,3 +1,34 @@
+9 Jan 2004: limma 1.8.16
+
+- bug fix for lmFit() when no weights or NAs but non-estimable coefficients
+
+8 Jan 2004: limma 1.8.15
+
+- lm.series() and lmFit() now treat linear model with no weights or NAs as a special case, with great increase in speed for typical Affymetrix analysis
+- lmFit() better recognises when an marrayNorm object has a non-empty list of gene names
+- new User's Guide section of Adjusting for Multiple Testing
+
+16 Dec 2004: limma 1.8.14
+
+- fix !is.infinite bug in starting values for fit.normexp()
+- tests for version of R removed from trigamma.inverse() and .vsimpleLoess()
+
+9 Dec 2004: limma 1.8.13
+
+- log and unlog arguments removed from MA.RG() and RG.MA().  RGLists are now always assumed to contain unlogged intensities.
+- changes to plotDensities() to accommodate above
+- bug fix to normalizeBetweenArrays with method="Gquantile" or "Rquantile".  Now changes only the A-values.
+
+2 Dec 2004: limma 1.8.12
+
+- fix to last section of User's Guide: quantile normalization code example was garbled
+- bug fix in plotDensities(): object=MAList and log.transform=TRUE should give log not log-log scale
+
+1 Dec 2004: limma 1.8.11
+
+- log.transform=TRUE now the default for plotDensities(), corresponding changes to help doc
+- new argument unlog for RG.MA()
+
 23 Nov 2004: limma 1.8.10
 
 - bug fix for summary.TestResults to remove reference to 'results'

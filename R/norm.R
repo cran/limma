@@ -61,10 +61,6 @@ loessFit <- function(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights))
 	nonparametric <- 1
 	order.parametric <- 1
 	order.drop.sqr <- 2
-	if(as.numeric(version$year)>2003)
-		loess.package <- "stats"
-	else
-		loess.package <- "modreg"
 	if (iterations) 
 		for (j in 1:iterations) {
 			robust <- weights * robust
@@ -78,22 +74,22 @@ loessFit <- function(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights))
 				xi = double(max.kd), vert = double(2 * D), vval = double((D + 
 				1) * max.kd), diagonal = double(N), trL = double(1), 
 				delta1 = double(1), delta2 = double(1), as.integer(surf.stat == 
-				"interpolate/exact"), PACKAGE = loess.package)
+				"interpolate/exact"), PACKAGE = "stats")
 			fitted.residuals <- y - z$fitted.values
 			if (j < iterations) 
 				robust <- .Fortran("lowesw", as.double(fitted.residuals), 
 				as.integer(N), robust = double(N), double(N), 
-				PACKAGE = loess.package)$robust
+				PACKAGE = "stats")$robust
 		}
 	list(fitted = z$fitted.values, residuals = fitted.residuals)
 }
 
 #  WITHIN ARRAY NORMALIZATION
 
-MA.RG <- function(object, log.transform=TRUE, bc.method="subtract", offset=0) {
+MA.RG <- function(object, bc.method="subtract", offset=0) {
 #	Convert RGList to MAList
 #	Gordon Smyth
-#	2 March 2003.  Last revised 10 Oct 2004.
+#	2 March 2003.  Last revised 9 Dec 2004.
 
 	if(is.null(object$R) || is.null(object$G)) stop("Object doesn't contain R and G components")
 	object <- backgroundCorrect(object, method=bc.method, offset=offset)
@@ -101,12 +97,10 @@ MA.RG <- function(object, log.transform=TRUE, bc.method="subtract", offset=0) {
 	G <- object$G
 
 #	Log
-	if(log.transform) { 
-		R[R <= 0] <- NA
-		G[G <= 0] <- NA
-		R <- log(R,2)
-		G <- log(G,2)
-	}
+	R[R <= 0] <- NA
+	G[G <= 0] <- NA
+	R <- log(R,2)
+	G <- log(G,2)
 	
 #	Minus and Add
 	object$R <- object$G <- object$Rb <- object$Gb <- object$other <- NULL
@@ -116,12 +110,12 @@ MA.RG <- function(object, log.transform=TRUE, bc.method="subtract", offset=0) {
 }
 
 RG.MA <- function(object) {
-#	Convert MAList to logged RGList
+#	Convert MAList to RGList
 #	Gordon Smyth
-#	5 September 2003.
+#	5 September 2003.  Last modified 9 Dec 2004.
 
-	object$R <- object$A+object$M/2
-	object$G <- object$A-object$M/2
+	object$R <- 2^( object$A+object$M/2 )
+	object$G <- 2^( object$A-object$M/2 )
 	object$M <- NULL
 	object$A <- NULL
 	new("RGList",unclass(object))
@@ -370,7 +364,7 @@ plotPrintorder <- function(object,layout,start="topleft",slide=1,method="loess",
 normalizeBetweenArrays <- function(object, method="scale", targets=NULL, ...) {
 #	Normalize between arrays
 #	Gordon Smyth
-#	12 Apri 2003.  Last revised 11 May 2004.
+#	12 Apri 2003.  Last revised 9 December 2004.
 
 	choices <- c("none","scale","quantile","Aquantile","Gquantile","Rquantile","Tquantile","vsn")
 	method <- match.arg(method,choices)
@@ -423,14 +417,12 @@ normalizeBetweenArrays <- function(object, method="scale", targets=NULL, ...) {
 		Gquantile = {
 			G <- object$A-object$M/2
 			E <- normalizeQuantiles(G,...) - G
-			object$M <- object$M - E
-			object$A <- object$A + E/2
+			object$A <- object$A + E
 		},
 		Rquantile = {
 			R <- object$A+object$M/2
 			E <- normalizeQuantiles(R,...) - R
-			object$M <- object$M - E
-			object$A <- object$A + E/2
+			object$A <- object$A + E
 		},
 		Tquantile = {
 			narrays <- NCOL(object$M)

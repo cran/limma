@@ -115,9 +115,9 @@ plotMA <- function(MA, array=1, xlab="A", ylab="M", main=colnames(MA)[array], xl
 
 plotMA3by2 <- function(MA, prefix="MA", main=colnames(MA), zero.weights=FALSE, common.lim=TRUE, ...)
 #	Make files of MA-plots, six to a page
-#	Gordon Smyth  27 May 2004.  Last modified 12 Aug 2004.
+#	Gordon Smyth  27 May 2004.  Last modified 9 Dec 2004.
 {
-	if(is(MA,"RGList")) MA <- MA.RG
+	if(is(MA,"RGList")) MA <- MA.RG(MA)
 	narrays <- ncol(MA)
 	npages <- ceiling(narrays/6)
 	if(!zero.weights || !is.null(MA$weights)) MA$M[MA$weights<=0] <- NA

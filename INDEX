@@ -89,7 +89,7 @@ normalizeQuantiles      Normalize Columns of a Matrix to have the same
 normalizeRobustSpline   Normalize Single Microarray Using Shrunk
                         Robust Splines
 normalizeWithinArrays   Normalize Within Arrays
-plotDensities           Single-channel Densities Plot
+plotDensities           Individual-channel Densities Plot
 plotMA                  MA-Plot
 plotMA3by2              Write MA-Plots to Files
 plotPrintTipLoess       MA Plots by Print-Tip Group

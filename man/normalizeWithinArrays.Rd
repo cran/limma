@@ -8,7 +8,7 @@ Normalize the expression log-ratios for one or more two-colour spotted microarra
 }
 \usage{
 normalizeWithinArrays(object, layout, method="printtiploess", weights=object$weights, span=0.3, iterations=4, controlspots=NULL, df=5, robust="M", bc.method="subtract", offset=0)
-MA.RG(object, log.transform=TRUE, bc.method="subtract", offset=0)
+MA.RG(object, bc.method="subtract", offset=0)
 RG.MA(object)
 }
 \arguments{
@@ -25,8 +25,6 @@ RG.MA(object)
   \item{robust}{robust regression method if \code{method="robustspline"}.  Choices are \code{"M"} or \code{"MM"}.}
   \item{bc.method}{character string specifying background correct method, see \code{\link{backgroundCorrect}} for options}
   \item{offset}{numeric value, intensity offset used when computing log-ratios, see \code{\link{backgroundCorrect}}}
-  \item{log.transform}{logical indicating whether intensities should be log2 transformed.
-  If \code{FALSE} then intensities are assumed to be already logged.}
 }
 
 \details{

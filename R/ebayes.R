@@ -190,17 +190,12 @@ trigammaInverse <- function(x) {
 #	Newton's method
 #	1/trigamma(y) is convex, nearly linear and strictly > y-0.5,
 #	so iteration to solve 1/x = 1/trigamma is monotonically convergent
-	Rversion <- as.numeric(version$major)+as.numeric(version$minor)/10
-	if(Rversion > 1.81)
-		tetraGamma <- function(x) psigamma(x,deriv=2)
-	else
-		tetraGamma <- tetragamma
 	y <- 0.5+1/x
 	iter <- 0
 	repeat {
 		iter <- iter+1
 		tri <- trigamma(y)
-		dif <- tri*(1-tri/x)/tetraGamma(y)
+		dif <- tri*(1-tri/x)/psigamma(y,deriv=2)
 		y <- y+dif
 		if(max(-dif/y) < 1e-8) break
 		if(iter > 50) {

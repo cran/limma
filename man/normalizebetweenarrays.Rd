@@ -39,7 +39,10 @@ These two methods are called "q" and "Aq" respectively in Yang and Thorne (2003)
 \code{targets} may be a target matrix such as read by \code{readTargets} or can be a vector indicating green channel groups followed by red channel groups.
 
 \code{method="Gquantile"} ensures that the green (first) channel has the same empirical distribution across arrays, leaving the M-values (log-ratios) unchanged.
+This method might be used when the green channel is a common reference throughout the experiment.
+In such a case the green channel represents the same target throughout, so it makes compelling sense to force the distribution of intensities to be same for the green channel on all the arrays, and to adjust to the red channel accordingly.
 \code{method="Rquantile"} ensures that the red (second) channel has the same empirical distribution across arrays, leaving the M-values (log-ratios) unchanged.
+Both \code{Gquantile} and \code{Rquantile} normalization have the implicit effect of changing the red and green log-intensities by equal amounts.
 
 If \code{object} is a \code{matrix} then the scale, quantile or vsn normalization will be applied to the columns.
 Applying \code{method="Aquantile"} when \code{object} is a \code{matrix} will produce an error.
