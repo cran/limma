@@ -40,7 +40,10 @@ functions \code{lmFit} or \code{gls.series}.
 At this time it is not possible to estimate correlations between duplicate spots and between technical replicates simultaneously.
 If \code{block} is not null, then the function will set \code{ndups=1}.
 
-The function may take long time to execute as it fits a mixed linear model for each gene.
+The function may take long time to execute as it fits a mixed linear model for each gene for an iterative algorithm.
+It is not uncommon for the function to return a small number of warning messages that correlation estimates cannot be computed for some individual genes.
+This is not a serious concern providing that there are only a few such warnings and the total number of genes is large.
+The consensus estimator computed by this function will not be materially affected by a small number of genes.
 
 \code{dupcor.series} produces the same values as \code{duplicateCorrelation} and it retained for compatibility with earlier releases of the software.
 }

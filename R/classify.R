@@ -4,13 +4,13 @@ setClass("TestResults",representation("matrix"))
 
 summary.TestResults <- function(object,...)
 #	Gordon Smyth
-#	26 Feb 2004.  Last modified 23 Nov 2004.
+#	26 Feb 2004.  Last modified 31 Jan 2005.
 {
 #	apply(object,2,table)
 	tab <- array(0,c(3,ncol(object)),dimnames=list(c("-1","0","1"),colnames(object)))
-	tab[1,] <- colSums(object== -1)
-	tab[2,] <- colSums(object== 0)
-	tab[3,] <- colSums(object== 1)
+	tab[1,] <- colSums(object== -1,na.rm=TRUE)
+	tab[2,] <- colSums(object== 0,na.rm=TRUE)
+	tab[3,] <- colSums(object== 1,na.rm=TRUE)
 	class(tab) <- "table"
 	tab
 }
@@ -23,7 +23,7 @@ setMethod("show","TestResults",function(object) {
 decideTests <- function(object,method="separate",adjust.method="fdr",p.value=0.05)
 #	Accept or reject hypothesis tests across genes and contrasts
 #	Gordon Smyth
-#	17 Aug 2004. Last modified 4 Nov 2004.
+#	17 Aug 2004. Last modified 31 Jan 2005.
 {
 	if(!is(object,"MArrayLM")) stop("Need MArrayLM object")
 	if(is.null(object$t)) object <- eBayes(object)
@@ -32,14 +32,19 @@ decideTests <- function(object,method="separate",adjust.method="fdr",p.value=0.0
 	switch(method,separate={
 		p <- as.matrix(object$p.value)
 		tstat <- as.matrix(object$t)
-		for (j in 1:ncol(p)) p[,j] <- p.adjust(p[,j],method=adjust.method)
+		for (j in 1:ncol(p)) {
+			o <- !is.na(p[,j])
+			p[o,j] <- p.adjust(p[o,j],method=adjust.method)
+		}
 		results <- new("TestResults",sign(tstat)*(p<p.value))
 	},global={
 		p <- as.matrix(object$p.value)
 		tstat <- as.matrix(object$t)
-		p <- p.adjust(p,method=adjust.method)
+		o <- !is.na(p)
+		p[o] <- p.adjust(p[o],method=adjust.method)
 		results <- new("TestResults",sign(tstat)*(p<p.value))
 	},heirarchical={
+		if(any(is.na(object$F.p.value))) stop("Can't handle NA p-values yet")
 		sel <- p.adjust(object$F.p.value,method=adjust.method) < p.value
 		i <- sum(sel,na.rm=TRUE)
 		n <- sum(!is.na(sel))
@@ -53,6 +58,7 @@ decideTests <- function(object,method="separate",adjust.method="fdr",p.value=0.0
 		colnames(results) <- colnames(object$t)
 		if(any(sel)) results[sel,] <- classifyTestsP(object[sel,],p.value=p.value*a)
 	},nestedF={
+		if(any(is.na(object$F.p.value))) stop("Can't handle NA p-values yet")
 		sel <- p.adjust(object$F.p.value,method=adjust.method) < p.value
 		i <- sum(sel,na.rm=TRUE)
 		n <- sum(!is.na(sel))

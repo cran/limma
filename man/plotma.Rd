@@ -53,6 +53,7 @@ See \code{\link[graphics]{points}} for possible values for \code{pch}, \code{col
 }
 
 \value{A plot is created on the current graphics device.}
+\references{See \url{http://www.statsci.org/micrarra/refs/maplots.html}}
 \author{Gordon Smyth}
 \examples{
 MA <- new("MAList")

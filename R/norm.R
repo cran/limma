@@ -200,7 +200,7 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 normalizeRobustSpline <- function(M,A,layout,df=5,method="M") {
 #	Robust spline normalization
 #	Gordon Smyth
-#	27 April 2003.  Last revised 28 June 2004.
+#	27 April 2003.  Last revised 2 Feb 2005.
 
 	require(MASS)
 	require(splines)
@@ -214,9 +214,9 @@ normalizeRobustSpline <- function(M,A,layout,df=5,method="M") {
 	x <- X[O,,drop=FALSE]
 	y <- M[O]
 	w <- rep(1,length(y))
-	s <- summary(rlm(x,y,weights=w,method=method),method="XtWX",correlation=FALSE)
-	beta0 <- s$coefficients[,1]
-	covbeta0 <- s$cov * s$stddev^2
+	s0 <- summary(rlm(x,y,weights=w,method=method),method="XtWX",correlation=FALSE)
+	beta0 <- s0$coefficients[,1]
+	covbeta0 <- s0$cov * s0$stddev^2
 
 #	Tip-wise splines
 	beta <- array(1,c(ngrids,1)) %*% array(beta0,c(1,df))
@@ -239,18 +239,24 @@ normalizeRobustSpline <- function(M,A,layout,df=5,method="M") {
 
 #	Empirical Bayes estimates
 	res.cov <- cov(beta) - apply(covbeta,c(2,3),mean)
-	Sigma0 <- covbeta0 * max(0, sum(diag(res.cov)) / sum(diag(covbeta0)) )
+	a <- max(0, sum(diag(res.cov)) / sum(diag(covbeta0)) )
+	Sigma0 <- covbeta0 * a 
 #	Sigma0 <- covbeta0 * max(0,mean(eigen(solve(covbeta0,res.cov))$values))
 
 #	Shrunk splines
-	spots <- 1:nspots
-	for (i in 1:ngrids) {
-		beta[i,] <- beta0 + Sigma0 %*% solve(Sigma0+covbeta[i,,],beta[i,]-beta0)
-		o <- O[spots]
-		x <- X[spots,][o,]
-		M[spots][o] <- M[spots][o] - x %*% beta[i,]
-		M[spots][!o] <- NA
-		spots <- spots + nspots
+	if(a==0) {
+		M[O] <- s0$residuals
+		M[!O] <- NA
+	} else {
+		spots <- 1:nspots
+		for (i in 1:ngrids) {
+			beta[i,] <- beta0 + Sigma0 %*% solve(Sigma0+covbeta[i,,],beta[i,]-beta0)
+			o <- O[spots]
+			x <- X[spots,][o,]
+			M[spots][o] <- M[spots][o] - x %*% beta[i,]
+			M[spots][!o] <- NA
+			spots <- spots + nspots
+		}
 	}
 	M
 }

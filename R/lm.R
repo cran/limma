@@ -89,19 +89,21 @@ unwrapdups <- function(M,ndups=2,spacing=1) {
 uniquegenelist <- function(genelist,ndups=2,spacing=1) {
 #	Eliminate entries in genelist for duplicate spots
 #	Gordon Smyth
-#	2 Nov 2002.  Last revised 12 Apr 2003
+#	2 Nov 2002.  Last revised 10 Jan 2005
 
 	if(ndups <= 1) return(genelist)
-	if(is.null(dim(genelist))) dim(genelist) <- c(length(genelist),1)
-	index <- drop(unwrapdups(1:nrow(genelist),ndups=ndups,spacing=spacing)[,1])
-	drop(genelist[index,])
+	i <- drop(unwrapdups(1:NROW(genelist),ndups=ndups,spacing=spacing)[,1])
+	if(is.null(dim(genelist)))
+		return(genelist[i])
+	else
+		return(genelist[i,,drop=FALSE])
 }
 
 lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	18 Apr 2002. Revised 9 January 2005.
+#	18 Apr 2002. Revised 13 January 2005.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -126,7 +128,10 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 	NoWts <- !any(is.na(M)) && is.null(weights)
 	if(NoWts) {
 		fit <- lm.fit(design, t(M))
-		fit$sigma <- sqrt(colSums(fit$effects[(fit$rank + 1):narrays,]^2)/fit$df.residual)
+		if(fit$df.residual>0)
+			fit$sigma <- sqrt(colMeans(fit$effects[(fit$rank + 1):narrays,,drop=FALSE]^2))
+		else
+			fit$sigma <- rep(NA,ngenes)
 		fit$fitted.values <- fit$residuals <- fit$effects <- NULL
 		fit$coefficients <- t(fit$coefficients)
 		fit$cov.coefficients <- chol2inv(fit$qr$qr,size=fit$qr$rank)

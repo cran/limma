@@ -10,6 +10,7 @@
 8.Other                 Other Functions
 anova.MAList            ANOVA Table - method
 arrayWeights            Array Quality Weights
+arrayWeightsQuick       Array Quality Weights
 as.MAList               Convert marrayNorm Object to an MAList Object
 as.matrix.RGList        Turn a Microarray Data Object into a Matrix
 auROC                   Area Under Receiver Operating Curve
@@ -108,7 +109,7 @@ readGPRHeader           Read Header Information from Image Analysis
                         Raw Data File
 readImaGeneHeader       Read ImaGene Header Information
 readSpotTypes           Read Spot Types File
-readTargets             Read RNA Targets File
+readTargets             Read Targets File
 removeExt               Remove Common Extension from File Names
 rg.genepix              Extract RGList from data.frames Containing
                         GenePix Data

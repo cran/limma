@@ -130,8 +130,8 @@ ma3x3.spottedarray <- function(x,printer,FUN=mean,na.rm=TRUE,...)
 
 #  NORMAL + EXPONENTIAL ADAPTIVE MODEL
 
-fit.normexp <- function(foreground,background=NULL,background.matrix=NULL,trace=0,beta.start=NULL) {
-#	Fit background=normal + signal=exponential model.
+fit.normexp0 <- function(foreground,background=NULL,background.matrix=NULL,trace=0,beta.start=NULL) {
+#	Fit background=normal + signal=exponential model using Nelder-Mead.
 #	Gordon Smyth
 #	24 Aug 2002.  Last modified 15 Dec 2004.
 
@@ -192,8 +192,8 @@ m2loglik.normexp <- function(theta,foreground,background=NULL,background.matrix=
 signal.normexp <- function(mu,sigma,alpha,foreground) {
 #	Expected value of signal given foreground in normal + exponential model
 #	Gordon Smyth
-#	24 Aug 2002.
+#	24 Aug 2002. Last modified 23 Jan 2005.
 
 	mu.sf <- foreground-mu-sigma^2/alpha
-	mu.sf + sigma^2 * dnorm(0,mean=mu.sf,sd=sigma) / pnorm(0,mean=mu.sf,sd=sigma,lower.tail=FALSE)
+	mu.sf + sigma^2 * exp(dnorm(0,mean=mu.sf,sd=sigma,log=TRUE) - pnorm(0,mean=mu.sf,sd=sigma,lower.tail=FALSE,log=TRUE))
 }

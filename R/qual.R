@@ -30,7 +30,7 @@ wtIgnore.Filter <- function(qta) {
 	qta[,"Ignore Filter"]
 }
 
-arrayWeights <- function(y, fit)
+arrayWeightsQuick <- function(y, fit)
 #	Compute approximate array quality weights
 #	Gordon Smyth
 #	25 Oct 2004.  Last revised 28 Oct 2004.

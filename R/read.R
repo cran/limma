@@ -129,15 +129,23 @@ getLayout2 <- function(galfile)
 	structure(printer, class = "PrintLayout")
 }
 
-readTargets <- function(file="Targets.txt",path=NULL,sep="\t",row.names="FileName",quote="\"",...)
-#	Data frame of target information
+readTargets <- function(file="Targets.txt",path=NULL,sep="\t",row.names=NULL,quote="\"",...)
+#	Read data frame of target information
 #	Gordon Smyth
-#	19 Oct 2003.  Last modified 4 Nov 2004.
+#	19 Oct 2003.  Last modified 19 Jan 2005.
 {
 	if(!is.null(path)) file <- file.path(path,file)
 	tab <- read.table(file,header=TRUE,as.is=TRUE,sep=sep,quote=quote,fill=TRUE,...)
 #	if(!all(c("Cy3","Cy5") %in% names(tab))) warning("File should contain columns: Cy3 and Cy5")
-	if(row.names %in% names(tab)) row.names(tab) <- removeExt(tab[,row.names])
+	if(is.null(row.names)) {
+		if("Label" %in% names(tab)) {
+			row.names(tab) <- tab[,"Label"]
+		} else {
+			if("FileName" %in% names(tab)) row.names(tab) <- removeExt(tab[,"FileName"])
+		}
+	} else {
+		if(row.names %in% names(tab)) row.names(tab) <- tab[,row.names]
+	}
 	tab
 }
 
@@ -255,7 +263,7 @@ read.matrix <- function(file,nrows=0,skip=0,...) {
 read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth
-#	1 Nov 2002.  Last revised 20 Oct 2004.
+#	1 Nov 2002.  Last revised 29 Jan 2005.
 
 	if(missing(files)) {
 		if(missing(ext))
@@ -281,9 +289,7 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		spot.close.open = list(Rf="Rmean",Gf="Gmean",Rb="morphR.close.open",Gb="morphG.close.open"),
 		genepix = list(Rf="F635 Mean",Gf="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
 		quantarray = list(Rf="ch2 Intensity",Gf="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background")
-	) else {
-		source="generic"
-	}
+	)
 
 #	Read first file to get nspots
 	fullname <- slides[1]
@@ -675,8 +681,9 @@ rg.genepix <- function(slides,names.slides=names(slides),suffix="gpr") {
 removeExt <- function(x) {
 #	Remove any common extension from a vector of file names
 #	Gordon Smyth
-#	19 July 2002.
+#	19 July 2002.  Last modified 19 Jan 2005.
 
+	x <- as.character(x)
 	n <- length(x)
 	if(length(grep("\\.",x)) < n) return(x)
 	ext <- sub("(.*)\\.(.*)$","\\2",x)

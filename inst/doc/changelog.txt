@@ -1,10 +1,50 @@
+24 Feb 2005: limma 1.8.22
+
+- note added to dupcor.Rd that the function may issue some warnings
+- section added to User's Guide on "software packages using limma"
+- corrected text version component of CITATION
+
+8 Feb 2005: limma 1.8.21
+
+- new version of arrayWeights() by Matt Ritchie, old version renamed to arrayWeightsQuick()
+- modifications to m2loglik.normexp function and derivatives, grloglik() removed
+
+2 Feb 2005: limma 1.8.20
+
+- Note on possibility of adjusted p-values all equal to one added to topTable.Rd
+- bug fix in normalizeRobustSpline when Sigma0==0, i.e., when method reduces to global spline
+- CITATION updated to Bioconductor book chapter
+
+1 Feb 2005: limma 1.8.19
+
+- New BFGS version of fit.normexp by Jeremy Silver introduced,
+  old Nelder-Mead version renamed to fit.normexp0.  Several new utilities
+  functions compute the likelihood and gradient for the BFGS version.
+- signal.normexp() more resistant to floating overflow/underflow
+- decideTests() now allows for NA p-values for method="separate" or "global" (was giving wrong answers)
+- summary.TestResults now allowed for NA p-values
+- User's Guide starts to use bibtex, not fully converted yet
+- new sections "Time Course Experiments" and "Separate Channel Analyses" in user's guide
+- 'columns' argument no longer overwrites 'source' argument of read.maimages()
+- readTargets() now looks for columns "Label" or "FileName" to make row.names if row.names arg is NULL
+- removeExt() now coerces argument to character
+
+13 Jan 2005: limma 1.8.18
+
+- Bug fixes to lmFit with NoWts and df.residual equal to 0 or 1
+- new section "Several Groups" in user's guide
+
+10 Jan 2005: limma 1.8.17
+
+- uniquegenelist() now preserves data.frame or matrix class. This fixes a bug when fitting a model to an exprSet object with duplicate probes.
+
 9 Jan 2004: limma 1.8.16
 
-- bug fix for lmFit() when no weights or NAs but non-estimable coefficients
+- bug fix for lmFit() when no weights or NAs (NoWts) but non-estimable coefficients
 
 8 Jan 2004: limma 1.8.15
 
-- lm.series() and lmFit() now treat linear model with no weights or NAs as a special case, with great increase in speed for typical Affymetrix analysis
+- lm.series() and lmFit() now treat linear model with no weights or NAs (NoWts) as a special case, with great increase in speed for typical Affymetrix analysis
 - lmFit() better recognises when an marrayNorm object has a non-empty list of gene names
 - new User's Guide section of Adjusting for Multiple Testing
 
