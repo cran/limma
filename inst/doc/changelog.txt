@@ -1,3 +1,15 @@
+10 October 2004: limma 1.8.1
+
+- new argument other.columns for read.maimages()
+- [.RGList and MA.RG() now accommodate an 'other' component
+- usersguide.pdf updated from usersguide.tex
+- usersguide.html converted to usersguide.tex
+
+8 October 2004: limma 1.8.0
+
+- install.R file removed, replaced with LazyLoad: yes in DESCRIPTION
+- MA.RG() and normalizeWithinArrays() now accept arguments 'bc.method' and 'offset'
+
 4 October 2004: limma 1.7.9
 
 - bug fix for lmFit() for PLMset object

@@ -7,8 +7,8 @@
 Normalize the expression log-ratios for one or more two-colour spotted microarray experiments so that the log-ratios average to zero within each array or sub-array.
 }
 \usage{
-normalizeWithinArrays(object, layout, method="printtiploess", weights=object$weights, span=0.3, iterations=4, controlspots=NULL, df=5, robust="M")
-MA.RG(object, log.transform=TRUE)
+normalizeWithinArrays(object, layout, method="printtiploess", weights=object$weights, span=0.3, iterations=4, controlspots=NULL, df=5, robust="M", bc.method="subtract", offset=0)
+MA.RG(object, log.transform=TRUE, bc.method="subtract", offset=0)
 RG.MA(object)
 }
 \arguments{
@@ -23,6 +23,8 @@ RG.MA(object)
   \item{controlspots}{numeric or logical vector specifying the subset of spots which are non-differentially expressed control spots, for use with \code{method="composite"}}
   \item{df}{degrees of freedom for spline if \code{method="robustspline"}}
   \item{robust}{robust regression method if \code{method="robustspline"}.  Choices are \code{"M"} or \code{"MM"}.}
+  \item{bc.method}{character string specifying background correct method, see \code{\link{backgroundCorrect}} for options}
+  \item{offset}{numeric value, intensity offset used when computing log-ratios, see \code{\link{backgroundCorrect}}}
   \item{log.transform}{logical indicating whether intensities should be log2 transformed.
   If \code{FALSE} then intensities are assumed to be already logged.}
 }
@@ -47,6 +49,7 @@ The \code{"robustspline"} method calls \code{\link{normalizeRobustSpline}}.
 }
 \value{
 An object of class \code{\link[limma:malist]{MAList}}.
+Any components found in \code{object} will preserved except for \code{R}, \code{G}, \code{Rb}, \code{Gb} and \code{other}.
 }
 
 \author{Gordon Smyth}

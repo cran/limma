@@ -14,7 +14,7 @@
 <p align="center">Gordon Smyth, Natalie Thorne and James Wettenhall<br>
 The
 Walter and Eliza Hall Institute of Medical Research<br>
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->22 September 2004<!--webbot bot="Timestamp" i-checksum="39495" endspan --></p>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->09 October 2004<!--webbot bot="Timestamp" i-checksum="32355" endspan --></p>
 
 <h2>Table of Contents</h2>
 
@@ -25,9 +25,9 @@ Walter and Eliza Hall Institute of Medical Research<br>
   <li><a href="#QuickStart">Quick Start</a></li>
   <li><a href="#ReadingInData">Reading Data into Limma</a><ol>
   <li><a href="#RecommendedFiles">Recommended Files</a></li>
+  <li><a href="#TargetsFile">The Targets File</a></li>
   <li><a href="#ReadingIntensityData">Reading Intensity Data</a></li>
   <li><a href="#SpotQualityWeights">Spot Quality Weights</a></li>
-  <li><a href="#TargetsFile">The Targets File</a></li>
   <li><a href="#ReadingGeneList">Reading the Gene List</a></li>
   <li><a href="#SpotTypesFile">The Spot Types File</a></li>
 </ol>
@@ -99,7 +99,11 @@ http://bioinf.wehi.edu.au/limmaGUI</a>. The package limmaGUI is for use with
 two-color data while afflmGUI is for Affymetrix data.</p>
 
 <p>This tutorial was prepared using R Version 1.9.0 for Windows and limma 
-version 1.6.7. </p>
+version 1.6.7.</p>
+
+<p>Help with limma is available 
+by sending questions or problems to the Bioconductor mailing list <a href="mailto:bioconductor@stat.math.ethz.ch">
+bioconductor@stat.math.ethz.ch</a>.</p>
 
 <h2>2. Installation</h2>
 
@@ -107,36 +111,40 @@ version 1.6.7. </p>
 have already installed R. See the R project at
 <a href="http://www.r-project.org">http://www.r-project.org</a>.</p>
 
-<p>Limma is available from the R Project CRAN site. If you are using R on a 
+<p><b>Installing from CRAN</b>. Limma is available as a contributed package from the R Project CRAN site. 
+This is the recommended repository from which to obtain limma. If you are using R on a 
 system with a suitable internet connection and with installation privileges on 
 your computer, you should be able to install it via</p>
 
 <pre>&gt; install.packages(&quot;limma&quot;)</pre>
 <p>at the R prompt from an internet-connected computer. If you are using 
-Windows, use the drop-down menu [Packages &gt; Install package(s) from CRAN ...]. 
-This is recommend way to obtain limma.</p>
+Windows, use the drop-down menu [Packages &gt; Install package(s) from CRAN 
+...].</p>
 
-<p>The limma home page is
-<a href="http://bioinf.wehi.edu.au/limma/">http://bioinf.wehi.edu.au/limma</a>, 
-and the latest version of the package is always available from this page. If you 
-are using the most recent release of R (not the development version).  you should be able to install limma 
-from the home page using</p>
+<p><b>Installing from the WEHI</b>. The limma home page is
+<a href="http://bioinf.wehi.edu.au/limma/">http://bioinf.wehi.edu.au/limma</a>. 
+The latest version of the package is always available from this page, sometimes 
+a few days ahead of the CRAN site. Unlike CRAN, this page supports only most 
+recent official release of R and does not provide a Mac package build. You should be able to install limma 
+from this page using</p>
 
 <pre>&gt; install.packages(&quot;limma&quot;,contriburl=&quot;http://bioinf.wehi.edu.au/limma&quot;)</pre>
-<p>at the R prompt. Limma is updated frequently, often a couple 
-of times a week. The change-log is the file changelog.txt in the /doc directory 
-of the limma package installation. To display the first 20 lines of the 
-change-log, type the following at the R prompt:
+<p>at the R prompt.<p><b>Installing from Bioconductor</b>. Limma is available as part of the Bioconductor project at
+<a href="http://www.bioconductor.org">http://www.bioconductor.org</a>. Bioconductor 
+works on a 6-monthly official release cycle, lagging each major R release by a 
+few weeks. This means that Bioconductor software is updated only once every six months, unless you are 
+using the developmental version R. Updates of limma between the Bioconductor 
+official releases should be obtained from one of the above two sites.<p><b>
+Change-log</b>. Limma is updated frequently, often a couple 
+of times a week. The change-log can be viewed at
+<a href="http://bioinf.wehi.edu.au/limma/changelog.txt">
+http://bioinf.wehi.edu.au/limma/changelog.txt</a>. It can also be viewed from 
+the R prompt. To see the most recent 20 lines type:
 <pre>&gt; changeLog(n=20)</pre>
-<p>Limma is also available as part of the Bioconductor project at
-<a href="http://www.bioconductor.org">http://www.bioconductor.org</a>. Note 
-however that Bioconductor is updated only once every six months, unless you are 
-using the developmental version R.<p>The data sets used in the 
+<p><b>Data sets used this manual</b>. The data sets used in the 
 case study examples can be downloaded from
 <a href="http://bioinf.wehi.edu.au/marray/genstat2002/">
-http://bioinf.wehi.edu.au/marray/genstat2002/</a>. Help with limma is available 
-by sending questions or problems to <a href="mailto:bioconductor@stat.math.ethz.ch">
-bioconductor@stat.math.ethz.ch</a>.</p>
+http://bioinf.wehi.edu.au/marray/genstat2002</a>. </p>
 
 <h2>3<a name="RPreliminaries">. A Few Preliminaries on R</a></h2>
 
@@ -144,7 +152,7 @@ bioconductor@stat.math.ethz.ch</a>.</p>
 meaning that you have to type commands into it rather than pointing and 
 clicking using a mouse. A good way to get started is to type</p>
 
-<pre>  <code>help.start()</code></pre>
+<pre>&gt; <code>help.start()</code></pre>
 <p>at the 
 R prompt or, if you're using Windows, to follow the drop-down menu [Help &gt; Html 
 help]. Following the links [Packages &gt; limma] from the html help page will 
@@ -152,23 +160,23 @@ lead you to the contents page of help topics for commands in limma.</p>
 
 <p>Before you can use any limma commands you have to load the package by typing</p>
 
-<pre>  library(limma)</pre>
+<pre>&gt; library(limma)</pre>
 <p>at the R prompt. You can get help on any function in any loaded package by typing ? and the function 
 name at the R prompt, for example</p>
 
-<pre>  ?read.maimages</pre>
+<pre>&gt; ?read.maimages</pre>
 <p>for detailed help on the <code>read.maimages</code> function. Anything that you create in 
 R is an &quot;object&quot;. Objects might include data sets, variables, functions, 
 anything at all. For example</p>
-<pre>  x &lt;- 2</pre>
+<pre>&gt; x &lt;- 2</pre>
 <p>will create a variable <code>x</code> and will assign it the value 2. At any 
 stage of your R session you can type</p>
-<pre>  objects()</pre>
+<pre>&gt; objects()</pre>
 <p>to get a list of all the objects you have created. You see show the contents 
 of any object by typing the  name of the object at the prompt, for example either of the 
 following commands will print out the contents of <code>x</code>:</p>
-<pre>  show(x)
-  x</pre>
+<pre>&gt; show(x)
+&gt; x</pre>
 <p>We hope that you can use limma without having to spend a lot of time learning 
 about the R language itself but a little knowledge in this direction will be 
 very helpful, especially when you want to do something not explicitly provided 
@@ -187,7 +195,7 @@ Data example below.</p>
 <pre>&gt; targets &lt;- readTargets(&quot;SwirlSample.txt&quot;) # Read file containing info about the hybridizations,
                                             # including names of files containing the intensity data
 &gt; RG &lt;- read.maimages(targets$FileName, source=&quot;spot&quot;) # Read in the data
-&gt; RG$genes &lt;- readGAL()                     # Read in GAL file containing gene names
+&gt; RG$genes &lt;- readGAL()                     # Read in GAL file containing gene names, only needed if using SPOT!
 &gt; RG$printer &lt;- getLayout(RG$genes)         # Set printer layout information
 &gt; MA &lt;- normalizeWithinArrays(RG)           # Print-tip group loess normalization
 &gt; MA &lt;- normalizeBetweenArrays(MA)          # Scale normalization between arrays, optional
@@ -248,62 +256,117 @@ exported from the image analysis program into a series of text files. There
 should be one file for each array or, in the case of Imagene, two files for each 
 array. </p>
 
-<p>You will need to have (i) a file which describes the probes, often called the<i> 
-Gene List</i>, and (ii) the image analysis output files. It most cases it is 
+<p>You will need to have the image analysis output files.
+In most cases these files will include the IDs and names of the probes and possibly
+other annotation information.
+A few image analysis programs, for example SPOT, do not write the probe IDs into the
+output files.
+In this case you will also need a genelist file which describes the probes.
+It most cases it is 
 also desirable to have a <i>Targets File</i> which describes which RNA sample 
-was hybridized to each channel of each array. A further optional file is the <i>
-Spot Types</i> file which identifies special probes such as control spots.</p>
+was hybridized to each channel of each array. A further optional file is the
+<i>Spot Types</i> file which identifies special probes such as control spots.</p>
 
-<h3>5<a name="ReadingIntensityData">.2 Reading in Intensity Data</a></h3>
+<h3>5<a name="TargetsFile">.2 The Targets File</a></h3>
+<p>The first step in preparing your data is usually to create a 
+Targets File which lists the RNA target hybridized to each channel of each 
+array.&nbsp;  It is normally in tab-delimited text format.  It should contain a  row for each microarray 
+in your experiment. It should contain a FileName column, giving the file from
+image-analysis containing raw foreground and background intensities for each slide, a Cy3 column giving the RNA
+type reverse transcribed and labelled with Cy3 dye for that slide (e.g., Wild Type) and a Cy5 column giving the
+RNA type reverse transcribed and labelled with Cy5 dye for that slide.  For ImaGene files, the FileName column
+is split into a FileNameCy3 column and a FileNameCy5.  As well as the essential columns, you can have a Name
+column giving an alternative slide name to the default name, "Slide n", where n is the SlideNumber and you can
+have a Date column, listing the date of the hybridization, and as many extra columns as you like, as long as
+the column names are unique.</p>
+
+<p>Some examples are shown below.</p>
+
+<p>The ImaGene Targets file below shows the special case of the ImaGene image-processing software which gives two
+(tab-delimited text) output files for each slide, one for the Cy3 (Green) channel and one for the Cy5 (Red) channel.
+So instead of having a single FileName column, there are two file name columns: a FileNameCy3 column and a FileNameCy5
+column.</p>
+<p>
+<img src="limmaGUI/ImaGeneTargetsFile.png" width="499" height="233"><br><br>
+
+</p>
+
+<p>The <code>Date</code> column is optional and is not currently used in limma.</p>
+<p>
+<img src="limmaGUI/SwirlSampleInExcel.png" width="475" height="253"><br><br>
+
+</p>
+
+<p>A <code>Name</code> column can be included, giving each array a name which can be used for plotting.  In this case, a short name
+is used so that a boxplot of all sixteen arrays can be plotted with labels for all arrays along the horizontal axis.  If
+no <code>Name</code> column is given, then a default name will be given to each slide, e.g. "Slide 1".</p>
+<p>
+<img src="limmaGUI/ApoAITargetsInExcel.png" width="466" height="445"><br><br>
+
+</p>
+
+<p>The Targets file below is from an experiment with four different RNA sources.  The main Targets file is not shown.  The
+one below is used to analyse the spiked-in scorecard controls.  Spike-in controls will generally be 
+analysed separately
+from genes because the follow different rules, e.g. for genes, the log-ratio between A and B plus the log-ratio between B
+and C should equal the log-ratio between A and C, but for scorecard controls, all three log (red/green) ratios may be the
+same.</p>
+<p>
+<img src="limmaGUI/ScorecardsTargetsInExcel.png" width="420" height="352"></p>
+<p>The Targets 
+File can be read using <code>readTargets()</code>:</p>
+<pre>&gt; targets &lt;- readTargets()</pre>
+
+<p>The file can have any name but the default name is <code>Targets.txt</code>. </p>
+
+<h3>5<a name="ReadingIntensityData">.3 Reading in Intensity Data</a></h3>
 
 <p>Let <code>files</code> be a character vector containing the names of the 
 image analysis output files. The foreground and background intensities can be 
 read into an <code>RGList</code> object using a command of the form</p>
-<pre>  RG &lt;- read.maimages(files, source=&quot;&lt;imageanalysisprogram&gt;&quot;, path=&quot;&lt;directory&gt;&quot;)</pre>
+<pre>&gt; RG &lt;- read.maimages(files, source=&quot;&lt;imageanalysisprogram&gt;&quot;, path=&quot;&lt;directory&gt;&quot;)</pre>
 <p>where <code>&lt;imageanalysisprogram&gt;</code> is the name of the image analysis 
 program and <code>&lt;directory&gt;</code> is the full path of the directory 
 containing the files. If the files are in the current R working directory then 
 the argument <code>path</code> can be omitted; see the help entry for <code>
-setwd</code> for how to set the current working directory. For example, if the files are SPOT output and 
-have common extension &quot;spot&quot; then they can 
-be read using</p>
-<pre>  files &lt;- dir(pattern=&quot;*\\.spot&quot;)
-  RG &lt;- read.maimages(files, source=&quot;spot&quot;)</pre>
-<p>The object <code>files</code> is then a character vector containing all the 
-spot file names in alphabetical order. If the files are GenePix output files and have extension &quot;gpr&quot; then they 
-can be read using</p>
-<pre>  files &lt;- dir(pattern=&quot;*\\.gpr&quot;)
-  RG &lt;- read.maimages(files, source=&quot;genepix&quot;)</pre>
-<p>Consult the help entry for <code>read.maimages</code> to see which other 
+setwd</code> for how to set the current working directory. The file names are 
+usually read from the Targets File. For example, the Targets File <code>
+Targets.txt</code> is in the current working directory together with the SPOT 
+output files, then one might use</p>
+<pre>&gt; targets &lt;- readTargets()
+&gt; RG &lt;- read.maimages(targets$FileName, source=&quot;spot&quot;)</pre>
+<p>If the files are GenePix output files then they might be read using</p>
+<pre>&gt; RG &lt;- read.maimages(targets$FileName, source=&quot;genepix&quot;)</pre>
+<p>given an appropriate Targets File. Consult the help entry for <code>read.maimages</code> to see which other 
 image analysis programs are supported. Files are assumed by default to be 
 tab-delimited. If the files use a different separator this may be specified 
 using the <code>sep=</code> argument. For example if the Genepix files were 
 comma-separated (csv) then the read command would be</p>
-<pre>  RG &lt;- read.maimages(files, source=&quot;genepix&quot;, sep=&quot;,&quot;)</pre>
+<pre>&gt; RG &lt;- read.maimages(files, source=&quot;genepix&quot;, sep=&quot;,&quot;)</pre>
 <p>What should you do if your image analysis program is not currently supported 
 by limma? 
 If your output files are of a standard format, you can supply the column names 
 corresponding to the intensities yourself. For example, </p>
-<pre>  RG &lt;- read.maimages(files, columns=list(Rf=&quot;F635 Mean&quot;,Gf=&quot;F532 Mean&quot;,Rb=&quot;B635 Median&quot;,Gb=&quot;B532 Median&quot;))</pre>
+<pre>&gt; RG &lt;- read.maimages(files, columns=list(Rf=&quot;F635 Mean&quot;,Gf=&quot;F532 Mean&quot;,Rb=&quot;B635 Median&quot;,Gb=&quot;B532 Median&quot;))</pre>
 <p>is exactly equivalent to the earlier command with <code>source=&quot;genepix&quot;</code>. 
 &quot;Standard format&quot; means here that there is a unique column name identifying each 
 column of interest and that there are no lines in the file following the last 
 line of data. Header information at the start of the file is ok. </p>
 <p>It is a good idea to look at your data to check that it has been read in 
 correctly. Type</p>
-<pre>  show(RG)</pre>
+<pre>&gt; show(RG)</pre>
 <p>to see a print out the first few lines of data. Also try</p>
-<pre>  summary(RG$R)</pre>
+<pre>&gt; summary(RG$R)</pre>
 <p>to see a five-number summary of the red intensities for each array, and so 
 on.</p>
 <p>It is possible to read the data in several steps. If <code>RG1</code> and
 <code>RG2</code> are two data sets corresponding to different sets of arrays 
 then</p>
-<pre>  RG &lt;- cbind(RG1, RG2)</pre>
+<pre>&gt; RG &lt;- cbind(RG1, RG2)</pre>
 <p>will combine them into one large data set. Data sets can also be subsetted. 
 For example <code>RG[,1]</code> is the data for the first array while <code>
 RG[1:100,]</code> is the data on the first 100 genes. </p>
-<h3>5<a name="SpotQualityWeights">.3. Spot Quality Weights</a></h3>
+<h3>5<a name="SpotQualityWeights">.4. Spot Quality Weights</a></h3>
 <p>It is desirable to use the image analysis to compute a weight for each spot 
 between 0 and 1 which indicates the reliability of the acquired intensities at 
 that spot. For example, if the SPOT image analysis program is used and the size 
@@ -323,84 +386,51 @@ GenePix program.</p>
 <p>The appropriate way to computing spot quality weights depends on the image analysis program 
 that you are using. Consult the 
 help entry <code>QualityWeights</code> to see what quality weight functions are 
-available. The use of the <code>wt.fun</code> argument is very flexible and 
+available. The <code>wt.fun</code> argument is very flexible and 
 allows you to construct your own weights. The <code>wt.fun</code> argument can 
 be any function which takes a data set as argument and computes the desired 
 weights. For example, if you wish to give zero weight to all Genepix flags less 
 than -50 you could use </p>
 
-<pre>myfun &lt;- function(x) as.numeric(x$Flags &gt; -50.5)
-RG &lt;- read.maimages(files, source=&quot;genepix&quot;, wt.fun=myfun)</pre>
+<pre>&gt; myfun &lt;- function(x) as.numeric(x$Flags &gt; -50.5)
+&gt; RG &lt;- read.maimages(files, source=&quot;genepix&quot;, wt.fun=myfun)</pre>
 
 <p>The <code>wt.fun</code> facility is very general and can be used to compute 
 weights based on any number of columns in the image analysis files. For example, 
 some researchers like to filter out spots if the foreground mean and median from 
 GenePix for a given spot differ by more than a certain threshold, say 50. This 
 could be achieved by</p>
-<pre>myfun &lt;- function(x, threshold=50) {
-    okred &lt;- abs(x[,&quot;F635 Median&quot;]-x[,&quot;F635 Mean&quot;]) &lt; threshold
-    okgreen &lt;- abs(x[,&quot;F532 Median&quot;]-x[,&quot;F532 Mean&quot;]) &lt; threshold
-    as.numeric(okgreen &amp; okred)
-}
-RG &lt;- read.maimages(files, source=&quot;genepix&quot;, wt.fun=myfun)</pre>
+<pre>&gt; myfun &lt;- function(x, threshold=50) {
++    okred &lt;- abs(x[,&quot;F635 Median&quot;]-x[,&quot;F635 Mean&quot;]) &lt; threshold
++    okgreen &lt;- abs(x[,&quot;F532 Median&quot;]-x[,&quot;F532 Mean&quot;]) &lt; threshold
++    as.numeric(okgreen &amp; okred)
++}
+&gt; RG &lt;- read.maimages(files, source=&quot;genepix&quot;, wt.fun=myfun)</pre>
 <p>Then all the &quot;bad&quot; spots will get weight zero which, in limma, is equivalent 
 to flagging them out. The definition of <code>myfun</code> here could be 
 replaced with any other code to compute weights using the columns in the GenePix 
 output files.</p>
-<h3>5<a name="TargetsFile">.4 The Targets File</a></h3>
-<p>Although not strictly necessary, it is almost aways a good idea to construct a 
-Targets File which lists the RNA target hybridized to each channel of each 
-array.&nbsp;  The Targets File is normally in tab-delimited text format.  It should contain a  row for each microarray 
-in your experiment. It should contain a FileName column, giving the file from
-image-analysis containing raw foreground and background intensities for each slide, a Cy3 column giving the RNA
-type reverse transcribed and labelled with Cy3 dye for that slide (e.g. Wild Type) and a Cy5 column giving the
-RNA type reverse transcribed and labelled with Cy5 dye for that slide.  For ImaGene files, the FileName column
-is split into a FileNameCy3 column and a FileNameCy5.  As well as the essential columns, you can have a Name
-column giving an alternative slide name to the default name, "Slide n", where n is the SlideNumber and you can
-have a Date column, listing the date of the hybridization, and as many extra columns as you like, as long as
-the column names are unique.</p>
-
-<p>Some examples are shown below.</p>
-
-<p>The ImaGene Targets file below shows the special case of the ImaGene image-processing software which gives two
-(tab-delimited text) output files for each slide, one for the Cy3 (Green) channel and one for the Cy5 (Red) channel.
-So instead of having a single FileName column, there are two file name columns: a FileNameCy3 column and a FileNameCy5
-column.</p>
-<img src="limmaGUI/ImaGeneTargetsFile.png" width="499" height="233"><br><br>
-
-<p>The <code>Date</code> column is optional and is not currently used in limma.</p>
-<img src="limmaGUI/SwirlSampleInExcel.png" width="475" height="253"><br><br>
-
-<p>A <code>Name</code> column can be included, giving each array a name which can be used for plotting.  In this case, a short name
-is used so that a boxplot of all sixteen arrays can be plotted with labels for all arrays along the horizontal axis.  If
-no <code>Name</code> column is given, then a default name will be given to each slide, e.g. "Slide 1".</p>
-<img src="limmaGUI/ApoAITargetsInExcel.png" width="466" height="445"><br><br>
-
-<p>The Targets file below is from an experiment with four different RNA sources.  The main Targets file is not shown.  The
-one below is used to analyse the spiked-in scorecard controls.  Spike-in controls will generally be 
-analysed separately
-from genes because the follow different rules, e.g. for genes, the log-ratio between A and B plus the log-ratio between B
-and C should equal the log-ratio between A and C, but for scorecard controls, all three log (red/green) ratios may be the
-same.</p>
-<img src="limmaGUI/ScorecardsTargetsInExcel.png" width="420" height="352"><p>The Targets 
-File can be read using <code>readTargets()</code>. The file can have any name 
-but the default name is <code>Targets.txt</code>. Very often the targets file 
-will be first thing read because it contains the image analysis output file 
-names, e.g.,</p>
-<pre>&gt; targets &lt;- readTargets()
-&gt; RG &lt;- read.maimages(targets$FileName)
-</pre>
 <h3>5<a name="ReadingGeneList">.5 Reading the Gene List</a></h3>
+<p>In most cases the RGList <code>RG</code> read by <code>read.maimages()</code> 
+will contain a component <code>RG$genes</code> containing the probe IDs and 
+other probe-specific information. In some cases the <code>genes</code> component 
+will be not be set because there is no probe information in the image analysis 
+output files. An example is output from the SPOT program. In such cases, the 
+probe information needs to be read separately. </p>
 <p>If the arrays have been scanned with an Axon scanner, then the gene names 
 will be available in a GenePix Array List (GAL) file. If the GAL file has 
-extension &quot;gal&quot; and is in the current working directory, then it may be read 
-into a data.frame by</p>
+extension <font face="Times New Roman">“</font>gal<font face="Times New Roman">”</font> 
+and is in the current working directory, then it may be read into a data.frame 
+by</p>
 <pre>&gt; RG$genes &lt;- readGAL()</pre>
-<p>The print layout of the arrays can be extracted from the GAL by</p>
+<p>Non-Genepix gene lists can be read into R using the function \texttt{read.table} 
+from R base. </p>
+<p>Once the gene array list is available, the print layout of the arrays can be 
+extracted from it by</p>
 <pre>&gt; RG$printer &lt;- getLayout(RG$genes)</pre>
-<p>Non-Genepix gene lists can be read into R using the function <code>read.table</code> 
-from R base. If you have Imagene or SMD image analysis output, then the gene 
-list will be extracted from the image analysis output files by <code>read.images</code>.</p>
+<p>This will set the number of pins, or print-tips, using during the printing of 
+the arrays. This determines the number of what are often called grids or meta 
+rows and columns on the arrays.</p>
 
 <h3>5<a name="SpotTypesFile">.6 The Spot Types File</a></h3>
 <p>The Spot Types file (STF) is another optional tab-delimited text file which 
@@ -478,7 +508,7 @@ normalizeWithinArrays</code> so there is no need for any special action on the
 part of users. If you want to over-ride this default background correct, for 
 example to ensure that all the corrected intensities are positive, then use the
 <code>backgroundCorrect</code> function. For example we generally find</p>
-<pre>&gt; RG &lt;- backgroundCorrect(RG, method=&quot;normexp&quot;, offset=100)</pre>
+<pre>&gt; RG &lt;- backgroundCorrect(RG, method=&quot;normexp&quot;, offset=50)</pre>
 <p>to be superior for differential expression purposes to background subtraction 
 with most image analysis programs. This method adjusts the foreground adaptively 
 for the background intensities and results in strictly positive adjusted 
@@ -579,7 +609,7 @@ been used on all the arrays. Such experiments can be analysed very similarly to
 Affymetrix experiments except that allowance must be made for dye-swaps. The 
 simplest method is to setup the design matrix using the <code>modelMatrix()</code> 
 function and the targets file. As an example, we consider part of an experiment 
-conducted by Jöelle Michaud, Catherine Carmichael and Dr Hamish Scott at the 
+conducted by Joëlle Michaud, Catherine Carmichael and Dr Hamish Scott at the 
 Walter and Eliza Hall Institute to compare the effects of transcription factors 
 in a human cell line. The targets file is as follows:</p>
 <pre>&gt; targets &lt;- readTargets(&quot;runxtargets.txt&quot;)
@@ -1042,7 +1072,8 @@ each gene and <code>sigma</code> is the sample standard deviations for each
 gene. Ordinary t-statistics for comparing mutant to wt could be computed by</p>
 <pre>&gt; ordinary.t &lt;- fit$coef / fit$stdev.unscaled / fit$sigma</pre>
 <p>We prefer though to use empirical Bayes moderated t-statistics which are 
-computed below. Now create an MA-plot of the average M and A-values for each gene.</p>
+computed below.</p>
+<p>&nbsp;Now create an MA-plot of the average M and A-values for each gene.</p>
 <pre>&gt; M &lt;- fit$coef
 &gt; A &lt;- fit$Amean
 &gt; plot(A,M,pch=16,cex=0.2)
@@ -1786,6 +1817,7 @@ hour for a series of arrays.</p>
 &gt; plot(fit$coef,eb$lods,xlab=&quot;Log2 Fold Change&quot;,ylab=&quot;Log Odds&quot;,pch=16,cex=0.2)</pre>
 <p align="center">
 <img border="0" src="bob/volcano.png" width="890" height="590"></p>
+
 <h2><a name="marray">12. Using limma with the marray Package</a></h2>
 <p>The package marray is 
 designed to read and normalize cDNA data. The marray package provides location and scale normalization
@@ -1840,15 +1872,15 @@ demonstration of how M-values are less noisy than single-channels. </p>
 
 <pre>&gt; imageplot(log(RG.b$R[,4],2), layout, low="white", high="red") </pre>
 <p align="center">
-<img border="0" src="apoai/imageRG.b.R4.png" width="590" height="590"></p>
+<img border="0" src="apoai/imageRG-b-R4.png" width="590" height="590"></p>
 
 <pre>&gt; imageplot(log(RG.b$G[,4],2), layout, low="white", high="green") </pre>
 <p align="center">
-<img border="0" src="apoai/imageRG.b.G4.png" width="590" height="590"></p>
+<img border="0" src="apoai/imageRG-b-G4.png" width="590" height="590"></p>
 
 <pre>&gt; imageplot(log(MA.n$M[,4],2), layout, low="white", high="blue") </pre>
 <p align="center">
-<img border="0" src="apoai/imageMA.n.M4.png" width="590" height="590"></p>
+<img border="0" src="apoai/imageMA-n-M4.png" width="590" height="590"></p>
 
 <p>It should be noted that analysing log-ratios corresponds to doing all
 analysis on the basis of within-array contrasts while the
@@ -1927,42 +1959,39 @@ between the red and green single-channel intensity distributions:</p>
 
 <pre>&gt; plotDensities(RG.b, log.transform=TRUE)</pre>
 <p align="center">
-<img border="0" src="apoai/densRG.b.png" width="590" height="590"></p>
+<img border="0" src="apoai/densRG-b.png" width="590" height="590"></p>
 
 <pre>&gt; plotDensities(MA.n)</pre>
 <p align="center">
-<img border="0" src="apoai/densRG.n.png" width="590" height="590"></p>
+<img border="0" src="apoai/densRG-n.png" width="590" height="590"></p>
 
 <p> <code> Printtiploess</code> makes the single-channels within arrays
 similar:</p>
 <pre>&gt; plotDensities(MA.p)</pre>
 <p align="center">
-<img border="0" src="apoai/densRG.p.png" width="590" height="590"></p>
+<img border="0" src="apoai/densRG-p.png" width="590" height="590"></p>
 
 <p> All the single-channels have the same distribution. </p>
 <pre>&gt; plotDensities(MA.q, col="black")</pre>
 <p align="center">
-<img border="0" src="apoai/densRG.q.png" width="590" height="590"></p>
+<img border="0" src="apoai/densRG-q.png" width="590" height="590"></p>
 
 <pre>&gt; plotDensities(MA.pq, col="black")</pre>
 <p align="center">
-<img border="0" src="apoai/densRG.pq.png" width="590" height="590"></p>
+<img border="0" src="apoai/densRG-pq.png" width="590" height="590"></p>
 
 <p><b>MpAq</b> gives very similar results as <b>pq</b>.</p>
 <pre>&gt; plotDensities(MA.MpAq)</pre>
 <p align="center">
-<img border="0" src="apoai/densRG.MpAq.png" width="590" height="590"></p>
-
+<img border="0" src="apoai/densRG-MpAq.png" width="590" height="590"></p>
 
 <h2>Conventions</h2>
-
 
 <p>Where possible, limma tries to use the convention that class names are in 
 upper CamelCase, i.e., the first letter of each word is 
 capitalized, while function names are in lower camelCase, i.e., first word is lowercase. When periods appear in function names, the 
 first word should be an action while the second word is the name of a type of 
 object on which the function acts.</p>
-
 
 <h2>Acknowledgements</h2>
 <p>Thanks to Yee Hwa Yang and Sandrine Dudoit for the first three data sets. The Swirl zebrafish data were provided by Katrin Wuennenburg-Stapleton from the

@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 4 October 2004.
+#	30 June 2003.  Last modified 8 October 2004.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -23,6 +23,7 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 	if(is(object,"PLMset")) {
 #		don't use accessor function so don't have to require affyPLM
 		M <- object@chip.coefs
+		if(length(M)==0) stop("chip.coefs has length zero")
 		if(missing(weights) && length(object@se.chip.coefs)) weights <- 1/pmax(object@se.chip.coefs,1e-5)^2
 	} else {
 	if(is(object,"exprSet")) {

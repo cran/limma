@@ -4,9 +4,10 @@ assign("[.RGList",
 function(object, i, j, ...) {
 #  Subsetting for RGList objects
 #  Gordon Smyth
-#  29 June 2003.  Last modified 5 July 2003.
+#  29 June 2003.  Last modified 10 Oct 2004.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
+	oc <- names(object$other)
 	if(missing(i))
 		if(missing(j))
 			return(object)
@@ -17,6 +18,8 @@ function(object, i, j, ...) {
 			object$Gb <- object$Gb[,j,drop=FALSE]
 			object$weights <- object$weights[,j,drop=FALSE]
 			object$targets <- object$targets[j,,drop=FALSE]
+			object$targets <- object$targets[j,,drop=FALSE]
+			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][,j,drop=FALSE]
 		}
 	else
 		if(missing(j)) {
@@ -26,6 +29,7 @@ function(object, i, j, ...) {
 			object$Gb <- object$Gb[i,,drop=FALSE]
 			object$weights <- object$weights[i,,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
+			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][i,,drop=FALSE]
 		} else {
 			object$R <- object$R[i,j,drop=FALSE]
 			object$G <- object$G[i,j,drop=FALSE]
@@ -34,6 +38,7 @@ function(object, i, j, ...) {
 			object$weights <- object$weights[i,j,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
 			object$targets <- object$targets[j,,drop=FALSE]
+			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][i,j,drop=FALSE]
 		}
 	object
 })

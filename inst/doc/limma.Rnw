@@ -26,7 +26,7 @@ The linear model and differential expression functions apply to all microarray t
 
 The full Limma User's Guide is available as part of the online documentation.
 To reach the User's Guide you need to install the limma package.
-If you've installed the package and you're using Windows, simply type \texttt{library(limma)} at the R prompt then click on ``limma'' from the drop-down menu called ``Vignettes''.
+If you've installed the package and you're using Windows, type \texttt{library(limma)} at the R prompt then click on ``limma'' from the drop-down menu called ``Vignettes''.
 If you're not using windows, you can type
 \begin{Schunk}
 \begin{Sinput}

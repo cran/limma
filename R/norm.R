@@ -90,17 +90,15 @@ loessFit <- function(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights))
 
 #  WITHIN ARRAY NORMALIZATION
 
-MA.RG <- function(object, log.transform=TRUE) {
+MA.RG <- function(object, log.transform=TRUE, bc.method="subtract", offset=0) {
 #	Convert RGList to MAList
 #	Gordon Smyth
-#	2 March 2003.  Last revised 5 September 2003.
+#	2 March 2003.  Last revised 10 Oct 2004.
 
+	if(is.null(object$R) || is.null(object$G)) stop("Object doesn't contain R and G components")
+	object <- backgroundCorrect(object, method=bc.method, offset=offset)
 	R <- object$R
 	G <- object$G
-
-#	Background correction
-	if(!is.null(object$Rb)) R <- R-object$Rb
-	if(!is.null(object$Gb)) G <- G-object$Gb
 
 #	Log
 	if(log.transform) { 
@@ -111,7 +109,7 @@ MA.RG <- function(object, log.transform=TRUE) {
 	}
 	
 #	Minus and Add
-	object$R <- object$G <- object$Rb <- object$Gb <- NULL
+	object$R <- object$G <- object$Rb <- object$Gb <- object$other <- NULL
 	object$M <- as.matrix(R-G)
 	object$A <- as.matrix((R+G)/2)
 	new("MAList",unclass(object))
@@ -129,12 +127,12 @@ RG.MA <- function(object) {
 	new("RGList",unclass(object))
 }
 
-normalizeWithinArrays <- function(object,layout=object$printer,method="printtiploess",weights=object$weights,span=0.3,iterations=4,controlspots=NULL,df=5,robust="M") {
+normalizeWithinArrays <- function(object,layout=object$printer,method="printtiploess",weights=object$weights,span=0.3,iterations=4,controlspots=NULL,df=5,robust="M",bc.method="subtract",offset=0)
 #	Within array normalization
 #	Gordon Smyth
-#	2 March 2003.  Last revised 16 July 2004.
-
-	if(!is(object,"MAList")) object <- MA.RG(object)
+#	2 March 2003.  Last revised 8 Oct 2004.
+{
+	if(!is(object,"MAList")) object <- MA.RG(object,bc.method=bc.method,offset=offset)
 	choices <- c("none","median","loess","printtiploess","composite","robustspline")
 	method <- match.arg(method,choices)
 	if(method=="none") return(object)

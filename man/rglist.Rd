@@ -23,7 +23,8 @@ Optional components include
   \code{weights}:\tab numeric matric containing relative spot quality weights.  Should be non-negative.\cr
   \code{printer}:\tab list containing information on the process used to print the spots on the arrays.  See \link[limma:PrintLayout]{PrintLayout}.\cr
   \code{genes}:\tab data.frame containing information on the genes spotted on the arrays.  Should include a character column \code{Name} containing names for the genes or controls.\cr
-  \code{targets}:\tab data.frame containing information on the target RNA samples.  Should include factor or character columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.
+  \code{targets}:\tab data.frame containing information on the target RNA samples.  Should include factor or character columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.\cr
+  \code{other}:\tab list containing numeric matrices of other spot-specific information
 }
 All of the matrices should have the same dimensions.
 The row dimension of \code{targets} should match the column dimension of the matrices.

@@ -252,10 +252,10 @@ read.matrix <- function(file,nrows=0,skip=0,...) {
 	x
 }
 
-read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
+read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth
-#	1 Nov 2002.  Last revised 8 June 2004.
+#	1 Nov 2002.  Last revised 10 Oct 2004.
 
 	if(missing(files)) {
 		if(missing(ext))
@@ -353,6 +353,19 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		}
 	}
 
+#	Other columns
+	if(!is.null(other.columns)) {
+		other.columns <- as.character(other.columns)
+		j <- match(other.columns,colnames(obj),0)
+		if(any(j>0)) {
+			other.columns <- colnames(obj)[j]
+			RG$other <- list()
+			for (j in other.columns) RG$other[[j]] <- Y 
+		} else {
+			other.columns <- NULL
+		}
+	}
+
 #	Now read remainder of files
 	for (i in 1:nslides) {
 		if(i > 1) {
@@ -366,6 +379,9 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		RG$Rb[,i] <- obj[,columns$Rb]
 		RG$Gb[,i] <- obj[,columns$Gb]
 		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)
+		if(!is.null(other.columns)) for (j in other.columns) {
+			RG$other[[j]][,i] <- obj[,j] 
+		}
 		if(verbose) cat(paste("Read",fullname,"\n"))
 	}
 	new("RGList",RG)
