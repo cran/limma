@@ -1,0 +1,266 @@
+6 September 2004: limma 1.7.6
+
+- bug fixes to decideTests() for method="heirarchical" and method="nestedF"
+
+2 September 2004: limma 1.7.5
+
+- Now passes R CMD check under R 2.0
+- example into User's Guide of wt.fun arg of read.maimages() using multiple columns
+- rlm.series() deprecated in favor of mrlm()
+- new function decideTests() for global multiple testing across probes and contrasts
+- anova.MAList checks if design matrix has more than one column
+- new function nonEstimable()
+- lmFit() now reports non-estimable coefficients
+- bug fix to contrasts.fit() when there are non-estimable coefficients
+
+20 July 2004: limma 1.7.4
+
+- normalizeWithinArrays(method="composite") now allows for NAs
+- added fill=TRUE to read.table() in readTargets()
+- fix bug causing dim on RGList, MAList and MArrayLM to return NULL when just one column
+- write.fit() now works on MArrayLM objects when eBayes has not been used
+
+3 July 2004: limma 1.7.3
+
+- plotMA() now does single-channel MA-plots and accepts exprSet and matrix objects
+- imageplot legend now rounds numbers to 1 decimal place
+- GenePix Allocation List to GenePix Array List throughout
+
+2 July 2004: limma 1.7.2
+
+- in Windows, loading limma twice no longer creates extra "Vignettes" menus
+- bug fixes to read.imagene() to account for changes to readImaGeneHeader() on 8 June
+
+28 June 2004: limma 1.7.1
+
+- cex=16,pch=0.2 now default in plotMA()
+- cex=16,pch=0.1 changed to cex=16,pch=0.2 throughout User's Guide
+- calls in normalizeRobustSpline() to rlm() now explicitly set prior weights
+
+28 June 2004: limma 1.7.0
+
+- pdf version of User's Guide updated
+- estrogen case study re-done for User's Guide
+- many .Rd files revised
+- instances of missing() changed to is.null() is modelMatrix()
+- lm.series(), rlm.series(), gls.series() and lmscFit() now save cov matrix of coefficients
+- contrasts.fit() and classifyTestF() now use cov matrix of coefficients in data object
+- changed many external links in .Rd files to reflect movement of functions from base to stats and graphics in R 1.9.0
+- readGPRHeader() no longer assumes any known fields
+- lmFit() now accepts PLMset objects
+- changelog.txt moved to /inst/doc
+
+21 June 2004: limma 1.6.14
+
+- eBayes() checks design for full rank before computing F-statistic
+- Fix link to convert:coerce in array2channel.Rd
+- plotMA() now accepts MarrayLM objects
+- new background correction method "normexp" and associated functions
+- summary methods for RGList, MAList and MArrayLM
+
+14 June 2004: limma 1.6.13
+
+- changelog.txt (this file) included in /archive
+- new function imageplot3by2() to write plots to files
+- imageplot() now shows z-range legend
+- new argument 'offset' for backgroundCorrect()
+
+8 June 2004: limma 1.6.12
+
+- updates to read.maimages() to handle new format SMD files
+- periods removed from names of output from readImaGeneHeader()
+- read.maimages() now calls readGPRHeader() to get skip records for each gpr file
+- readGPRHeaders() renamed to readGPRHeader()
+- readImageneHeaders() renamed to readImaGeneHeader()
+- new function protectMetachar()
+- new function trimWhiteSpace()
+- update to kooperberg() help page example
+- kooperberg() now returns RGList
+- new function getLayout2() which reads GAL file headers
+- fill=TRUE added to read.table() calls in read.maimages()
+- "Quick Start" section in User's Guide now uses readTargets()
+- new function readSMDHeader()
+- new function tZscore(), updates to zscore help page
+- bug fix for vennCounts() when no sig results for one or more contrasts
+- eBayes() now returns F-statistics and corresponding p-values
+
+29 May 2004: limma 1.6.11
+
+- expanded function descriptions in 7.Diagnostics.Rd
+- fix Satterthwaite spelling errors
+- new function plotMA3by2()
+- plotMA() no longer plots points with zero weight by default
+
+25 May 2004: limma 1.6.10
+
+- example and help page updates for lmscFit() and intraspotCorrelation()
+- bug fix to array2channel() when Cy3/Cy5 are the only columns
+
+24 May 2004: limma 1.6.9
+
+- further comments on "vsn" normalization in the help entry for normalizeBetweenArrays()
+
+22 May 2004: limma 1.6.8
+
+- update contrasts.fit help page to cover general design matrices, lmFit()
+- new argument 'design' for contrasts.fit
+
+21 May 2004: limma 1.6.7
+
+- update User's Guide to refer to marray package
+- fix numerical bug in contrasts.fit for non-orthog design matrix
+
+14 May 2004: limma 1.6.6
+
+- new argument 'grep' for array2channel()
+- Estrogen case study redone for user's guide.
+- Made pdf of User's Guide.
+
+14 May 2004: limma 1.6.5
+
+- smooothVar() renamed to squeezeVar()
+- array2channel() behaves nicely for zero-size data.frames
+- dim() correctly returns c(0,0) for zero-size RGList, MAList, MArrayLM objects
+- optional arguments in normalizeBetweenArrays() changed to ...
+- default for 'ties' in normalizeQuantiles() changed to TRUE
+
+10 May 2004: limma 1.6.4
+
+- method="vsn" added to normalizeBetweenArrays()
+
+7 May 2004: limma 1.6.3
+
+- merge method for MAList objects
+- functions FStat, dupcor.series, classifyTests now use match.call() and eval()
+- clean up help entry for auROC()
+- fix documentation bug for topTable(adjust=NULL)
+
+19 April 2004: limma 1.6.2
+
+- new documentation entry on single channel analysis
+= new function intraspotCorrelation()
+- lmsc.series() renamed to lmscFit(), now produces an MArrayLM object
+
+7 April 2004: limma 1.6.1
+
+- fix to printHead to treat factors as as vectors
+- new argument cex for vennDiagram
+
+6 April 2004: limma 1.6.0
+
+- additional argument block to duplicateCorrelation, gls.series and lmFit to treat technical replicates as randomized blocks
+- new methods Rquantile, Gquantile, Tquantile for normalizeBetweenArrays
+- lmFit now extracts probe IDs from exprSet object
+- Ecoli-lrp case study added to User's Guide
+
+29 March 2004: limma 1.5.9
+
+- backgroundCorrect(,method="edwards") now handles NAs
+- bug fixes to backgroundCorrect(,method="edwards")
+- classifyTests() renamed to classifyTestsF()
+- classifyTestsP() now extracts degrees of freedom from object
+- read.maimages no longer disallows source= and columns= together
+
+20 March 2004: limma 1.5.8
+
+- internal links added to contents section of User's Guide
+- changed calling sequence in duplicateCorrelation() to randomizedBlockFit, limma now depends on package statmod >= 1.0.6
+- two changes to plotPrintTipLoess() to avoid warning messages
+- bug fix to duplicateCorrelation() to avoid test on rho[i] when NA
+
+15 March 2004: limma 1.5.7
+
+- fixes to write.fit() to accomodate TestResults class
+- Sweave-style vignette added, as well as User's Guide
+- new function array2channel() to targets files from by-array to by-channel representation
+- removed warning about Cy3, Cy5 columns from readTargets()
+- more general use of 'ref' in modelMatrix(), doesn't have to occur on every array
+- target names are sorted in modelMatrix()
+- designMatrix() renamed to modelMatrix(), designMatrix deprecated
+- new function lmsc.series() for single-channel linear models
+
+12 March 2004: limma 1.5.6
+
+- tetragamma() changed to psigamma(x,deriv=2) with R version check
+
+9 March 2004: limma 1.5.5
+
+- bug fix to normalizeRobustSpline() to prevent error when spline basis becomes singular
+- La.eigen() to eigen() in is.fullrank()
+- case study Estrogen added to User's Guide
+
+8 Mar 2004: limma 1.5.4
+
+- new argument 'mar' for vennDiagram(), reduces white-space for venn Diagrams
+- new argument 'annotation' for read.maimages()
+- fix bug in gls.series to ensure that spacing and weights arguments are passed to duplicateCorrelation()
+- check for R version when setting package argument for .C and .Fortran calls
+
+4 Mar 2004: limma 1.5.3
+
+- new function smoothVar()
+- fix 'ProbUID' typo for source="agilent"
+
+26 Feb 2004: limma 1.5.2
+
+- source="agilent" added to read.maimages
+- bug fixed in heatdiagram() and heatDiagram() which caused over-printing when using par(mfrow)
+- vennCounts() now uses table() for major computation and is therefore much faster
+- new function FStat()
+- S3 class "classification" replaced by S4 class "TestResults", including 'show' and 'summary' methods
+- classifyTests(), classifyTestsT() and classifyTestsP() now produce "TestResults" objects
+
+21 Feb 2004: limma 1.5.1
+
+- removed package argument from calls to .C and .Fortran loess hooks in modreg package.  Edited package dependencies in DESCRIPTION file.  These two changes allow the code to pass R cmd check in both R 1.8.1 and R 1.9.0 (dev) and allows the development and release versions of limma to be consolidated.
+
+18 Feb 2004: limma 1.3.18
+
+- fix bug in duplicateCorrelation() which was not finding the M matrix when object was not an MArrayLM
+
+17 Feb 2004: limma 1.3.17
+
+- new argument 'resort.by' for toptable() and topTable()
+
+16 Feb 2004: limma 1.3.16
+
+- changes to loessFit() to avoid errors with small numbers of observations
+- argument 'path' added to readSpotTypes() and readTargets()
+- check in duplicateCorrelation() for correlation less than -1
+- more expository comments added to 2.Classes.Rd
+
+8 Feb 2004: limma 1.3.15
+
+- duplicateCorrelation now uses randomizedBlockFit from the statmod package instead of gls from the nlme package.  This results in a several-fold increase in speed for duplicateCorrelation and dupcor.series.
+- dupcor.series now deprecated
+- getLayout() now has option to guess spacing between duplicate spots
+- new function blockDiag() to form block diagonal matrices
+- fix bug in imageplot() which caused overprinting of plots when using par(mfrow)
+
+23 Jan 2004: limma 1.3.14
+
+- new function poolVar to Welch-style pooling of sample variances with unequal variances
+- new functions usersguideURL() and .First.lib() to implement limma entry in Windows drop-down Vignettes menu
+
+18 Jan 2004: limma 1.3.13
+
+- bug fix for write.fit() (was failing when adjust p-values with multiple contrasts)
+- Updates to references - linear modelling paper now accepted for publication
+
+30 Dec 2003: limma 1.3.12
+
+- bug fix for designMatrix() (was giving wrong matrix when common reference was Cy5 for first array)
+
+29 Dec 2003: limma 1.3.11
+
+- bug fix to printorder() with spacing="topbottom" (was returning vectors of wrong length)
+- new function modifyWeights()
+- designMatrix() now uses zapsmall() to eliminate small non-zero entries
+
+26 Dec 2003: limma 1.3.10
+
+- readGAL() now sorts GAL files into standard order if they are not already
+- read.maimages() function now sets the genelist directly from the gpr files, so readGAL() will usually no longer be required
+- new function auROC() to compute exact area under ROC
+
+For earlier changes, see the Change Log at http://www.bioconductor.org

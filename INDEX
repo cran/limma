@@ -1,0 +1,137 @@
+[.RGList                Subset RGList, MAList or MArrayLM Objects
+1.Introduction          Introduction to the LIMMA Package
+2.Classes               Classes Defined by this Package
+3.ReadingData           Reading Microarray Data from Files
+4.Normalization         Normalization of Microarray Data
+5.LinearModels          Linear Models for Microarrays
+6.SingleChannel         Individual Channel Analysis of Two-Color
+                        Microarrays
+7.Diagnostics           Diagnostics and Quality Assessment
+8.Other                 Other Functions
+anova.MAList            ANOVA Table - method
+as.MAList               Convert marrayNorm Object to an MAList Object
+auROC                   Area Under Receiver Operating Curve
+backgroundCorrect       Correct Intensities for Background
+blockDiag               Block Diagonal Matrix
+bwss                    Between and within sums of squares
+bwss.matrix             Between and within sums of squares for matrix
+cbind.RGList            Combine RGList or MAList Objects
+classifyTests           Treat Simultaneous T-Tests as Classification
+                        Problem
+contrasts.fit           Compute Contrasts from Linear Model Fit
+controlStatus           Set Status of each Spot from List of Spot
+                        Types
+decideTests             Compute Matrix of Hypothesis Test Results
+designI2M               Convert Individual Channel Design Matrix to
+                        M-A Format
+designMatrix            Construct Design Matrix
+dim.RGList              Retrieve the Dimensions of an RGList, MAList
+                        or MArrayLM Object
+dimnames.RGList         Retrieve the Dimension Names of an RGList,
+                        MAList or MArrayLM Object
+dupcor.series           Correlation Between Duplicates
+ebayes                  Empirical Bayes Statistics for Differential
+                        Expression
+exprSet2-class          Expression Set - class
+fit.normexp             Fit Normal+Exp Convolution Model to Observed
+                        Intensities
+fitFDist                Moment Estimation of Scaled F-Distribution
+FStat                   Treat Simultaneous T-Tests as Classification
+                        Problem
+geneSetTest             Gene Set Test
+getLayout               Extract the Print Layout of an Array from the
+                        GAL File
+getSpacing              Get Numerical Spacing
+gls.series              Generalized Least Squares for Series of
+                        Microarrays
+gridr                   Row and Column Positions on Microarray
+heatdiagram             Stemmed Heat Diagram
+helpMethods             Prompt for Method Help Topics
+imageplot               Image Plot of Microarray Statistics
+imageplot3by2           Write Imageplots to Files
+intraspotCorrelation    Intra-Spot Correlation for Two Color Data
+is.fullrank             Check for Full Column Rank
+isNumeric               Test for Numeric Argument
+kooperberg              Kooperberg Model-Based Background Correction
+LargeDataObject-class   Large Data Object - class
+limmaguideURL           File Location of html Limma User's Guide
+lm.series               Linear Model for Series of Arrays
+lmFit                   Linear Model for Series of Arrays
+lmscFit                 Fit Linear Model to Individual Channels of
+                        Two-Color Data
+loessFit                Fast Simple Loess
+m.spot                  Extract M or A-values from SPOT data.frame or
+                        matrix
+m2loglik.normexp        Normal + Exponential Log-Likelihood
+ma3x3.matrix            Two dimensional Moving Averages with 3x3
+                        Window
+makeContrasts           Construct Matrix of Custom Contrasts
+makeUnique              Make Values of Character Vector Unique
+MAList-class            M-value, A-value Expression List - class
+MArrayLM-class          Microarray Linear Model Fit - class
+matvec                  Multiply a Matrix by a Vector
+merge.RGList            Merge RGList or MAList Data Objects
+modelMatrix             Construct Design Matrix
+modifyWeights           modifyWeights
+normalizeBetweenArrays
+                        Normalize Between Arrays
+normalizeForPrintorder
+                        Print-Order Normalization
+normalizeMedianDeviations
+                        Normalize Columns of a Matrix to have the Same
+                        Scale
+normalizeQuantiles      Normalize Columns of a Matrix to have the same
+                        Quantiles
+normalizeRobustSpline   Normalize Single Microarray Using Shrunk
+                        Robust Splines
+normalizeWithinArrays   Normalize Within Arrays
+plotDensities           Single-channel Densities Plot
+plotMA                  MA-Plot
+plotMA3by2              Write MA-Plots to Files
+plotPrintTipLoess       MA Plots by Print-Tip Group
+poolVar                 Pool Sample Variances with Unequal Variances
+printHead               Print Leading Rows of Large Objects
+PrintLayout-class       Print Layout - class
+printorder              Identify Order in which Spots were Printed
+protectMetachar         Protect Metacharacters
+qqt                     Student's t Quantile-Quantile Plot
+QualityWeights          Spot Quality Weights
+read.maimages           Read RGList from Image Analysis Output Files
+read.matrix             Read Matrix with Headers from File
+read.series             Read series of image files
+readGAL                 Read a GAL file
+readGPRHeader           Read Header Information from Image Analysis
+                        Raw Data File
+readImaGeneHeader       Read ImaGene Header Information
+readSpotTypes           Read Spot Types File
+readTargets             Read RNA Targets File
+removeExt               Remove Common Extension from File Names
+rg.genepix              Extract RGList from data.frames Containing
+                        GenePix Data
+rg.quantarray           Extract RGList from data.frames Containing
+                        Quantarray Data
+rg.series.spot          Read RGList from SPOT Image Analysis Output
+                        Files
+rg.spot                 Extract RGList from data.frames Containing
+                        SPOT Data
+RGList-class            Red, Green Intensity List - class
+rlm.series              Robust Linear Model for Series of Microarrays
+signal.normexp          Expected Signal Given Observed Foreground
+                        Under Normal+Exp Model
+splitName               Split Composite Gene Names
+squeezeVar              Smooth Sample Variances
+summary.RGList          Summaries of Microarray Data Objects
+targetsA2C              Convert Two-Color Targets Dataframe from
+                        One-Row-Per-Array to One-Row-Per-Channel
+TestResults-class       Matrix of Test Results - class
+tmixture.vector         Estimate Scale Factor in Mixture of
+                        t-Distributions
+toptable                Table of Top Genes from Linear Model Fit
+trigammaInverse         Inverse Trigamma Function
+trimWhiteSpace          Trim Leading and Trailing White Space
+uniquegenelist          Eliminate Duplicate Names from the Gene List
+unwrapdups              Unwrap Duplicate Spot Values from Rows into
+                        Columns
+vennCounts              Venn Diagrams
+write.fit               Write MArrayLM Object to a File
+zscoreGamma             z-score equivalents
