@@ -14,7 +14,7 @@
 <p align="center">Gordon Smyth, Natalie Thorne and James Wettenhall<br>
 The
 Walter and Eliza Hall Institute of Medical Research<br>
-<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->18 September 2004<!--webbot bot="Timestamp" i-checksum="39506" endspan --></p>
+<!--webbot bot="Timestamp" S-Type="EDITED" S-Format="%d %B %Y" startspan -->22 September 2004<!--webbot bot="Timestamp" i-checksum="39495" endspan --></p>
 
 <h2>Table of Contents</h2>
 
@@ -35,7 +35,7 @@ Walter and Eliza Hall Institute of Medical Research<br>
   </li>
   <li><a href="#DataExploration">Data Exploration</a></li>
   <li><a href="#Normalization">Normalization and Background Correction</a></li>
-  <li><a href="#DifferentialExpression">Differential Expression</a><ol>
+  <li>Linear Models<ol>
   <li><a href="#LinearModels">Linear Models</a></li>
   <li><a href="#AffymetrixDesigns">Affymetrix and Other Single-Channel Designs</a></li>
   <li><a href="#CommonReferenceDesigns">Common Reference Designs</a></li>
@@ -44,6 +44,7 @@ Walter and Eliza Hall Institute of Medical Research<br>
 </ol>
 
   </li>
+  <li>Statistics for Differential Expression</li>
   <li><a href="#CaseStudies">Case Studies</a><ol>
   <li><a href="#Swirl">Swirl Data: A Single-Sample Experiments</a></li>
   <li><a href="#ApoAI">ApoAI Data: A Two-Sample Experiments</a></li>
@@ -125,7 +126,8 @@ from the home page using</p>
 <p>at the R prompt. Limma is updated frequently, often a couple 
 of times a week. The change-log is the file changelog.txt in the /doc directory 
 of the limma package installation. To display the first 20 lines of the 
-change-log, type the following at the R prompt:<pre>  writeLines(readLines(file.path(.find.package(&quot;limma&quot;),&quot;doc&quot;,&quot;changelog.txt&quot;),n=20))</pre>
+change-log, type the following at the R prompt:
+<pre>&gt; changeLog(n=20)</pre>
 <p>Limma is also available as part of the Bioconductor project at
 <a href="http://www.bioconductor.org">http://www.bioconductor.org</a>. Note 
 however that Bioconductor is updated only once every six months, unless you are 
@@ -346,7 +348,7 @@ to flagging them out. The definition of <code>myfun</code> here could be
 replaced with any other code to compute weights using the columns in the GenePix 
 output files.</p>
 <h3>5<a name="TargetsFile">.4 The Targets File</a></h3>
-<p>Although not strictly necessary, it is usually a good idea to construct a 
+<p>Although not strictly necessary, it is almost aways a good idea to construct a 
 Targets File which lists the RNA target hybridized to each channel of each 
 array.&nbsp;  The Targets File is normally in tab-delimited text format.  It should contain a  row for each microarray 
 in your experiment. It should contain a FileName column, giving the file from
@@ -475,17 +477,20 @@ intensities as part of the normalization process using <code>
 normalizeWithinArrays</code> so there is no need for any special action on the 
 part of users. If you want to over-ride this default background correct, for 
 example to ensure that all the corrected intensities are positive, then use the
-<code>backgroundCorrect</code> function. For example use</p>
-<pre>&gt; RG &lt;- backgroundCorrect(RG, method=&quot;minimum&quot;)</pre>
-<p>to reset zero or negative intensities to half the value of the minimum value 
-of the positive intensities. No further background correction will be performed 
+<code>backgroundCorrect</code> function. For example we generally find</p>
+<pre>&gt; RG &lt;- backgroundCorrect(RG, method=&quot;normexp&quot;, offset=100)</pre>
+<p>to be superior for differential expression purposes to background subtraction 
+with most image analysis programs. This method adjusts the foreground adaptively 
+for the background intensities and results in strictly positive adjusted 
+intensities, i.e., negative intensities are avoided. The use of an offset forces 
+the log-ratios for very low intensities spots towards zero. No further background correction will be performed 
 when <code>normalizeWithinArrays</code> is used subsequently to normalize the 
 intensities.</p>
-<p>Limma contains some more sophisticated normalization methods. Normalization 
-of absolute expression levels as well as just log-ratios is covered in Section 
-11 of this guide.</p>
-<h2>8<a name="DifferentialExpression">. Differential Expression</a></h2>
-<h3>8<a name="LinearModels">.1 Linear Models</a></h3>
+<p>Limma contains some more sophisticated normalization methods. Some 
+between-array normalization methods are discussed in Section 
+12 of this guide.</p>
+<h2>8<a name="DifferentialExpression">. Linear Models</a></h2>
+<h3>8<a name="LinearModels">.1 Introduction</a></h3>
 <p>The package limma uses an approach called <i>linear models</i> to analyse 
 designed microarray experiments. This approach allows very general experiments 
 to be analysed just as easily as a simple replicated experiment. The approach is 
@@ -495,6 +500,26 @@ indicates in effect which RNA samples have been applied to each array. The
 second is the <i>contrast matrix</i> which specifies which comparisons you would 
 like to make between the RNA samples. For very simple experiments, you may not 
 need to specify the contrast matrix.</p>
+<p>The philosophy of the approach is as follows. You have to start by fitting a 
+linear model to your data which fully models the systematic part of your data. 
+The model is specified by the design matrix. Each row of the design matrix 
+corresponds to an array in your experiment and each column corresponds to a 
+coefficient which is used to describe the RNA sources in your experiment. With 
+Affymetrix or single-channel data, or with two-color with a common reference, 
+you will need as many coefficients as you have distinct RNA sources, no more and 
+no less. With direct-design two-color data you will need one fewer coefficient 
+than you have distinct RNA sources, unless you wish to estimate a dye-effect for 
+each gene, in which case the number of RNA sources and the number of 
+coefficients will be the same. Any set of independent coefficients will do, 
+providing they describe all your treatments. The main purpose of this step is to 
+estimate the variability in the data, hence the systematic part needs to 
+modelled so it can be distinguished from random variation. </p>
+<p>In practice the requirement to have exactly as many coefficients as RNA 
+sources is too restrictive in terms of questions you might want to answer. You 
+might be interested in more or fewer comparisons between the RNA source. Hence 
+the contrasts step is provided so that you can take the initial coefficients and 
+compare them in as many ways as you want to answer any questions you might have, 
+regardless of how many or how few these might be.</p>
 <p>If you have data from Affymetrix experiments, from single-channel spotted 
 microarrays or from spotted microarrays using a common reference, then linear 
 modeling is the same as ordinary analysis of variance or multiple regression 
@@ -612,7 +637,8 @@ computed:</p>
 &gt; fit2 &lt;- eBayes(fit2)</pre>
 <h3>8<a name="DirectDesigns">.4 Direct Two-Color Designs</a></h3>
 <p>Two-colour designs without a common reference require the most statistical 
-knowledge to choose the appropriate design matrix. As an example, we consider an 
+knowledge to choose the appropriate design matrix. A direct design is one in 
+which there is no single RNA source which is hybridized to every array. As an example, we consider an 
 experiment conducted by Dr Mireille Lahoud at the Walter and Eliza Hall 
 Institute to compare gene expression in three different populations of 
 dendritric cells (DC).</p>
@@ -695,8 +721,8 @@ mutant versus wild type comparison.</p>
 the mice. Here we outline a direct approach in which a separate coefficient is 
 fitted for each mouse, and then the contrast of interest is formed between the 
 mice.</p>
-<pre><font size="3">design &lt;- modelMatrix(targets, ref=&quot;wt1&quot;)
-design &lt;- cbind(Dye=1,design)
+<pre><font size="3">&gt; design &lt;- modelMatrix(targets, ref=&quot;wt1&quot;)
+&gt; design &lt;- cbind(Dye=1,design)
 &gt; colnames(design)
 [1] &quot;Dye&quot; &quot;mu1&quot; &quot;mu2&quot; &quot;mu3&quot; &quot;wt2&quot; &quot;wt3&quot;</font></pre>
 <p>The above code treats the first wild-type mice as a baseline reference, so 
@@ -704,17 +730,82 @@ that columns of the design matrix represent the difference between each of the
 other mice and  wt1. The design matrix also includes an intercept term which 
 represents the dye effect of cy5 over cy3 for each gene. If you don't wish to 
 allow for a dye effect, the second line of code can be omitted.</p>
-<pre><font size="3">fit &lt;- lmFit(MA, design)
-cont.matrix &lt;- makeContrasts(muvswt=(mu1+mu2+mu3-wt2-wt3)/3, levels=design)
-fit2 &lt;- contrasts.fit(fit, cont.matrix)
-fit2 &lt;- eBayes(fit2)</font></pre>
+<pre><font size="3">&gt; fit &lt;- lmFit(MA, design)
+&gt; cont.matrix &lt;- makeContrasts(muvswt=(mu1+mu2+mu3-wt2-wt3)/3, levels=design)
+&gt; fit2 &lt;- contrasts.fit(fit, cont.matrix)
+&gt; fit2 &lt;- eBayes(fit2)</font></pre>
 <p>The contrast defined by the function <code>makeContrasts</code> represents 
 the average difference between the mutant and wild-type mice, which is the 
 comparison of interest.</p>
 <p>This general approach is applicable to many medium-sized studies involving 
 biological replicates.</p>
-<h2>9<a name="CaseStudies">. Case Studies</a></h2>
-<h3>9<a name="Swirl">.1. Swirl Zebrafish: A Single-Sample Experiment</a></h3>
+<h2>9. Statistics for Differential Expression</h2>
+<p>A number of summary statistics are computed by the <code>eBayes()</code> 
+function for each gene and each contrast. The M-value (<code>M</code>) is the 
+log2-fold change, or sometimes the log2-expression level, for that gene. The 
+A-value (<code>A</code>) is the the average expression level for that gene 
+across all the arrays and channels. The moderated t-statistic (<code>t</code>) 
+is the ratio of the M-value to its standard error. This has the same 
+interpretation as an ordinary t-statistic except that the standard errors have 
+been moderated across genes, effectively borrowing information from the ensemble 
+of genes to aid with inference about each individual gene. The ordinary 
+t-statistics are not usually required or recommended, but they can be recovered 
+by</p>
+<pre>&gt; tstat.ord &lt;- fit$coef / fit$stdev.unscaled / fit$sigma</pre>
+<p>after fitting a linear model. The ordinary t-statistic is on <code>
+fit$df.residual</code> degrees of freedom while the moderated t-statistic is on
+<code>fit$df.residual+fit$df.prior</code> degrees of freedom.</p>
+<p>The p-value (<code>p-value</code>) is obtained from the moderated 
+t-statistic, usually after some form of adjustment for multiple testing. The 
+most popular form of adjustment is &quot;fdr&quot; which is Benjamini and Hochberg's 
+method to control the false discovery rate. The meaning of the adjusted p-value 
+is as follows. If you select all genes with p-value below a given value, say 
+0.05, as differentially expression, then the expected proportion of false 
+discoveries in the selected group should be less than that value, in this case 
+less than 5%.</p>
+<p>The B-statistic (<code>lods</code> or <code>B</code>) is the log-odds 
+that that gene is differentially expressed. Suppose for example that B=1.5. The 
+odds of differential expression is exp(1.5)=4.48, i.e, about four and a half to 
+one. The probability that the gene is differentially expressed is 
+4.48/(1+4.48)=0.82, i.e., the probability is about 82% that this gene is 
+differentially expressed. A B-statistic of zero corresponds to a 50-50 chance 
+that the gene is differentially expressed. The B-statistic is automatically 
+adjusted for multiple testing by assuming that 1% of the genes, or some other 
+percentage specified by the user, are expected to be differentially expressed. 
+If there are no missing values in your data, then the moderated t&nbsp; and B 
+statistics will rank the genes in exactly the same order. Even you do have spot 
+weights or missing data, the p-values and B-statistics will usually provide a 
+very similar ranking of the genes.</p>
+<p>Please keep in mind that the moderated t-statistic p-values and the 
+B-statistic probabilities depend on various sorts of mathematical assumptions 
+which are never exactly true for microarray data. The B-statistics also depend 
+on a prior guess for the proportion of differentially expressed genes. Therefore 
+they are intended to be taken as a guide rather than as a strict measure of the 
+probability of differential expression. Of the three statistics, the 
+moderated-t, the associated p-value and the B-statistics, we usually base our 
+gene selections on the p-value. All three measures are closely related, but the 
+moderated-t and its p-value do not require a prior guess for the number of 
+differentially expressed genes.</p>
+<p>The above mentioned statistics are computed for every contrast for each gene. 
+The <code>eBayes()</code> function computes one more useful statistic. The moderated F-statistic (F) combines 
+the t-statistics for all the contrasts into an overall test of significance for 
+that gene. The 
+moderated F-statistic tests whether any of the contrasts are non-zero for that 
+gene, i.e., whether that gene is differentially expressed on any contrast. The 
+moderated-F has numerator degrees of freedom equal to the number of contrasts 
+and denominator degrees of freedom the same as the moderated-t. Its p-value is 
+stored as <code>fit$F.p.value</code>. It is similar to the ordinary F-statistic 
+from analysis of variance except that the denominator mean squares are 
+moderated across genes.</p>
+<p>In a complex experiment with many contrasts, it may be desirable to select 
+genes firstly on the basis of their moderated F-statistics, and subsequently to 
+decide which of the individual contrasts are significant for the selected genes. 
+This cuts down on the number of tests which need to be conducted and therefore 
+on the amount of adjustment for multiple testing. The 
+functions <code>classifyTestsF()</code> and <code>decideTests()</code> are 
+provided for this purpose.</p>
+<h2>10<a name="CaseStudies">. Case Studies</a></h2>
+<h3>10<a name="Swirl">.1. Swirl Zebrafish: A Single-Sample Experiment</a></h3>
 
 <p>In this section we consider a case study in which two RNA sources are 
 compared directly on a set of replicate or dye-swap arrays. The case study 
@@ -1027,7 +1118,7 @@ result of being based on observations made on the same set of arrays. Rainer et
 al (2003) have argued that the Benjamini and Hochberg approach is actually quite 
 stable with respect to dependence between the probes, but this remains a 
 somewhat controversial point.</p>
-<h3>9<a name="ApoAI">.2 ApoAI Knockout Data: A Two-Sample Experiment</a></h3>
+<h3>10<a name="ApoAI">.2 ApoAI Knockout Data: A Two-Sample Experiment</a></h3>
 <p>In this section we consider a case study where two RNA sources are compared 
 through a common reference RNA. The analysis of the log-ratios involves a 
 two-sample comparison of means for each gene.</p>
@@ -1179,7 +1270,7 @@ to be differentially expressed in the knockout versus the control line.</p>
 &gt; text(fit$coef[top8,2],fit$lods[top8,2],labels=substring(genelist[top8,&quot;NAME&quot;],1,5),cex=0.8,col=&quot;blue&quot;)</pre>
 <p align="center">
 <img border="0" src="apoai/bayes.png" width="693" height="743"></p>
-<h3>9<a name="ecoli">.3 Ecoli Lrp Data: Affymetrix Data with Two Targets</a></h3>
+<h3>10<a name="ecoli">.3 Ecoli Lrp Data: Affymetrix Data with Two Targets</a></h3>
 <p>The data are from experiments reported in Hung et al (2002) and are available 
 from the www site </p>
 <p>&nbsp; <a href="http://visitor.ics.uci.edu/genex/cybert/tutorial/index.html">http://visitor.ics.uci.edu/genex/cybert/tutorial/index.html</a></p>
@@ -1299,7 +1390,7 @@ values mean that it is repressed.</p>
 knock-out gene itself is in position four. Many of the genes in the above table, 
 including the ser, glt, liv, opp, lys, ilv and fim families, are known targets 
 of lrp. </p>
-<h3>9<a name="Estrogen">.4 Estrogen Data: A 2x2 Factorial Experiment with Affymetrix Arrays</a></h3>
+<h3>10<a name="Estrogen">.4 Estrogen Data: A 2x2 Factorial Experiment with Affymetrix Arrays</a></h3>
 <p>This data is from the estrogen package on Bioconductor. A subset of the data 
 is also analysed in the factDesign package vignette. To repeat this case study 
 you will need to have the R packages affy, estrogen and hgu95av2cdf installed.</p>
@@ -1439,7 +1530,7 @@ which is the highly conservative Holm's method.</p>
 6053   35995_at  2.76  8.87  12.7 1.05e-02  6.46
 12455    893_at  1.54 10.95  12.7 1.06e-02  6.45
 10175  40079_at -2.41  8.23 -12.6 1.09e-02  6.42</pre>
-<h3>9<a name="Weaver">.5 Weaver Mutant Data: A 2x2 Factorial Experiment with 
+<h3>10<a name="Weaver">.5 Weaver Mutant Data: A 2x2 Factorial Experiment with 
 Two-Color Data</a></h3>
 <p>This case study considers a more involved analysis in which the sources of 
 RNA have a factorial structure. In this example we assume that data is available as an 
@@ -1563,7 +1654,7 @@ those which have decreasing expression in the wild-type over time, and those
 which are down-regulated (green) in the mutant are those which increase over 
 time in the wild-type. The mutant is not participating in normal development 
 between 11 and 21 days in respect of these genes.</p>
-<h2>10<a name="DuplicateSpots">. Within-Array Replicate Spots</a></h2>
+<h2>11<a name="DuplicateSpots">. Within-Array Replicate Spots</a></h2>
 <p>In this section we consider a case study in which all genes (ESTs and 
 controls) are printed more than once on the array. This means that there is both 
 within-array and between-array replication for each gene. The structure of the 
@@ -1695,10 +1786,10 @@ hour for a series of arrays.</p>
 &gt; plot(fit$coef,eb$lods,xlab=&quot;Log2 Fold Change&quot;,ylab=&quot;Log Odds&quot;,pch=16,cex=0.2)</pre>
 <p align="center">
 <img border="0" src="bob/volcano.png" width="890" height="590"></p>
-<h2><a name="marray">11. Using limma with the marray Package</a></h2>
+<h2><a name="marray">12. Using limma with the marray Package</a></h2>
 <p>The package marray is 
-designed to read and normalize cDNA data. The marray package concentrates on location and scale normalization
-of M-values and provides some 
+designed to read and normalize cDNA data. The marray package provides location and scale normalization
+of M-values, rather than the within and between-array approach of limma, and provides some 
 normalization methods which are not in limma. Data input using the 
 marray packages produces a data object of class <code>marrayRaw</code>. Normalization using marrayNorm will produce a 
 data object 
@@ -1714,7 +1805,7 @@ using the convert package. <code>marrayRaw</code> objects may be converted to
 objects:</p>
 <pre>&gt; library(convert)
 &gt; MA &lt;- as(Data, &quot;MAList&quot;)</pre>
-<h2><a name="SingleChannelNormalization">12. Single-Channel Normalization for Two-Color Arrays</a></h2>
+<h2><a name="SingleChannelNormalization">13. Single-Channel Normalization for Two-Color Arrays</a></h2>
 
 <p> We provide a short background on the topic of single-channel
 normalization for two color arrays. Throughout this section the ApoAI

@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 10 August 2004.
+#	30 June 2003.  Last modified 4 October 2004.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -20,16 +20,16 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 		M <- object@maM
 		if(missing(weights) && length(object@maW)) weights <- object@maW
 	} else {
+	if(is(object,"PLMset")) {
+#		don't use accessor function so don't have to require affyPLM
+		M <- object@chip.coefs
+		if(missing(weights) && length(object@se.chip.coefs)) weights <- 1/pmax(object@se.chip.coefs,1e-5)^2
+	} else {
 	if(is(object,"exprSet")) {
 #		don't use accessor function so don't have to require Biobase
 		M <- object@exprs
 #		don't use weights until this is more thoroughly tested
 #		if(missing(weights) && length(object@se.exprs)) weights <- 1/pmax(object@se.exprs,1e-5)^2
-	} else {
-	if(is(object,"PLMset")) {
-#		don't use accessor function so don't have to require affyPLM
-		M <- object@chip.coefs
-		if(missing(weights) && length(object@se.chip.coefs)) weights <- 1/pmax(object@se.chip.coefs,1e-5)^2
 	}}}}
 #	Default method
 	if(is.null(M)) M <- as.matrix(object)
@@ -60,9 +60,9 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 		if(length(object@maA)) fit$Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
 	}
 	if(is(object,"exprSet")) {
-		ProbeSetID <- rownames(object@exprs)
+		ProbeSetID <- rownames(M)
 		if(!is.null(ProbeSetID)) fit$genes <- uniquegenelist(data.frame(ID=I(ProbeSetID)),ndups=ndups,spacing=spacing)
-		fit$Amean <- rowMeans(object@exprs,na.rm=TRUE)
+		fit$Amean <- rowMeans(M,na.rm=TRUE)
 	}
 	new("MArrayLM",fit)
 }

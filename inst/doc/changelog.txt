@@ -1,3 +1,7 @@
+4 October 2004: limma 1.7.9
+
+- bug fix for lmFit() for PLMset object
+
 25 September 2004: limma 1.7.8
 
 - citation entry for limma
