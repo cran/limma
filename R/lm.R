@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 8 October 2004.
+#	30 June 2003.  Last modified 29 October 2004.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -41,7 +41,7 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 	if(!is.null(ne)) cat("Coefficients not estimable:",paste(ne,collapse=" "),"\n")
 	method <- match.arg(method,c("ls","robust"))
 	if(method=="robust")
-		fit <- rlm.series(M,design=design,ndups=ndups,spacing=spacing,weights=weights,...)
+		fit <- mrlm(M,design=design,ndups=ndups,spacing=spacing,weights=weights,...)
 	else
 		if(ndups < 2 && is.null(block))
 			fit <- lm.series(M,design=design,ndups=ndups,spacing=spacing,weights=weights)

@@ -1,3 +1,28 @@
+23 Nov 2004: limma 1.8.10
+
+- bug fix for summary.TestResults to remove reference to 'results'
+- fit.normexp() now catches and reports optimization errors
+- decideTests() now runs eBayes() if MArrayLM object found not to contain t-statistics
+
+4 Nov 2004: limma 1.8.9
+
+- new argument '...' for readTargets()
+- intraspotCorrelation() now uses try() to tolerate some fit errors from remlscore()
+- decideTests.Rd now longer says 'object' arg can be a matrix
+- convest() now plots pi0 in title of plot for doplot=TRUE
+- bug fix: changeLog() was always displaying 20 lines, also assumed "/" separator
+
+29 Oct 2004: limma 1.8.8
+
+- bug fix: lmFit() should call mrlm() not rlm.series()
+
+29 Oct 2004: limma 1.8.7
+
+- limma now officially requires R 2.0 (because of lazyloading)
+- new function convest()
+- new function arrayWeights()
+- as.matrix() methods for all data classes
+
 27 Oct 2004: limma 1.8.6
 
 - new function volcanoplot()

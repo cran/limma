@@ -14,7 +14,7 @@ Briefly summarize microarray data objects.
   \item{...}{other arguments are not used}
 }
 \details{
-The data objects are summarized as if they were lists, i.e., brief information about the components is listed.
+The data objects are summarized as if they were lists, i.e., brief information about the length and type of the components is given.
 }
 \value{
 A table.

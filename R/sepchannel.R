@@ -56,7 +56,7 @@ lmscFit <- function(object,design,correlation)
 intraspotCorrelation <- function(object,design,trim=0.15)
 #	Estimate intra-spot correlation between channels for two channel data
 #	Gordon Smyth
-#	19 April 2004.
+#	19 April 2004.  Last modified 4 Nov 2004.
 {
 #	Check input
 	M <- as.matrix(object$M)
@@ -80,17 +80,21 @@ intraspotCorrelation <- function(object,design,trim=0.15)
 	X <- rbind(designM, designA)
 	Z <- diag(2) %x% rep(1,narrays)
 	if(!require(statmod)) stop("statmod package required but is not available")
-	arho <- rep(0,ngenes)
+	arho <- rep(NA,ngenes)
 	degfre <- matrix(0,ngenes,2,dimnames=list(rownames(M),c("df.M","df.A")))
 	for (i in 1:ngenes) {
 		y <- c(M[i,],A[i,])
-		fit <- remlscore(y,X,Z)
-		arho[i] <- 0.5*(fit$gamma[2]-fit$gamma[1])
-		degfre[i,] <- crossprod(Z,1-fit$h)
+		fit <- try(remlscore(y,X,Z),silent=TRUE)
+		if(is.list(fit)) {
+			arho[i] <- 0.5*(fit$gamma[2]-fit$gamma[1])
+			degfre[i,] <- crossprod(Z,1-fit$h)
+		}
 	}
 	arho <- arho+log(2)
-	arhobias <- digamma(degfre[,1]/2)-log(degfre[,1]/2)-digamma(degfre[,2]/2)+log(degfre[,2]/2)
-	list(consensus.correlation=tanh(mean(arho-arhobias,trim=trim)), all.correlations=arho, df=degfre)
+	degfreNA <- degfre
+	degfreNA[degfre==0] <- NA
+	arhobias <- digamma(degfreNA[,1]/2)-log(degfreNA[,1]/2)-digamma(degfreNA[,2]/2)+log(degfreNA[,2]/2)
+	list(consensus.correlation=tanh(mean(arho-arhobias,trim=trim,na.rm=TRUE)), all.correlations=arho, df=degfre)
 }
 
 targetsA2C <- function(targets,channel.codes=c(1,2),channel.columns=list(Target=c("Cy3","Cy5")),grep=FALSE)

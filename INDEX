@@ -9,7 +9,9 @@
 7.Diagnostics           Diagnostics and Quality Assessment
 8.Other                 Other Functions
 anova.MAList            ANOVA Table - method
+arrayWeights            Array Quality Weights
 as.MAList               Convert marrayNorm Object to an MAList Object
+as.matrix.RGList        Turn a Microarray Data Object into a Matrix
 auROC                   Area Under Receiver Operating Curve
 backgroundCorrect       Correct Intensities for Background
 blockDiag               Block Diagonal Matrix
@@ -22,6 +24,7 @@ classifyTests           Treat Simultaneous T-Tests as Classification
 contrasts.fit           Compute Contrasts from Linear Model Fit
 controlStatus           Set Status of each Spot from List of Spot
                         Types
+convest                 Estimate Proportion of True Null Hypotheses
 decideTests             Compute Matrix of Hypothesis Test Results
 designI2M               Convert Individual Channel Design Matrix to
                         M-A Format

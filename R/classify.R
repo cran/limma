@@ -4,10 +4,10 @@ setClass("TestResults",representation("matrix"))
 
 summary.TestResults <- function(object,...)
 #	Gordon Smyth
-#	26 Feb 2004.  Last modified 24 Oct 2004.
+#	26 Feb 2004.  Last modified 23 Nov 2004.
 {
 #	apply(object,2,table)
-	tab <- array(0,c(3,ncol(object)),dimnames=list(c("-1","0","1"),colnames(results)))
+	tab <- array(0,c(3,ncol(object)),dimnames=list(c("-1","0","1"),colnames(object)))
 	tab[1,] <- colSums(object== -1)
 	tab[2,] <- colSums(object== 0)
 	tab[3,] <- colSums(object== 1)
@@ -23,9 +23,10 @@ setMethod("show","TestResults",function(object) {
 decideTests <- function(object,method="separate",adjust.method="fdr",p.value=0.05)
 #	Accept or reject hypothesis tests across genes and contrasts
 #	Gordon Smyth
-#	17 Aug 2004. Last modified 6 Sep 2004.
+#	17 Aug 2004. Last modified 4 Nov 2004.
 {
 	if(!is(object,"MArrayLM")) stop("Need MArrayLM object")
+	if(is.null(object$t)) object <- eBayes(object)
 	method <- match.arg(method,c("separate","global","heirarchical","nestedF"))
 	adjust.method <- match.arg(adjust.method,c("none","bonferroni","holm","fdr"))
 	switch(method,separate={

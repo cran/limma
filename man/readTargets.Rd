@@ -5,7 +5,7 @@
 Read targets file for a two-color microarray experiment into a dataframe.
 }
 \usage{
-readTargets(file="Targets.txt", path=NULL, sep="\t", row.names="FileName")
+readTargets(file="Targets.txt", path=NULL, sep="\t", row.names="FileName",quote="\"",...)
 }
 \arguments{
   \item{file}{character string giving the name of the targets file.}
@@ -13,6 +13,8 @@ readTargets(file="Targets.txt", path=NULL, sep="\t", row.names="FileName")
        Can be omitted if the file is in the current working irectory.} 
   \item{sep}{field separator character}
   \item{row.names}{character string giving name of column from which to obtain row names}
+  \item{quote}{the set of quoting characters}
+  \item{...}{other arguments are passed to \code{\link[base]{read.table}}}
 }
 \details{
 The targets file is a text file containing information about the RNA samples used as targets in the microarray experiment.

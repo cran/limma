@@ -8,7 +8,7 @@ Classify a series of related t-statistics as up, down or not significant.
 decideTests(object,method="separate",adjust.method="fdr",p.value=0.05)
 }
 \arguments{
-  \item{object}{numeric matrix of t-statistics or an \code{MArrayLM} object from which the t-statistics may be extracted.}
+  \item{object}{\code{MArrayLM} object output from \code{eBayes} from which the t-statistics may be extracted.}
   \item{method}{character string specify how probes and contrasts are to be combined in the multiple testing strategy.  Choices are \code{"separate"}, \code{"global"}, \code{"heirarchical"}, \code{"nestedF"} or any partial string.}
   \item{adjust.method}{character string specifying p-value adjustment method.  See \code{\link[stats]{p.adjust}} for possible values.}
   \item{p.value}{numeric value between 0 and 1 giving the desired size of the test}

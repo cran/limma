@@ -21,7 +21,7 @@ nonEstimable(x)
 \code{is.fullrank} returns \code{TRUE} or \code{FALSE}.
 
 \code{nonEstimable} returns a character vector of names for the columns of \code{x} which are linearly dependent on previous columns.
-If code{x} has full column rank, then the value is \code{NULL}.
+If \code{x} has full column rank, then the value is \code{NULL}.
 }
 
 \details{

@@ -152,3 +152,10 @@ as.MAList <- function(object) {
 	MA
 } 
 
+#  Gordon Smyth, 28 Oct 2004
+as.matrix.RGList <- function(x) normalizeWithinArrays(x,method="none")$M
+as.matrix.MAList <- function(x) x$M
+as.matrix.MArrayLM <- function(x) x$coefficients
+as.matrix.marrayNorm <- function(x) x@maM
+as.matrix.exprSet <- function(x) x@exprs
+

@@ -9,6 +9,8 @@ This package provides an \code{\link[limma:anova-method]{anova}} method which is
 It is not designed to assess differential expression of individual genes.
 \code{\link[limma:anova-method]{anova}} uses utility functions \code{\link{bwss}} and \code{\link{bwss.matrix}}.
 
+The function \code{\link{arrayWeights}} estimates the empirical reliability of each array following a linear model fit.
+
 Diagnostic plots can be produced by
 
 \describe{
