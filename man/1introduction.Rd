@@ -9,8 +9,8 @@ The normalization and data analysis functions are for two-colour spotted microar
 The linear model and differential expression functions apply to all microarrays including Affymetrix and other multi-array oligonucleotide experiments.
 
 There are three types of documentation available.
-(1) The \emph{\link[limma:../doc/usersguide]{LIMMA User's Guide}} can be reached through the "User Guides and Package Vignettes" links at the top of the LIMMA contents page.
-The function \code{\link{limmaguideURL}} gives the file location of the User's Guide.
+(1) The \emph{\link[limma:../doc/usersguide.pdf]{LIMMA User's Guide}} can be reached through the "User Guides and Package Vignettes" links at the top of the LIMMA contents page.
+The function \code{\link{limmaUsersGuide}} gives the file location of the User's Guide.
 (2) An overview of limma functions grouped by purpose is contained in the numbered chapters at the top of the \link[limma:00Index]{LIMMA contents page}, of which this page is the first.
 (3) The \link[limma:00Index]{LIMMA contents page} gives an alphabetical index of detailed help topics.
 }

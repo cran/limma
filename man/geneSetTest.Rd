@@ -28,6 +28,10 @@ In that case the function returns the proportion of \code{nsim} randomly selecte
 If it doesn't make sense to average the values of the statistic for any reason, then only the ranks of the statistics are used and a Wilcoxon two-sample test, also known as a Mann-Whitney test, is performed.
 
 This is essentially a stream-lined approach to Gene Set Enrichment Analysis introduced by Mootha et al (2003).
+
+Usually, \code{statistics} is intended to hold t-like statistics, meaning that the genewise null hypotheses would be rejected for large positive or large negative values.
+Then \code{alternative="greater"} can be used to test whether genes in the set tend to be up-regulated, \code{alternative="less"} can be used to test whether the gene set is down-regulated, while \code{alternative="two.sided"} tests whether the gene set holds highly ranked genes without regard to direction of change.
+Important note: if \code{statistics} is an F-like statistic for which only large values are relevant for rejecting the null hypothesis, then you must use \code{alternative="greater"} to get meaningful results.
 }
 \seealso{\code{\link[stats]{wilcox.test}}}
 \author{Gordon Smyth}
@@ -60,7 +64,9 @@ PGC-1alpha-responsive genes involved in oxidative phosphorylation are coordinate
 }
 
 \examples{
-geneSetTest(c(0.1,3.3,2.2),-9:9,nsim=100)
-geneSetTest(c(0.1,3.3,2.2),-9:9,ranks.only=TRUE)
+sel <- c(2,4,5)
+stat <- -9:9
+geneSetTest(sel,stat,nsim=100)
+geneSetTest(sel,stat,ranks.only=TRUE)
 }
 \keyword{htest}

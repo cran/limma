@@ -1,7 +1,38 @@
+27 Oct 2004: limma 1.8.6
+
+- new function volcanoplot()
+- further editing of all sections of the User's Guide, especially the Weaver case study and the section on between-array normalization
+- limmaUsersGuide() now outputs file format rather than URL format, i.e., no file:/// prefix
+- slicker summary.TestResults
+
+23 Oct 2004: limma 1.8.5
+
+- limma.Rtex no longer refers to openVignette(), because this won't find the User's Guide
+- html version of User's Guide removed
+- limmaguideURL() replaced with limmaUsersGuide()
+- aaa.R containing 'library("methods")' removed
+
+22 Oct 2004: limma 1.8.4
+
+- lm.series now preserves rownames in M (when ndups=1)
+- updates to geneSetTest.Rd: (i) warning re use with F-like statistics, (ii) better example
+
+20 Oct 2004: limma 1.8.3
+
+- fix bug (introduced 1.7.8 or later) for read.maimages() with Agilent data
+- further development of "Special Designs" section of User's Guide
+
+14 Oct 2004: limma 1.8.2
+
+- New section on "Special Designs" for User's Guide
+- heatDiagram() now chooses col range more carefully so that red is associated only with positive fold changes and green with negative
+- new argument 'mar' for heatDiagram()
+
 10 October 2004: limma 1.8.1
 
 - new argument other.columns for read.maimages()
 - [.RGList and MA.RG() now accommodate an 'other' component
+- many edits to text of User's Guide
 - usersguide.pdf updated from usersguide.tex
 - usersguide.html converted to usersguide.tex
 
@@ -16,6 +47,7 @@
 
 25 September 2004: limma 1.7.8
 
+- read.maimages() now tries to set $printer layout with Agilent data
 - citation entry for limma
 - contrasts.fit() now stops with error message if attempt to take contrast of non-estimable parameter
 - further bug fix to contrasts.fit() when there are non-estimable coefficients

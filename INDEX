@@ -55,7 +55,7 @@ is.fullrank             Check for Full Column Rank
 isNumeric               Test for Numeric Argument
 kooperberg              Kooperberg Model-Based Background Correction
 LargeDataObject-class   Large Data Object - class
-limmaguideURL           File Location of html Limma User's Guide
+limmaUsersGuide         View Limma User's Guide
 lm.series               Linear Model for Series of Arrays
 lmFit                   Linear Model for Series of Arrays
 lmscFit                 Fit Linear Model to Individual Channels of
@@ -134,5 +134,6 @@ uniquegenelist          Eliminate Duplicate Names from the Gene List
 unwrapdups              Unwrap Duplicate Spot Values from Rows into
                         Columns
 vennCounts              Venn Diagrams
+volcanoplot             Volcano Plot
 write.fit               Write MArrayLM Object to a File
 zscoreGamma             z-score equivalents

@@ -1,9 +1,27 @@
 #  PRESENTATION PLOTS
 
-heatDiagram <- function(results,coef,primary=1,names=NULL,treatments=colnames(coef),limit=NULL,orientation="landscape",cex=1,low="green",high="red",ncolors=123,...) {
+volcanoplot <- function(fit, coef=1, highlight=0, names=fit$genes$ID, ...)
+#	Volcano plot of log-fold-change and B-statistic
+#	Gordon Smyth
+#	27 Oct 2004.
+{
+	if(!is(fit,"MArrayLM")) stop("fit must be an MArrayLM")
+	if(is.null(fit$lods)) stop("No B-statistics found, perhaps eBayes() not yet run")
+	x <- as.matrix(fit$coef)[,coef]
+	y <- as.matrix(fit$lods)[,coef]
+	plot(x,y,xlab="Log Fold Change",ylab="Log Odds",pch=16,cex=0.2,...)
+	if(highlight>0) {
+		o <- order(y,decreasing=TRUE)
+		i <- o[1:highlight]
+		text(x[i],y[i],labels=substring(names[i],1,8),cex=0.8,col="blue")
+	}
+	invisible()
+}
+
+heatDiagram <- function(results,coef,primary=1,names=NULL,treatments=colnames(coef),limit=NULL,orientation="landscape",low="green",high="red",cex=1,mar=NULL,ncolors=123,...) {
 #	Heat diagram to display fold changes of genes under different conditions
 #	Gordon Smyth
-#	27 Oct 2002. Last revised 18 Sep 2004.
+#	27 Oct 2002. Last revised 11 Oct 2004.
 
 #	Check input
 	results <- as.matrix(results)
@@ -40,30 +58,43 @@ heatDiagram <- function(results,coef,primary=1,names=NULL,treatments=colnames(co
 #	Check colours
 	if(is.character(low)) low <- col2rgb(low)/255
 	if(is.character(high)) high <- col2rgb(high)/255
-	col <- rgb( seq(low[1],high[1],len=ncolors), seq(low[2],high[2],len=ncolors), seq(low[3],high[3],len=ncolors) )
+	r <- range(coef,na.rm=TRUE)
+	r <- r/max(abs(r))
+	low2 <- low + (high-low)*(1+r[1])/2
+	high2 <- high + (low-high)*(1-r[2])/2
+	col <- rgb( seq(low2[1],high2[1],len=ncolors), seq(low2[2],high2[2],len=ncolors), seq(low2[3],high2[3],len=ncolors) )
 
-#	Heat plot
+#	Output dataframe
 	coef <- coef[ord,,drop=FALSE]
 	names <- names[ord]
-	out <- data.frame(Name=names,coef)
+	out <- coef
+	rownames(out) <- names
+
 #	Insert white space between up and down
 	nup <- sum(coef[,primary]>=0)
-	coef <- rbind(coef[1:nup,,drop=FALSE],matrix(NA,1,nt),coef[(nup+1):ng,,drop=FALSE])
-	names <- c(names[1:nup],"",names[(nup+1):ng])
+	if(nup>0 && nup<ng) {
+		coef <- rbind(coef[1:nup,,drop=FALSE],matrix(NA,1,nt),coef[(nup+1):ng,,drop=FALSE])
+		names <- c(names[1:nup],"",names[(nup+1):ng])
+		ng <- ng+1
+	}
 	if(orientation=="portrait") {
 		coef <- t(coef)
 		coef <- coef[,ng:1,drop=FALSE]
 	}
+
+#	Heat plot
 	on.exit(par(old.par))
 	if(orientation=="portrait") {
-		old.par <- par(mar=cex*c(1,1,4,3))
+		if(is.null(mar)) mar <- cex*c(1,1,4,3)
+		old.par <- par(mar=mar)
 		image(coef,col=col,xaxt="n",yaxt="n",...)
 		cext <- cex*min(1,8/nt)
 		mtext(paste(" ",treatments,sep=""),side=3,las=2,at=(cext-1)*0.005+(0:(nt-1))/(nt-1),cex=cext)
 		cex <- cex*min(1,40/ng)
 		mtext(paste(" ",names,sep=""),side=4,las=2,at=(1-cex)*0.005+((ng-1):0)/(ng-1),cex=cex)
 	} else {
-		old.par <- par(mar=cex*c(5,6,1,1))
+		if(is.null(mar)) mar <- cex*c(5,6,1,1)
+		old.par <- par(mar=mar)
 		image(coef,col=col,xaxt="n",yaxt="n",...)
 		cext <- cex*min(1,12/nt)
 		mtext(paste(treatments," ",sep=""),side=2,las=1,at=(1-cext)*0.005+(0:(nt-1))/(nt-1),cex=cext)
@@ -73,12 +104,12 @@ heatDiagram <- function(results,coef,primary=1,names=NULL,treatments=colnames(co
 	invisible(out)
 }
 
-heatdiagram <- function(stat,coef,primary=1,names=NULL,treatments=colnames(stat),critical.primary=4,critical.other=3,limit=NULL,orientation="landscape",cex=1,low="green",high="red",ncolors=123,...) {
+heatdiagram <- function(stat,coef,primary=1,names=NULL,treatments=colnames(stat),critical.primary=4,critical.other=3,limit=NULL,orientation="landscape",low="green",high="red",cex=1,mar=NULL,ncolors=123,...) {
 #	Heat diagram to display fold changes of genes under different conditions
 #	Similar to heatDiagram with classifyTestsT(stat,t1=critical.primary,t2=critical.other)
 #	except that heatdiagram() requires primary column to be significant at the first step-down level
 #	Gordon Smyth
-#	27 Oct 2002. Last revised 25 Feb 2003.
+#	27 Oct 2002. Last revised 25 Feb 2003.  mar added 11 Oct 2004
 
 #	Check input
 	stat <- as.matrix(stat)
@@ -129,14 +160,16 @@ heatdiagram <- function(stat,coef,primary=1,names=NULL,treatments=colnames(stat)
 	}
 	on.exit(par(old.par))
 	if(orientation=="portrait") {
-		old.par <- par(mar=cex*c(1,1,4,3))
+		if(is.null(mar)) mar <- cex*c(1,1,4,3)
+		old.par <- par(mar=mar)
 		image(coef,col=col,xaxt="n",yaxt="n",...)
 		cext <- cex*min(1,8/nt)
 		mtext(paste(" ",treatments,sep=""),side=3,las=2,at=(cext-1)*0.005+(0:(nt-1))/(nt-1),cex=cext)
 		cex <- cex*min(1,40/ng)
 		mtext(paste(" ",names,sep=""),side=4,las=2,at=(1-cex)*0.005+((ng-1):0)/(ng-1),cex=cex)
 	} else {
-		old.par <- par(mar=cex*c(5,6,1,1))
+		if(is.null(mar)) mar <- cex*c(5,6,1,1)
+		old.par <- par(mar=mar)
 		image(coef,col=col,xaxt="n",yaxt="n",...)
 		cext <- cex*min(1,12/nt)
 		mtext(paste(treatments," ",sep=""),side=2,las=1,at=(1-cext)*0.005+(0:(nt-1))/(nt-1),cex=cext)

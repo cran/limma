@@ -71,16 +71,18 @@ After the above steps the results may be displayed or further processed using:
 \item{ \code{\link{toptable}} or \code{\link{topTable}} }{
 	Presents a list of the genes most likely to be differentially expressed for a given contrast.}
 
-\item{ \code{\link{classifyTestsF}} }{
-	Uses nested F-tests to classify the genes as up, down or even over the contrasts in the linear model with special attention to genes which are significant in more than one contrast.
-	\code{\link{classifyTestsT}} and \code{\link{classifyTestsP}} are simpler methods using cutoffs for the t-statistics or p-values individually.}
+\item{ \code{\link{decideTests}} }{
+	Classify the genes as up, down or even over the contrasts in the linear model with special attention to genes which are significant in more than one contrast.}
+
+\item{ \code{\link{volcanoplot}}}{
+	Volcano plot of fold change versus the B-statistic for any fitted coefficient.}
 
 \item{ \code{\link{FStat}} }{
 	Computes an overall moderated F-statistic to test whether all the contrasts are equal to zero.}
 
 \item{ \code{\link{heatdiagram}} or \code{\link{heatDiagram}} }{
 	Allows visual comparison of the results across many different conditions in the linear model.
-	Not the same as heatdiagrams produced by other packages!
+	Not the same as heatmaps produced by other packages!
 	This function accepts a \code{TestResults} matrix produced by \code{classifyTests}.}
 
 \item{ \code{\link{vennCounts}} }{

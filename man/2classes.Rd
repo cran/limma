@@ -23,7 +23,7 @@ This package defines the following data classes.
 
 \item{ \code{\link[limma:TestResults]{TestResults}} }{
 	Store the results of testing a set of contrasts equal to zero for each probe.
-	Usually created by \code{classifyTests}, \code{classifyTestsP} or \code{classifyTestsT}.
+	Usually created by \code{decideTests}.
 	Objects of this class normally contain one row for each unique probe.}
 }
 

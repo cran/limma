@@ -99,7 +99,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	18 Apr 2002. Revised 25 June 2004.
+#	18 Apr 2002. Revised 22 Oct 2004.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -118,7 +118,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 		if(!is.null(weights)) weights <- unwrapdups(weights,ndups=ndups,spacing=spacing)
 	}
 	ngenes <- nrow(M)
-	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta,dimnames=list(NULL,colnames(design)))
+	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta,dimnames=list(rownames(M),colnames(design)))
 	sigma <- rep(NA,ngenes)
 	df.residual <- rep(0,ngenes)
 	for (i in 1:ngenes) {

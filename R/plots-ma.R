@@ -139,3 +139,21 @@ plotMA3by2 <- function(MA, prefix="MA", main=colnames(MA), zero.weights=FALSE, c
 	}
 	invisible()
 }
+
+plotPrintTipLoess <- function(object,layout,array=1,span=0.4,...) {
+#  MA-plots by print-tip group
+#  Gordon Smyth
+#  7 April 2003.  Last revised 19 March 2004.
+
+	if(is(object,"RGList")) {
+		object <- MA.RG(object[,array])
+		array <- 1
+	}
+	if(!is.null(object$printer) && missing(layout)) layout <- object$printer
+	y <- object$M[,array]
+	x <- object$A[,array]
+	if(dev.cur()==1) plot.new()
+	df <- data.frame(y=object$M[,array],x=object$A[,array],gr=factor(gridc(layout)),gc=factor(layout$ngrid.r-gridr(layout)+1))
+	coplot(y~x|gr*gc,data=na.omit(df),xlab=c("A","Tip Column"),ylab=c("M","Tip Row"),pch=".",span=span,show.given=FALSE,panel=panel.smooth)
+}
+

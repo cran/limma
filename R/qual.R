@@ -29,3 +29,4 @@ wtIgnore.Filter <- function(qta) {
 
 	qta[,"Ignore Filter"]
 }
+

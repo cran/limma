@@ -2,7 +2,18 @@
 
 setClass("TestResults",representation("matrix"))
 
-summary.TestResults <- function(object,...) apply(object,2,table)
+summary.TestResults <- function(object,...)
+#	Gordon Smyth
+#	26 Feb 2004.  Last modified 24 Oct 2004.
+{
+#	apply(object,2,table)
+	tab <- array(0,c(3,ncol(object)),dimnames=list(c("-1","0","1"),colnames(results)))
+	tab[1,] <- colSums(object== -1)
+	tab[2,] <- colSums(object== 0)
+	tab[3,] <- colSums(object== 1)
+	class(tab) <- "table"
+	tab
+}
 
 setMethod("show","TestResults",function(object) {
 	cat("TestResults matrix\n")

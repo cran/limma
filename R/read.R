@@ -255,7 +255,7 @@ read.matrix <- function(file,nrows=0,skip=0,...) {
 read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth
-#	1 Nov 2002.  Last revised 10 Oct 2004.
+#	1 Nov 2002.  Last revised 20 Oct 2004.
 
 	if(missing(files)) {
 		if(missing(ext))
@@ -281,7 +281,9 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		spot.close.open = list(Rf="Rmean",Gf="Gmean",Rb="morphR.close.open",Gb="morphG.close.open"),
 		genepix = list(Rf="F635 Mean",Gf="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
 		quantarray = list(Rf="ch2 Intensity",Gf="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background")
-	)
+	) else {
+		source="generic"
+	}
 
 #	Read first file to get nspots
 	fullname <- slides[1]
@@ -349,7 +351,7 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		if(!is.null(RG$genes$Row) && !is.null(RG$genes$Col)) {
 			nr <- length(unique(RG$genes$Row))
 			nc <- length(unique(RG$genes$Col))
-			if(nspots==nr*nc) RG$printer <- lists(ngrid.r=1,ngrid.c=1,nspot.r=nr,nspot.c=nc)
+			if(nspots==nr*nc) RG$printer <- list(ngrid.r=1,ngrid.c=1,nspot.r=nr,nspot.c=nc)
 		}
 	}
 

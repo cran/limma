@@ -15,13 +15,13 @@
 \begin{document}
 \title{Limma Package Vignette}
 \author{Gordon Smyth}
-\date{March 16, 2004}
+\date{23 October 2004}
 \maketitle
 
-Limma is a library for the analysis of gene expression microarray data, especially the use of linear models for analysing designed experiments and the assessment of differential expression.
+Limma is an R package for the analysis of gene expression microarray data, especially the use of linear models for analysing designed experiments and the assessment of differential expression.
 Limma provides the ability to analyse comparisons between many RNA targets simultaneously in arbitrary complicated designed experiments.
 Empirical Bayesian methods are used to provide stable results even when the number of arrays is small.
-The normalization and data analysis functions are for two-colour spotted microarrays.
+The normalization and data analysis functions are for two-color spotted microarrays.
 The linear model and differential expression functions apply to all microarray technologies including Affymetrix and other single-channel oligonucleotide platforms.
 
 The full Limma User's Guide is available as part of the online documentation.
@@ -31,14 +31,7 @@ If you're not using windows, you can type
 \begin{Schunk}
 \begin{Sinput}
 > library(limma)
-> browseURL(limmaguideURL())
-\end{Sinput}
-\end{Schunk}
-or alternatively
-\begin{Schunk}
-\begin{Sinput}
-> library(Biobase)
-> openVignette()
+> limmaUsersGuide()
 \end{Sinput}
 \end{Schunk}
 or alternatively
@@ -47,8 +40,7 @@ or alternatively
 > help.start()
 \end{Sinput}
 \end{Schunk}
-and follow the links the limma package help.
-This last option will also lead you to the printable pdf version of the User's Guide.
+and follow the links to the limma package help.
 
 \end{document}
 
