@@ -55,10 +55,11 @@ modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
 makeContrasts <- function(..., levels) {
 #	Construct matrix of custom contrasts
 #	Gordon Smyth
-#	30 June 2003.  Last modified 16 March 2004.
+#	30 June 2003.  Last modified 25 Sep 2004.
 
 	if(is.factor(levels)) levels <- levels(levels)
 	if(is.matrix(levels)) levels <- colnames(levels)
+	if(is.data.frame(levels)) levels <- names(levels)
 	levels <- make.names(levels)
 	n <- length(levels)
 	if(n < 1) stop("No levels to construct contrasts from")

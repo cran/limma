@@ -16,6 +16,7 @@ blockDiag               Block Diagonal Matrix
 bwss                    Between and within sums of squares
 bwss.matrix             Between and within sums of squares for matrix
 cbind.RGList            Combine RGList or MAList Objects
+changeLog               Limma Change Log
 classifyTests           Treat Simultaneous T-Tests as Classification
                         Problem
 contrasts.fit           Compute Contrasts from Linear Model Fit

@@ -292,7 +292,7 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 contrasts.fit <- function(fit,contrasts) {
 #	Convert coefficients and std deviations in fit object to reflect contrasts of interest
 #	Gordon Smyth
-#	13 Oct 2002.  Last modified 10 August 2004.
+#	13 Oct 2002.  Last modified 25 Sep 2004.
 
 	ncoef <- NCOL(fit$coefficients)
 	if(NROW(contrasts)!=ncoef) stop("Number of rows of contrast matrix must match number of coefficients")
@@ -308,9 +308,11 @@ contrasts.fit <- function(fit,contrasts) {
 	if(r < ncoef) {
 		if(is.null(fit$pivot)) stop("cor.coef not full rank but pivot column not found in fit")
 		est <- fit$pivot[1:r]
+		if(any(contrasts[-est,])) stop("trying to take contrast of non-estimable coefficient")
 		contrasts <- contrasts[est,,drop=FALSE]
 		fit$coefficients <- fit$coefficients[,est,drop=FALSE]
 		fit$stdev.unscaled <- fit$stdev.unscaled[,est,drop=FALSE]
+		ncoef <- r
 	}
 	fit$coefficients <- fit$coefficients %*% contrasts
 

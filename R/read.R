@@ -344,6 +344,15 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		if(any(j>0)) RG$genes <- data.frame(obj[,j,drop=FALSE])
 	}
 
+#	Set printer layout
+	if(source=="agilent") {
+		if(!is.null(RG$genes$Row) && !is.null(RG$genes$Col)) {
+			nr <- length(unique(RG$genes$Row))
+			nc <- length(unique(RG$genes$Col))
+			if(nspots==nr*nc) RG$printer <- lists(ngrid.r=1,ngrid.c=1,nspot.r=nr,nspot.c=nc)
+		}
+	}
+
 #	Now read remainder of files
 	for (i in 1:nslides) {
 		if(i > 1) {

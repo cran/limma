@@ -1,3 +1,10 @@
+25 September 2004: limma 1.7.8
+
+- citation entry for limma
+- contrasts.fit() now stops with error message if attempt to take contrast of non-estimable parameter
+- further bug fix to contrasts.fit() when there are non-estimable coefficients
+- new function changeLog()
+- limmaguideURL() now uses system.file()
 - heatDiagram() now separates primary up and down genes with white space
 
 18 September 2004: limma 1.7.7

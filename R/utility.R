@@ -87,3 +87,12 @@ helpMethods <- function(genericFunction) {
 	 	return(invisible())
 	}
 }
+ 
+changeLog <- function(n=20)
+#	Write first n lines of limma changelog
+#	Gordon Smyth
+#	20 Sep 2004
+{
+	writeLines(readLines(system.file("doc/changelog.txt",package="limma"),n=20))
+}
+

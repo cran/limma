@@ -1,0 +1,19 @@
+citHeader("To cite limma in publications use:")
+
+citEntry(entry="article",
+         title = "Linear models and empirical Bayes methods for assessing differential expression in microarray experiments",
+         author = person(first="Gordon",middle="K",last="Smyth"),
+         journal = "Statistical Applications in Genetics and Molecular Biology",
+         year = 2004,
+         pages ="Article 3",
+         
+         textVersion = 
+         paste("Smyth, G. K. (2004). Linear models and empirical Bayes",
+         	"methods for assessing differential expression in",
+         	"microarray experiments. Statistical Applications",
+         	"in Genetics and Molecular Biology 3, No. 1, Article 3.", 
+               sep="")
+         )
+
+citFooter("We have invested a lot of time and effort in creating limma,",
+          "please cite it when using it for data analysis.")
