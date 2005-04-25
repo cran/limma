@@ -240,7 +240,7 @@ topTable <- function(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sor
 toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="holm",sort.by="B",resort.by=NULL,...)
 #	Summary table of top genes
 #	Gordon Smyth
-#	21 Nov 2002. Last revised 26 June 2004.
+#	21 Nov 2002. Last revised 28 February 2005.
 {
 	if(is.null(eb)) {
 		fit$coefficients <- as.matrix(fit$coefficients)[,coef]
@@ -279,7 +279,7 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 		tab <- data.frame(M=M[top])
 	else {
 		if(is.null(dim(genelist)))
-			tab <- data.frame(Name=I(genelist[top]),M=M[top])
+			tab <- data.frame(ProbeID=I(genelist[top]),M=M[top])
 		else
 			tab <- data.frame(genelist[top,,drop=FALSE],M=M[top])
 	}
@@ -300,6 +300,23 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 		tab <- tab[ord,]
 	}
 	tab
+}
+
+as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
+#	Convert MAList object to data.frame
+#	Gordon Smyth
+#	6 April 2005
+{
+	x <- unclass(x)
+	if(is.null(x$coefficients)) return(data.frame())
+	cn <- names(x)
+	nprobes <- NROW(x$coefficients)
+	include.comp <- cn[unlist(lapply(x,NROW))==nprobes]
+	other.comp <- setdiff(names(x),include.comp)
+	if(length(other.comp)) for (a in other.comp) x[[a]] <- NULL
+	coef.comp <- c("coefficients","stdev.unscaled","t","p.value","lods")
+	for (a in coef.comp) if(!is.null(x[[a]]) && NCOL(x[[a]])==1) colnames(x[[a]]) <- paste(a,colnames(x[[a]]),sep=".")
+	as.data.frame(x,row.names=row.names,optional=optional)
 }
 
 squeezeVar <- function(var, df)

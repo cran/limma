@@ -6,8 +6,8 @@
 Extract a table of the top-ranked genes from a linear model fit.
 }
 \usage{
-toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="holm",sort.by="B",resort.by=NULL,...)
 topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",resort.by=NULL)
+toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="holm",sort.by="B",resort.by=NULL,...)
 }
 \arguments{
   \item{fit}{list containing a linear model fit produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{rlm.series}.
@@ -19,8 +19,8 @@ topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",res
   \item{A}{matrix of A-values or vector of average A-values.}
   \item{eb}{output list from \code{ebayes(fit)}}
   \item{adjust.method}{method to use to adjust the p-values for multiple testing.  Options are \code{"bonferroni"}, \code{"holm"}, \code{"hochberg"}, \code{"hommel"}, \code{"fdr"} and \code{"none"}. If \code{"none"} then the p-values are not adjusted. A \code{NULL} value will result in the default adjustment method, which is \code{"holm"}.}
-  \item{sort.by}{character string specifying statistic to rank genes by.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"P"} or \code{"B"}.}
-  \item{resort.by}{character string specifying statistic to sort the selected genes by in the output data.frame.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"P"} or \code{"B"}.}
+  \item{sort.by}{character string specifying statistic to rank genes by.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}.}
+  \item{resort.by}{character string specifying statistic to sort the selected genes by in the output data.frame.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}.}
   \item{...}{any other arguments are passed to \code{ebayes} if \code{eb} is \code{NULL}}
 }
 \value{
@@ -28,12 +28,13 @@ topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",res
   \item{genelist}{if genelist was included as input}
   \item{M}{estimate of the effect or the contrast, on the log2 scale}
   \item{t}{moderated t-statistic}
-  \item{P.Value}{nominal P-value}
+  \item{P.Value}{adjusted p-value or q-value}
   \item{B}{log odds that the gene is differentially expressed}
 }
 \details{
 This function summarizes a linear model fit object produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{rlm.series} by selecting the top-ranked genes for any given contrast.
 \code{topTable()} assumes that the linear model fit has already been processed by \code{eBayes()}.
+Note that \code{toptable} is the earlier interface and is being phased out.
 
 The p-values for the coefficient/contrast of interest are adjusted for multiple testing by a call to \code{\link[stats]{p.adjust}}.
 The \code{"holm"} method is the default because it is conservative and valid for any type of dependence between the p-values.
@@ -41,12 +42,15 @@ In most microarray contexts however the less conservative Benjamini and Hochberg
 See \code{help("p.adjust")} for more information.
 Note, if there is no good evidence for differential expression in the experiment, that it is quite possible for all the adjusted p-values to be large, even for all of them to be equal to one.
 It is quite possible for all the adjusted p-values to be equal to one if the smallest p-value is no smaller than \code{1/ngenes} where \code{ngenes} is the number of genes with non-missing p-values.
+Note that p-values adjusted to control the false discovery rate are often called q-values.
 
-The \code{sort.by} argument is used to select the top genes.
+The \code{sort.by} argument specifies the criterion used to select the top genes.
+The choices are: \code{"M"} to sort by the (absolute) coefficient representing the log-fold-change; \code{"A"} to sort by average expression level (over all arrays) in descending order; \code{"T"} or \code{"t"} for absolute t-statistic; \code{"P"} or \code{"p"} for p-values; or \code{"B"} for the \code{lods} or B-statistic.
+
 Normally the genes appear in order of selection in the output table.
-If one wants the table to be in some order other than selection order, the \code{resort.by} argument may be used.
-For example, \code{topTable(fit, sort.by="B", resort.by="M")} selects the top genes according to log-odds of differential expression and then orders the resulting genes by log-ratio.
-\code{topTable(fit, sort.by="M", resort.by="M")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
+If one wants the table to be in a different order, the \code{resort.by} argument may be used.
+For example, \code{topTable(fit, sort.by="B", resort.by="M")} selects the top genes according to log-odds of differential expression and then orders the resulting genes by log-ratio in decreasing order.
+Or \code{topTable(fit, sort.by="M", resort.by="M")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
 }
 \seealso{
 \code{\link{ebayes}}, \code{\link[stats]{p.adjust}}, \code{\link{lm.series}}, \code{\link{gls.series}}, \code{\link{rlm.series}}.

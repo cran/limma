@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 8 January 2005.
+#	30 June 2003.  Last modified 20 March 2005.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -62,11 +62,12 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 		}
 		if(length(object@maA)) fit$Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
 	}
-	if(is(object,"exprSet")) {
-		ProbeSetID <- rownames(M)
-		if(!is.null(ProbeSetID)) fit$genes <- uniquegenelist(data.frame(ID=I(ProbeSetID)),ndups=ndups,spacing=spacing)
+	if(is(object,"exprSet") || is(object,"matrix")) {
+		ProbeID <- rownames(M)
+		if(!is.null(ProbeID)) fit$genes <- uniquegenelist(data.frame(ID=I(ProbeID)),ndups=ndups,spacing=spacing)
 		fit$Amean <- rowMeans(M,na.rm=TRUE)
 	}
+	if(is.null(fit$genes)) fit$genes <- rownames(M)
 	new("MArrayLM",fit)
 }
 
@@ -236,7 +237,7 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 #	Fit linear model for each gene to a series of microarrays.
 #	Fit is by generalized least squares allowing for correlation between duplicate spots.
 #	Gordon Smyth
-#	11 May 2002.  Last revised 25 June 2004.
+#	11 May 2002.  Last revised 21 April 2005.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -253,7 +254,11 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 		if(is.null(spacing)) spacing <- 1
 		cormatrix <- diag(rep(correlation,len=narrays)) %x% array(1,c(ndups,ndups))
 	} else {
-		ndups <- spacing <- 1
+		if(ndups>1) {
+			stop("Cannot specify ndups>2 and non-null block argument")
+		} else {
+			ndups <- spacing <- 1
+		}
 		block <- as.vector(block)
 		if(length(block)!=narrays) stop("Length of block does not match number of arrays")
 		ub <- unique(block)

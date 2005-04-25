@@ -107,7 +107,7 @@ getLayout2 <- function(galfile)
 		stop("Please specify a gal file name.")
 	galHeader <- readLines(galfile,n=100)
 	blockLines <- galHeader[grep("Block[0-9]",galHeader)]
-	if(length(blockLines))
+	if(length(blockLines)==0)
 		stop("Invalid or missing header in GAL file.")
 	blockLines <- gsub("[ \t]*$","",blockLines) # Removing trailing whitespace (e.g. tabs)
 	numBlocks <- length(blockLines)
@@ -295,14 +295,14 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 	fullname <- slides[1]
 	if(!is.null(path)) fullname <- file.path(path,fullname)
 	switch(source, "quantarray" = {
-		firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE)
+		firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE)
 		skip <- grep("Begin Data",firstfield)
 		if(length(skip)==0) stop("Cannot find \"Begin Data\" in image output file")
 		nspots <- grep("End Data",firstfield) - skip -2
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",nrows=nspots,...)
 	}, "arrayvision" = {
 		skip <- 1
-		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE)
+		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)
 		fg <- grep(" Dens - ",cn)
 		if(length(fg) != 2) stop(paste("Cannot find foreground columns in",fullname))
 		bg <- grep("Bkgd",cn)
@@ -481,11 +481,11 @@ readGPRHeader <- function(file) {
 readImaGeneHeader <- function(file) {
 #	Extracts header information from an Imagene analysis output file
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 2 July 2004.
+#	14 Aug 2003.  Last modified 14 April 2005.
 
-	firstfield <- scan(file,what="",sep="\t",quote="\"",nlines=60,flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE)
+	firstfield <- scan(file,what="",sep="\t",quote="\"",nlines=100,flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscape=FALSE)
 	NHeaderRecords <- grep("Begin Raw Data",firstfield)
-	txt <- scan(file,what="",sep="\t",quote="\"",nlines=NHeaderRecords-1,quiet=TRUE)
+	txt <- scan(file,what="",sep="\t",quote="\"",nlines=NHeaderRecords-1,quiet=TRUE,allowEscape=FALSE)
 	out <- list(NHeaderRecords=NHeaderRecords,BeginRawData=NHeaderRecords)
 	out$Version <- txt[grep("^version$",txt)+1]
 	out$Date <- txt[grep("^Date$",txt)+1]

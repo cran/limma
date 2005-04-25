@@ -22,7 +22,8 @@ Produces a spatial picture of any spot-specific measure from an array image. If 
 \item{ \code{\link{plotMA}} }{
 MA-plots.
 One of the most useful plots of a two-color array.
-\code{\link{plotMA3by2}} will write MA-plots to files, six plots to a page.}
+\code{\link{plotMA3by2}} will write MA-plots to files, six plots to a page.
+\code{\link{mdplot}} can also be useful for comparing two one-channel microarrays.}
 
 \item{ \code{\link{plotPrintTipLoess}} }{
 Produces a grid of MA-plots, one for each print-tip group on an array, together with the corresponding lowess curve.

@@ -1,7 +1,63 @@
 #	LOESS FUNCTIONS
 
+#loessFitnew <- function(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights)), iterations=4) {
+##	Fast loess fit for simple x and y
+##	This function uses lowess if no weights and loess otherwise.
+##	It is intended to give a streamlined common interface to the two functions.
+##	Gordon Smyth
+##	28 June 2003.  Last revised 27 Feb 2005.
+#
+#	n <- length(y)
+#	out <- list(fitted=rep(NA,n),residuals=rep(NA,n))
+#	obs <- is.finite(y) & is.finite(x)
+#	xobs <- x[obs]
+#	yobs <- y[obs]
+#	nobs <- length(yobs)
+#	if(nobs==0) return(out)
+#	if(is.null(weights)) {
+#		o <- order(xobs)
+#		oo <- order(o)
+#		iter <- iterations-1
+#		delta = bin * diff(range(xobs)) 
+#		smoothy <- .C("lowess", x = as.double(xobs[o]), as.double(yobs[o]), 
+#			nobs, as.double(span), as.integer(iter), as.double(delta), 
+#			y = double(nobs), double(nobs), double(nobs), PACKAGE = "base")$y[oo]
+#		out$fitted[obs] <- smoothy
+#		out$residuals[obs] <- yobs-smoothy
+#	} else {
+#		weights[is.na(weights) | weights<0] <- 0
+#		wt0 <- obs & weights==0
+#		if(any(wt0)) {
+#			obs[wt0] <- FALSE
+#			xobs <- x[obs]
+#			yobs <- y[obs]
+#			nobs <- length(yobs)
+#			if(nobs==0) return(out)
+#		}
+#		wobs <- weights[obs]
+#		if(nobs < 4+1/span) {
+#			fit <- lm.wfit(cbind(1,xobs),yobs,wobs)
+#		} else {
+##			Suppress warning "k-d tree limited by memory"
+#			oldopt <- options(warn=-1)
+#			on.exit(options(oldopt))
+# This is now quite fast
+#			fit <- loess(yobs~xobs,weights=wobs,span=span,degree=1,family="symmetric",cell=bin/span,iterations=iterations,trace.hat="approximate")
+#		}
+#		out$fitted[obs] <- fitted(fit)
+#		out$residuals[obs] <- residuals(fit)
+#		if(any(wt0)) {
+#			out$fitted[wt0] <- predict(fit,newdata=x[wt0])
+#			out$residuals[wt0] <- y[wt0]-out$fitted(
+#		}
+#	}
+#	out
+#}
+
 loessFit <- function(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights)), iterations=4) {
 #	Fast loess fit for simple x and y
+#	This function uses lowess if no weights and loess otherwise.
+#	It is intended to give a streamlined common interface to the two functions.
 #	Gordon Smyth
 #	28 June 2003.  Last revised 16 Feb 2004.
 
@@ -491,7 +547,7 @@ normalizeQuantiles <- function(A, ties=TRUE) {
 	A
 }
 
-normalizeMedianDeviations <- function(x) 
+normalizeMedianDeviations <- function(x)
 {
 #	Normalize columns of a matrix to have the same median absolute value
 #	Gordon Smyth

@@ -11,6 +11,9 @@
 anova.MAList            ANOVA Table - method
 arrayWeights            Array Quality Weights
 arrayWeightsQuick       Array Quality Weights
+as.data.frame.MArrayLM
+                        Turn a Microarray Linear Model Object into a
+                        Dataframe
 as.MAList               Convert marrayNorm Object to an MAList Object
 as.matrix.RGList        Turn a Microarray Data Object into a Matrix
 auROC                   Area Under Receiver Operating Curve
@@ -75,6 +78,7 @@ makeUnique              Make Values of Character Vector Unique
 MAList-class            M-value, A-value Expression List - class
 MArrayLM-class          Microarray Linear Model Fit - class
 matvec                  Multiply a Matrix by a Vector
+mdplot                  mdplot
 merge.RGList            Merge RGList or MAList Data Objects
 modelMatrix             Construct Design Matrix
 modifyWeights           modifyWeights

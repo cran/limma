@@ -4,7 +4,7 @@ duplicateCorrelation <- function(object,design=rep(1,ncol(M)),ndups=2,spacing=1,
 {
 #	Estimate the correlation between duplicates given a series of arrays
 #	Gordon Smyth
-#	25 Apr 2002. Last revised 5 April 2004.
+#	25 Apr 2002. Last revised 7 March 2005.
 
 	if(is(object,"MAList")) {
 		M <- object$M
@@ -50,11 +50,13 @@ duplicateCorrelation <- function(object,design=rep(1,ncol(M)),ndups=2,spacing=1,
 	for (i in 1:ngenes) {
 		y <- drop(M[i,])
 		o <- is.finite(y)
-		A <- Array[o]
-		if(sum(o)>(nbeta+2) && any(duplicated(A))) {
+		A <- factor(Array[o])
+		nobs <- sum(o)
+		nblocks <- length(levels(A))
+		if(nobs>(nbeta+2) && nblocks>1 && nblocks<nobs-1) {
 			y <- y[o]
 			X <- design[o,]
-			Z <- model.matrix(~factor(A)-1)
+			Z <- model.matrix(~0+A)
 			if(!is.null(weights)) {
 				w <- drop(weights[i,])[o]
 				s <- randomizedBlockFit(y,X,Z,w,only.varcomp=TRUE,maxit=20)$varcomp

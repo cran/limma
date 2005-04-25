@@ -1,3 +1,33 @@
+25 April 2005: limma 1.9.3
+
+- updates to references in User's Guide
+- syntax fix to TestResults.Rd
+
+23 April 2005: limma 1.9.2
+
+- edits to topTable.Rd and decideTests.Rd
+- gls.series() now returns error when ndups>2 and block is non-NULL
+
+14 April 2005: limma 1.9.1
+
+- In read.maimages() and readImaGeneHeader: argument allowEscapes=FALSE added to use of scan() to prevent new "feature" in R 2.1.0
+- new method as.data.frame.MArrayLM
+
+6 April 2005: limma 1.9.0
+
+- bug fix to getLayout2() when GAL-file has no header
+
+6 April 2005: limma 1.8.23
+
+- readImaGeneHeader now allows for headers up to 100 lines (previously 60)
+- comments in Between Arrays Normalization of usersguide.pdf about non-negative background correction
+- some additions to venn.Rd, say explicitly now that Venn diagrams for no more than three contrasts
+- corrections to code in Time Course Experiments section of User's Guide
+- duplicateCorrelation() now traps error condition when all non-missing observations for a gene belong to same block
+- topTable() default column name for gene names is now 'ProbeID'
+- lmFit() captures rownames if object is matrix
+- update to topTable.Rd on adjusted p-values
+
 24 Feb 2005: limma 1.8.22
 
 - note added to dupcor.Rd that the function may issue some warnings

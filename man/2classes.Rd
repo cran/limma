@@ -35,6 +35,7 @@ Objects of any of these classes may be \link[limma:subsetting]{subsetted}.
 Multiple data objects may be \link[limma:cbind]{combined} by rows (to add extra probes) or by columns (to add extra arrays).
 
 Furthermore all of these classes may be coerced to actually be of class \code{matrix} using \code{as.matrix}, although this entails loss of information.
+Fitted model objects of class \code{MArrayLM} can be coerced to class \code{data.frame} using \code{\link[limma:asdataframe]{as.data.frame}}.
 
 The first three classes belong to the virtual class \code{\link[limma:LargeDataObject]{LargeDataObject}}.
 A \code{show} method is defined for \code{LargeDataOject}s which uses the utility function \code{\link{printHead}}.

@@ -19,15 +19,20 @@ loessFit(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights)), iterations
 }
 
 \details{
-This function is a low-level equivalent to \code{lowess} in the base library if \code{weights} is null and to \code{loess} in the modreg package otherwise.
-It is used by \code{\link{normalizeWithinArrays}}.
-The parameters \code{span}, \code{cell} and \code{iterations} have the same meaning as in \code{loess}.
-\code{span} is equivalent to the argument \code{f} to \code{lowess} and \code{iterations} is equivalent to \code{iter+1}.
-Unlike \code{lowess} this function returns values in original rather than sorted order.
+This function is a low-level equivalent to \code{lowess} in the stats package if \code{weights} is null and to \code{loess} otherwise.
+It is intended to give a streamlined common interface to the two functions for use in \code{\link{normalizeWithinArrays}}.
+Note that, while \code{lowess} has fewer features than \code{loess}, it is faster, uses less memory and uses a more accurate interpolation scheme than \code{loess}, so it is desirable to use \code{lowess} whenever the extra features of \code{loess} are not required.
 
-The parameter \code{bin} is equivalent to \code{delta=bin*diff(range(x))} in a call to \code{lowess} when \code{weights=NULL} or to \code{cell=bin/span} in a call to \code{loess} when \code{weights} are given.
+There are a couple of key differences between \code{loessFit} and \code{loess} when \code{weights} is non-NULL.
+One difference is that \code{loessFit} returns a linear regression fit if there are insufficient observations to estimate the loess curve, whereas \code{loess} will return an error.
 
-The treatment of missing values is analogous to \code{na.exclude}.
+The arguments \code{span}, \code{cell} and \code{iterations} here have the same meaning as in \code{loess}.
+\code{span} is equivalent to the argument \code{f} of \code{lowess} and \code{iterations} is equivalent to \code{iter+1}.
+The parameter \code{bin} is intended to give a simple uniform interface to the \code{delta} argument of \code{lowess} and the \code{cell} argument of \code{loess}.
+\code{bin} translates to \code{delta=bin*diff(range(x))} in a call to \code{lowess} or to \code{cell=bin/span} in a call to \code{loess}.
+
+Unlike \code{lowess}, \code{loessFit} returns values in original rather than sorted order.
+Also unlike \code{lowess}, \code{loessFit} allows missing values, the treatment being analogous to \code{na.exclude}.
 }
 \value{
 A list with components
@@ -48,10 +53,11 @@ y <- rnorm(1000)
 x <- rnorm(1000)
 w <- rep(1,1000)
 # The following are equivalent apart from execution time
+# and interpolation inaccuracies
 system.time(fit <- loessFit(y,x)$fitted)
 system.time(fit <- loessFit(y,x,w)$fitted)
 system.time(fit <- fitted(loess(y~x,weights=w,span=0.3,family="symmetric",iterations=4)))
-# Similar but with sorted x-values
+# The same but with sorted x-values
 system.time(fit <- lowess(x,y,f=0.3)$y)
 }
 

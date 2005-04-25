@@ -157,3 +157,12 @@ plotPrintTipLoess <- function(object,layout,array=1,span=0.4,...) {
 	coplot(y~x|gr*gc,data=na.omit(df),xlab=c("A","Tip Column"),ylab=c("M","Tip Row"),pch=".",span=span,show.given=FALSE,panel=panel.smooth)
 }
 
+mdplot <- function(x,...)
+#	Mean-different plot
+#	Gordon Smyth
+#	16 March 2005
+{
+	d <- x[,1]-x[,2]
+	m <- (x[,1]+x[,2])/2
+	plot(m,d,xlab="Mean",ylab="Difference",...)
+}

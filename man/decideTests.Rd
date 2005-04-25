@@ -21,7 +21,9 @@ This is essentially a numeric matrix with elements \code{-1}, \code{0} or \code{
 These functions implement multiple testing procedures for determining whether each statistic in a matrix of t-statistics should be considered significantly different from zero.
 Rows of \code{tstat} correspond to genes and columns to coefficients or contrasts.
 
-The default settings with \code{method="separate"} is equivalent to using \code{topTable} separately for each coefficient in the linear model fit.  \code{method="global"} will treat the entire matrix of t-statistics as a single vector of unrelated tests.
+The setting \code{method="separate"} is equivalent to using \code{topTable} separately for each coefficient in the linear model fit, and will give the same lists of probes if \code{adjust.method} is the same.
+Note that the defaults for \code{adjust.method} are different for \code{decideTests} and \code{topTable}.
+\code{method="global"} will treat the entire matrix of t-statistics as a single vector of unrelated tests.
 \code{method="heirarchical"} adjusts down genes and then across contrasts.
 \code{method="nestedF"} adjusts down genes and then uses \code{classifyTestsF} to classify contrasts as significant or not for the selected genes.
 }
