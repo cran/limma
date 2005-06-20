@@ -24,7 +24,7 @@ If \code{method="half"} then any intensity which is less than 0.5 after backgrou
 If \code{method="minimum"} then any intensity which is zero or negative after background subtraction is set equal to half the minimum of the positive corrected intensities for that array.
 If \code{method="edwards"} a log-linear interpolation method is used to adjust lower intensities as in Edwards (2003).
 If \code{method="normexp"} a convolution of normal and exponential distributions is fitted to the foreground intensities using the background intensities as a covariate, and the expected signal given the observed foreground becomes the corrected intensity.
-See \code{\link{fit.normexp}} for more details.
+See \code{\link{normexp.fit}} for more details.
 This results in a smooth monotonic transformation of the background subtracted intensities such that all the corrected intensities are positive.
 
 The \code{offset} can be used to add a constant to the intensities before log-transforming, so that the log-ratios are shrunk towards zero at the lower intensities.
@@ -54,6 +54,6 @@ backgroundCorrect(RG, method="minimum")
 backgroundCorrect(RG, offset=5)
 }
 \seealso{
-An overview of normalization and background correction functions is given in \code{\link{4.Normalization}}.
+An overview of background correction functions is given in \code{\link{04.Background}}.
 }
 \keyword{models}

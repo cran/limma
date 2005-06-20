@@ -35,7 +35,7 @@ Egil Ferkingstad, Mette Langaas and Bo
 }
 \author{Egil Ferkingstad and Mette Langaas}
 \seealso{
-See \link{5.LinearModels} for other functions for producing or interpretting p-values.
+See \link{08.Tests} for other functions for producing or interpretting p-values.
 }
 
 \examples{

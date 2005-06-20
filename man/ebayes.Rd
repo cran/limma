@@ -8,7 +8,7 @@ ebayes(fit,proportion=0.01,stdev.coef.lim=c(0.1,4))
 eBayes(fit,proportion=0.01,stdev.coef.lim=c(0.1,4))
 }
 \arguments{
-  \item{fit}{a list object produced by \code{lm.series}, \code{gls.series}, \code{rlm.series} or \code{lmFit} containing components \code{coefficients}, \code{stdev.unscaled}, \code{sigma} and \code{df.residual}}
+  \item{fit}{a list object produced by \code{lm.series}, \code{gls.series}, \code{mrlm} or \code{lmFit} containing components \code{coefficients}, \code{stdev.unscaled}, \code{sigma} and \code{df.residual}}
   \item{proportion}{numeric value between 0 and 1, assumed proportion of genes which are differentially expressed}
   \item{stdev.coef.lim}{numeric vector of length 2, assumed lower and upper limits for the standard deviation of log2 fold changes for differentially expressed genes}
 }
@@ -27,7 +27,7 @@ eBayes(fit,proportion=0.01,stdev.coef.lim=c(0.1,4))
 }
 \details{These functions is used to rank genes in order of evidence for differential expression.
 It uses an empirical Bayes method to shrink the gene-wise sample variances towards a common values and, in so doing, augmenting the degrees of freedom for the individual variances.
-The function accepts as input output from the functions \code{lmFit}, \code{lm.series}, \code{rlm.series} or \code{gls.series}.
+The function accepts as input output from the functions \code{lmFit}, \code{lm.series}, \code{mrlm} or \code{gls.series}.
 The estimates \code{s2.prior} and \code{df.prior} are computed by \code{fitFDist}.
 \code{s2.post} is the weighted average of \code{s2.prior} and \code{sigma^2} with weights proportional to \code{df.prior} and \code{df.residual} respectively.
 The \code{lods} is sometimes known as the B-statistic.
@@ -41,7 +41,7 @@ the linear model output, see the example below.
 \seealso{
 \code{\link{squeezeVar}}, \code{\link{fitFDist}}, \code{\link{tmixture.matrix}}.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
 \references{

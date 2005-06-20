@@ -16,4 +16,8 @@ changeLog(n=20)
 
 \author{Gordon Smyth}
 
+\seealso{
+\link{01.Introduction}
+}
+
 \keyword{documentation}

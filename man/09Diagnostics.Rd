@@ -1,5 +1,5 @@
-\name{7.Diagnostics}
-\alias{7.Diagnostics}
+\name{09.Diagnostics}
+\alias{09.Diagnostics}
 \title{Diagnostics and Quality Assessment}
 
 \description{

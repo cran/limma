@@ -40,7 +40,7 @@ For example \code{02B13} is second row, 13th column, of the second plate.}
 \seealso{
 \code{\link{normalizeForPrintorder}}.
 
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 \author{Gordon Smyth}
 \examples{

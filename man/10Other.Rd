@@ -1,5 +1,5 @@
-\name{8.Other}
-\alias{8.Other}
+\name{10.Other}
+\alias{10.Other}
 \title{Other Functions}
 
 \description{

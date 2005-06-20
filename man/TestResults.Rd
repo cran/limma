@@ -31,14 +31,24 @@ This class inherits directly from class \code{matrix} so any operation appropria
 Functions in LIMMA which operate on \code{TestResults} objects include
 \code{\link{heatDiagram}},
 \code{\link{vennCounts}},
-\code{\link{vennDiagram}}.
+\code{\link{vennDiagram}},
+\code{\link{write.fit}}.
 }
 
 \author{Gordon Smyth}
 
 \seealso{
-  \link{2.Classes} gives an overview of all the classes defined by this package.
+  \link{02.Classes} gives an overview of all the classes defined by this package.
+  \link{08.Tests} gives an overview of multiple testing.
 }
+
+\examples{\dontrun{
+#  Assume a data object MA and a design matrix
+fit <- lmFit(MA, design)
+fit <- eBayes(fit)
+results <- decideTests(fit)
+summary(results)
+}}
 
 \keyword{classes}
 \keyword{htest}

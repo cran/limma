@@ -61,7 +61,7 @@ Smyth, G. K. Print-order normalization of cDNA microarrays. March 2002.  \url{ht
 \seealso{
 \code{\link{printorder}}.
 
-An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 }
 \examples{
 library(sma)

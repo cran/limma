@@ -24,7 +24,7 @@ Any other type of object is printed normally.
 \author{Gordon Smyth}
 
 \seealso{
-An overview of classes defined in LIMMA is given in \link{2.Classes}
+An overview of classes defined in LIMMA is given in \link{02.Classes}
 }
 
 \keyword{hplot}

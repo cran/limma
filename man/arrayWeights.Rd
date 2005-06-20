@@ -46,7 +46,7 @@ arrayWeights(object, design = NULL, weights = NULL)
         A matrix of array weights, suitable for use in the \code{weights} argument of \code{lmFit}.
  }
 \seealso{
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \examples{
 \dontrun{

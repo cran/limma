@@ -1,12 +1,12 @@
-\name{signal.normexp}
-\alias{signal.normexp}
+\name{normexp.signal}
+\alias{normexp.signal}
 \title{Expected Signal Given Observed Foreground Under Normal+Exp Model}
 \description{
 Adjust foreground intensities for observed background using Normal+Exp Model.
 This function is called by \code{backgroundCorrect} and is not normally called directly by the user.
 }
 \usage{
-signal.normexp(mu,sigma,alpha,foreground)
+normexp.signal(mu,sigma,alpha,foreground)
 }
 \arguments{
   \item{mu}{numeric vector giving expected values for signal}
@@ -22,8 +22,6 @@ Numeric vector containing adjusted intensities.
 }
 \author{Gordon Smyth}
 \seealso{
-\code{\link{fit.normexp}}
-
-An overview of normalization and background correction functions is given in \code{\link{4.Normalization}}.
+An overview of background correction functions is given in \code{\link{04.Background}}.
 }
 \keyword{models}

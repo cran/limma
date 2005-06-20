@@ -30,7 +30,7 @@ The first element is the number of rows (genes) and the second is the number of 
 \seealso{
   \code{\link[base]{dim}} in the base package.
   
-  \link{2.Classes} gives an overview of data classes used in LIMMA.
+  \link{02.Classes} gives an overview of data classes used in LIMMA.
 }
 \examples{
 M <- A <- matrix(11:14,4,2)

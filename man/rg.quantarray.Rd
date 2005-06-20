@@ -24,6 +24,6 @@ A list containing the components
 }
 \author{Gordon Smyth}
 \seealso{
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 \keyword{IO}

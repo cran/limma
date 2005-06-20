@@ -58,7 +58,7 @@ otherwise the default color of black will be used for all individual-channels.
 \value{A plot is created on the current graphics device.}
 \author{Natalie Thorne}
 \seealso{
-An overview of diagnostic plots in LIMMA is given in \link{7.Diagnostics}.
+An overview of diagnostic plots in LIMMA is given in \link{09.Diagnostics}.
 There is a section using \code{plotDensities} in conjunction with between-array normalization
 in the \emph{\link[limma:../doc/usersguide]{LIMMA User's Guide}}.
 }

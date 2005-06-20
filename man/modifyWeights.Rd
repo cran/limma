@@ -29,6 +29,6 @@ status <- c("Gene","Gene","Ratio_Control","Ratio_Control","Gene","Gene")
 modifyWeights(w,status,values="Ratio_Control",multipliers=0)
 }
 \seealso{
-An overview of normalization functions available in LIMMA is given in \link{4.Normalization}.
+An overview of normalization functions available in LIMMA is given in \link{05.Normalization}.
 }
 \keyword{hplot}

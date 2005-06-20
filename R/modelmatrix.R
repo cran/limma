@@ -1,16 +1,7 @@
-#  DESIGNMATRIX.R
+#  MODELMATRIX.R
 
 uniqueTargets <- function(targets) {
 	sort(unique(as.vector(as.matrix(targets[,c("Cy3","Cy5")]))))
-}
-
-designMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
-#	Renamed as modelMatrix 15 March 2004
-{
-	.Deprecated("modelMatrix")
-	a <- match.call()
-	a[[1]] <- as.name("modelMatrix")
-	eval(a)
 }
 
 modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
@@ -19,7 +10,7 @@ modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
 #	'parameters' specifies desired coefficients corresponding to columns of design matrix
 #	'ref' is common reference if such exists
 #	Gordon Smyth
-#	25 June 2003. Last modified 26 March 2004.
+#	25 June 2003. Last modified 28 May 2005.
 {
 	targets <- as.matrix(targets)
 	if(missing(targets)) stop("targets is required argument")
@@ -29,7 +20,7 @@ modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
 	target.names <- sort(unique(as.vector(t(as.matrix(targets[,c("Cy3","Cy5")])))))
 	if(verbose) cat("Found unique target names:\n",target.names,"\n")
 	if(is.null(parameters)) {
-#		if(any((targets[,"Cy3"]==ref) == (targets[,"Cy5"]==ref))) stop("ref needs to occur in exactly one channel on each array")
+		if(!(ref %in% target.names)) stop(paste("\"",ref,"\" not among the target names found",sep=""))
 		other.names <- setdiff(target.names,ref)
 		target.names <- c(ref,other.names)
 		ntargets <- length(target.names)
@@ -52,11 +43,11 @@ modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
 	zapsmall(t(solve(crossprod(parameters),crossprod(parameters,J))),14)
 }
 
-makeContrasts <- function(..., levels) {
+makeContrasts <- function(..., levels)
 #	Construct matrix of custom contrasts
 #	Gordon Smyth
-#	30 June 2003.  Last modified 25 Sep 2004.
-
+#	30 June 2003.  Last modified 12 June 2005.
+{
 	if(is.factor(levels)) levels <- levels(levels)
 	if(is.matrix(levels)) levels <- colnames(levels)
 	if(is.data.frame(levels)) levels <- names(levels)
@@ -84,7 +75,14 @@ makeContrasts <- function(..., levels) {
 	for (j in 1:(ne-1)) {
 		ej <- e[[j+1]]
 		if(is.character(ej)) ej <- parse(text=ej)
-		cm[,j] <- eval(ej)
+		ej <- eval(ej)
+#		was original argument a variable?
+		if(!is.numeric(ej)) {
+			colnames(cm)[j] <- as.character(ej)
+			if(is.character(ej)) ej <- parse(text=ej)
+			ej <- eval(ej)
+		}
+		cm[,j] <- ej
 	}
 	cm
 }

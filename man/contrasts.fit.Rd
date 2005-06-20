@@ -19,7 +19,7 @@ contrasts.fit(fit, contrasts)
   \item{...}{any other components input in \code{fit}}
 }
 \details{
-This function accepts input from any of the functions \code{\link{lmFit}}, \code{lm.series}, \code{rlm.series}, \code{gls.series} or \code{lmscFit}.
+This function accepts input from any of the functions \code{\link{lmFit}}, \code{lm.series}, \code{mrlm}, \code{gls.series} or \code{lmscFit}.
 The function re-orientates the fitted model object from the coefficients of the original design matrix to any set of contrasts of the original coefficients.
 The coefficients, unscaled standard deviations and correlation matrix are re-calculated in terms of the contrasts.
 
@@ -33,7 +33,7 @@ The approximation is usually acceptable.
 The results are always exact if the original fit was a oneway model.
 }
 \seealso{
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
 \examples{

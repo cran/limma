@@ -18,7 +18,7 @@ Integer giving spacing between replicate spots in the gene list.
 }
 \author{Gordon Smyth}
 \seealso{
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 \examples{
 getSpacing("columns",list(ngrid.r=2,ngrid.c=2,nspot.r=20,nspot.c=19))

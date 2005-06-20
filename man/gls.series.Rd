@@ -37,7 +37,7 @@ If \code{correlation=NULL} then a call is made to \code{duplicateCorrelation} to
 \seealso{
 \code{\link{duplicateCorrelation}}.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
 \examples{

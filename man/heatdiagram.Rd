@@ -10,7 +10,7 @@ heatDiagram(results,coef,primary=1,names=NULL,treatments=colnames(coef),limit=NU
 heatdiagram(stat,coef,primary=1,names=NULL,treatments=colnames(stat),critical.primary=4,critical.other=3,limit=NULL,orientation="landscape",low="green",high="red",cex=1,mar=NULL,ncolors=123,...)
 }
 \arguments{
-  \item{results}{\code{TestResults} matrix, containing elements -1, 0 or 1, from \code{\link{classifyTests}}}
+  \item{results}{\code{TestResults} matrix, containing elements -1, 0 or 1, from \code{\link{decideTests}}}
   \item{stat}{numeric matrix of test statistics. Rows correspond to genes and columns to treatments or contrasts between treatments.}
   \item{coef}{numeric matrix of the same size as \code{stat}. Holds the coefficients to be displayed in the plot.}
   \item{primary}{number or name of the column to be compared to the others. Genes are included in the diagram according to this column of \code{stat} and are sorted according to this column of \code{coef}. If \code{primary} is a name, then \code{stat} and \code{coef} must have the same column names.}

@@ -10,7 +10,7 @@ topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",res
 toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="holm",sort.by="B",resort.by=NULL,...)
 }
 \arguments{
-  \item{fit}{list containing a linear model fit produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{rlm.series}.
+  \item{fit}{list containing a linear model fit produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{mrlm}.
   For \code{topTable}, \code{fit} should be an object of class \code{MArrayLM} as produced by \code{lmFit}.}
   \item{coef}{column number or column name specifying which coefficient or contrast of the linear model is of interest}
   \item{number}{how many genes to pick out}
@@ -32,7 +32,7 @@ toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="holm",
   \item{B}{log odds that the gene is differentially expressed}
 }
 \details{
-This function summarizes a linear model fit object produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{rlm.series} by selecting the top-ranked genes for any given contrast.
+This function summarizes a linear model fit object produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{mrlm} by selecting the top-ranked genes for any given contrast.
 \code{topTable()} assumes that the linear model fit has already been processed by \code{eBayes()}.
 Note that \code{toptable} is the earlier interface and is being phased out.
 
@@ -53,7 +53,8 @@ For example, \code{topTable(fit, sort.by="B", resort.by="M")} selects the top ge
 Or \code{topTable(fit, sort.by="M", resort.by="M")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
 }
 \seealso{
-\code{\link{ebayes}}, \code{\link[stats]{p.adjust}}, \code{\link{lm.series}}, \code{\link{gls.series}}, \code{\link{rlm.series}}.
+An overview of linear model and testing functions is given in \link{06.LinearModels}.
+See also \code{\link[stats]{p.adjust}} in the \code{stats} package.
 }
 \author{Gordon Smyth}
 \examples{

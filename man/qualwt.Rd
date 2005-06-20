@@ -32,7 +32,7 @@ A function which takes a dataframe or matrix as argument and produces a numeric 
 }
 \author{Gordon Smyth}
 \seealso{
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 \examples{
 #  Read in spot output files from current directory and give full weight to 165

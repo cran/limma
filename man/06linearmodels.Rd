@@ -1,15 +1,15 @@
-\name{5.LinearModels}
-\alias{5.LinearModels}
+\name{06.LinearModels}
+\alias{06.LinearModels}
 \title{Linear Models for Microarrays}
 
 \description{
 This page gives an overview of the LIMMA functions available to fit linear models and to interpret the results.
 This page covers models for two color arrays in terms of log-ratios or for single-channel arrays in terms of log-intensities.
-If you wish to fit models to the individual channel log-intensities from two colour arrays, see \link{6.SingleChannel}.
+If you wish to fit models to the individual channel log-intensities from two colour arrays, see \link{07.SingleChannel}.
 
 The core of this package is the fitting of gene-wise linear models to microarray data.
 The basic idea is to estimate log-ratios between two or more target RNA samples simultaneously.
-See the \emph{\link[limma:../doc/usersguide]{LIMMA User's Guide}} for several case studies.
+See the LIMMA User's Guide for several case studies.
 }
 
 \section{Fitting Models}{
@@ -23,7 +23,7 @@ This is recommended interface for most users.
 \item{ \code{\link{lm.series}} }{
 	Straightforward least squares fitting of a linear model for each gene.}
 
-\item{ \code{\link{rlm.series}} }{
+\item{ \code{\link{mrlm}} }{
 	An alternative to \code{lm.series} using robust regression as implemented by the \code{rlm} function in the MASS package.}
 
 \item{ \code{\link{gls.series}} }{
@@ -71,32 +71,14 @@ After the above steps the results may be displayed or further processed using:
 \item{ \code{\link{toptable}} or \code{\link{topTable}} }{
 	Presents a list of the genes most likely to be differentially expressed for a given contrast.}
 
-\item{ \code{\link{decideTests}} }{
-	Classify the genes as up, down or even over the contrasts in the linear model with special attention to genes which are significant in more than one contrast.}
-
 \item{ \code{\link{volcanoplot}}}{
 	Volcano plot of fold change versus the B-statistic for any fitted coefficient.}
 
-\item{ \code{\link{FStat}} }{
-	Computes an overall moderated F-statistic to test whether all the contrasts are equal to zero.}
-
-\item{ \code{\link{heatdiagram}} or \code{\link{heatDiagram}} }{
-	Allows visual comparison of the results across many different conditions in the linear model.
-	Not the same as heatmaps produced by other packages!
-	This function accepts a \code{TestResults} matrix produced by \code{classifyTests}.}
-
-\item{ \code{\link{vennCounts}} }{
-	Accepts output from \code{classifyTests} and counts the number of genes in each classification.}
-
-\item{ \code{\link{vennDiagram}} }{
-	Accepts output from \code{classifyTests} or \code{vennCounts} and produces a Venn diagram plot.}
-
 \item{ \code{\link{write.fit}} }{
-	Writes an \code{MarrayLM} object to a file.}
+	Writes an \code{MarrayLM} object to a file,
+	as does \code{write.table} itself, implicitly using the \code{as.data.frame} method for \code{MArrayLM} objects.}
 }
-Given a set of p-values, the function \code{\link{convest}} can be used to estimate the proportion of true null hypotheses.
-
-When evaluating test procedures with simulated or known results, the utility function \code{\link{auROC}} can be used to compute the area under the Receiver Operating Curve for the test results for a given probe.
+For multiple testing functions which operate on linear model fits, see \link{08.Tests}.
 }
 
 \author{Gordon Smyth}
@@ -104,7 +86,6 @@ When evaluating test procedures with simulated or known results, the utility fun
 Smyth, G. K. (2004). Linear models and empirical Bayes methods for assessing differential expression in microarray experiments.
 \emph{Statistical Applications in Genetics and Molecular Biology}, \bold{3}, No. 1, Article 3. \url{http://www.bepress.com/sagmb/vol3/iss1/art3}
 
-Smyth, G. K., Michaud, J., and Scott, H. (2003). The use of within-array duplicate spots for assessing differential expression in microarray experiments.
-\url{http://www.statsci.org/smyth/pubs/dupcor.pdf}
+Smyth, G. K., Michaud, J., and Scott, H. (2005). The use of within-array replicate spots for assessing differential expression in microarray experiments. Bioinformatics 21(9), 2067-2075.
 }
 \keyword{documentation}

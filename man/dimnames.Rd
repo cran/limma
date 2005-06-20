@@ -25,6 +25,6 @@ If a list, its components are either 'NULL' or a character vector the length of 
 \seealso{
   \code{\link[base]{dimnames}} in the base package.
   
-  \link{2.Classes} gives an overview of data classes used in LIMMA.
+  \link{02.Classes} gives an overview of data classes used in LIMMA.
 }
 \keyword{array}

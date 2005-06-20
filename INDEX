@@ -1,13 +1,15 @@
 [.RGList                Subset RGList, MAList or MArrayLM Objects
-1.Introduction          Introduction to the LIMMA Package
-2.Classes               Classes Defined by this Package
-3.ReadingData           Reading Microarray Data from Files
-4.Normalization         Normalization of Microarray Data
-5.LinearModels          Linear Models for Microarrays
-6.SingleChannel         Individual Channel Analysis of Two-Color
+01.Introduction         Introduction to the LIMMA Package
+02.Classes              Classes Defined by this Package
+03.ReadingData          Reading Microarray Data from Files
+04.Background           Background Correction
+05.Normalization        Normalization of Microarray Data
+06.LinearModels         Linear Models for Microarrays
+07.SingleChannel        Individual Channel Analysis of Two-Color
                         Microarrays
-7.Diagnostics           Diagnostics and Quality Assessment
-8.Other                 Other Functions
+08.Tests                Hypothesis Testing for Linear Models
+09.Diagnostics          Diagnostics and Quality Assessment
+10.Other                Other Functions
 anova.MAList            ANOVA Table - method
 arrayWeights            Array Quality Weights
 arrayWeightsQuick       Array Quality Weights
@@ -23,8 +25,6 @@ bwss                    Between and within sums of squares
 bwss.matrix             Between and within sums of squares for matrix
 cbind.RGList            Combine RGList or MAList Objects
 changeLog               Limma Change Log
-classifyTests           Treat Simultaneous T-Tests as Classification
-                        Problem
 contrasts.fit           Compute Contrasts from Linear Model Fit
 controlStatus           Set Status of each Spot from List of Spot
                         Types
@@ -32,7 +32,6 @@ convest                 Estimate Proportion of True Null Hypotheses
 decideTests             Compute Matrix of Hypothesis Test Results
 designI2M               Convert Individual Channel Design Matrix to
                         M-A Format
-designMatrix            Construct Design Matrix
 dim.RGList              Retrieve the Dimensions of an RGList, MAList
                         or MArrayLM Object
 dimnames.RGList         Retrieve the Dimension Names of an RGList,
@@ -41,8 +40,6 @@ dupcor.series           Correlation Between Duplicates
 ebayes                  Empirical Bayes Statistics for Differential
                         Expression
 exprSet2-class          Expression Set - class
-fit.normexp             Fit Normal+Exp Convolution Model to Observed
-                        Intensities
 fitFDist                Moment Estimation of Scaled F-Distribution
 FStat                   Treat Simultaneous T-Tests as Classification
                         Problem
@@ -70,7 +67,6 @@ lmscFit                 Fit Linear Model to Individual Channels of
 loessFit                Fast Simple Loess
 m.spot                  Extract M or A-values from SPOT data.frame or
                         matrix
-m2loglik.normexp        Normal + Exponential Log-Likelihood
 ma3x3.matrix            Two dimensional Moving Averages with 3x3
                         Window
 makeContrasts           Construct Matrix of Custom Contrasts
@@ -94,6 +90,11 @@ normalizeQuantiles      Normalize Columns of a Matrix to have the same
 normalizeRobustSpline   Normalize Single Microarray Using Shrunk
                         Robust Splines
 normalizeWithinArrays   Normalize Within Arrays
+normexp.fit             Fit Normal+Exp Convolution Model to Observed
+                        Intensities
+normexp.m2loglik        Normal + Exponential Log-Likelihood
+normexp.signal          Expected Signal Given Observed Foreground
+                        Under Normal+Exp Model
 plotDensities           Individual-channel Densities Plot
 plotMA                  MA-Plot
 plotMA3by2              Write MA-Plots to Files
@@ -125,8 +126,6 @@ rg.spot                 Extract RGList from data.frames Containing
                         SPOT Data
 RGList-class            Red, Green Intensity List - class
 rlm.series              Robust Linear Model for Series of Microarrays
-signal.normexp          Expected Signal Given Observed Foreground
-                        Under Normal+Exp Model
 splitName               Split Composite Gene Names
 squeezeVar              Smooth Sample Variances
 summary.RGList          Summaries of Microarray Data Objects

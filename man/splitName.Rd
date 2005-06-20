@@ -28,7 +28,7 @@ Gene names are assumed to comprise a short name or identifier followed by more d
 \seealso{
 \code{\link[base]{strsplit}}.
 
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 
 \examples{

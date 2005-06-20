@@ -11,7 +11,7 @@ vennDiagram(object, include="both", names, mar=rep(1,4), cex=1.5, \dots)
 }
 \arguments{
   \item{x}{numeric matrix of 0's and 1's indicating significance of a test.
-  Usually created by \code{\link{decideTests}} or \code{\link{classifyTests}}.}
+  Usually created by \code{\link{decideTests}}.}
   \item{object}{either a \code{TestResults} matrix or a \code{VennCounts} object produced by \code{vennCounts}.}
   \item{include}{character string specifying whether to counts genes up-regulated, down-regulated or both.
   Choices are \code{"both"}, \code{"up"} or \code{"down"}.}
@@ -26,7 +26,7 @@ vennDiagram(object, include="both", names, mar=rep(1,4), cex=1.5, \dots)
 For \code{venDiagram}, the number of columns of \code{object} should be three or fewer.
 }
 \seealso{
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth and James Wettenhall}
 \examples{

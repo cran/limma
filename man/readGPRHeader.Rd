@@ -31,6 +31,6 @@ A key component is \code{NHeaderRecords} which gives the number of lines in the 
 \author{Gordon Smyth}
 \seealso{\code{\link{read.maimages}}
 
-An overview of LIMMA functions to read data is given in \link{3.ReadingData}.
+An overview of LIMMA functions to read data is given in \link{03.ReadingData}.
 }
 \keyword{file}

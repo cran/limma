@@ -61,7 +61,7 @@ Smyth, G. K., and Speed, T. P. (2003). Normalization of cDNA microarray data. In
 }
 
 \seealso{
-An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 
 See also \code{\link{normalizeBetweenArrays}} and \code{\link[marrayNorm]{maNorm}} in the marrayNorm package.
 }

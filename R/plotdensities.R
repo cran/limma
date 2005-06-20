@@ -3,7 +3,7 @@
 plotDensities<-function(object,log=TRUE,arrays=NULL,singlechannels=NULL,groups=NULL,col=NULL)
 #	Plot empirical single-channel densities
 #	Original version by Natalie Thorne, 9 September 2003
-#	Modified by Gordon Smyth.  Last modified 9 Dec 2004.  
+#	Modified by Gordon Smyth.  Last modified 1 June 2005.  
 {
 	matDensities<-function(X){
 		densXY<-function(Z){
@@ -29,7 +29,7 @@ plotDensities<-function(object,log=TRUE,arrays=NULL,singlechannels=NULL,groups=N
 		R <- object$R
 		G <- object$G
 		if(!is.null(object$Rb)) R <- R-object$Rb
-		if(!is.null(object$Rb)) R <- R-object$Rb
+		if(!is.null(object$Gb)) G <- G-object$Gb
 		if(log) {
 			R[R <= 0] <- NA
 			G[G <= 0] <- NA

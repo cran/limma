@@ -21,7 +21,9 @@ The number of true and false discoveries are determined by how well the true sta
 Numeric vector giving area under the curve, 1 being perfect and 0 being the minimum, or \code{NULL} if \code{truth} has zero length.
 }
 \seealso{
-\code{\link[ROC]{AUC}}
+See \link{08.Tests} for other functions for testing and processing p-values.
+
+See also \code{\link[ROC]{AUC}} in the \code{ROC} package.
 }
 \examples{
 auROC(c(1,1,0,0,0))

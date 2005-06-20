@@ -28,6 +28,6 @@ The number of files is determined by the number of columns of \code{MA}.
 \author{Gordon Smyth}
 
 \seealso{
-An overview of diagnostic functions available in LIMMA is given in \link{7.Diagnostics}.
+An overview of diagnostic functions available in LIMMA is given in \link{09.Diagnostics}.
 }
 \keyword{hplot}

@@ -17,7 +17,7 @@ A character vector of the same length as \code{x} in which any common extension 
 }
 
 \seealso{
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 
 \examples{

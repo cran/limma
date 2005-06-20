@@ -4,7 +4,7 @@ eBayes <- function(fit,proportion=0.01,stdev.coef.lim=c(0.1,4)) {
 #	Empirical Bayes statistics to select differentially expressed genes
 #	Object orientated version
 #	Gordon Smyth
-#	4 August 2003.  Last modified 17 June 2004.
+#	4 August 2003.  Last modified 20 June 2005.
 
 	eb <- ebayes(fit=fit,proportion=proportion,stdev.coef.lim=stdev.coef.lim)
 	fit$df.prior <- eb$df.prior
@@ -18,7 +18,12 @@ eBayes <- function(fit,proportion=0.01,stdev.coef.lim=c(0.1,4)) {
 	if(!is.null(fit$design) && is.fullrank(fit$design)) {
 		F.stat <- classifyTestsF(fit,fstat.only=TRUE)
 		fit$F <- as.vector(F.stat)
-		fit$F.p.value <- pf(F.stat,df1=attr(F.stat,"df1"),df2=attr(F.stat,"df2"),lower.tail=FALSE)
+		df1 <- attr(F.stat,"df1")
+		df2 <- attr(F.stat,"df2")
+		if(df2[1] > 1e6) # Work around bug in R 2.1
+			fit$F.p.value <- pchisq(df1*F.stat,df1,lower.tail=FALSE)
+		else
+			fit$F.p.value <- pf(F.stat,df1,df2,lower.tail=FALSE)
 	}
 	fit
 }

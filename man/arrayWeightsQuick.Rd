@@ -23,7 +23,7 @@ Numeric vector of weights of length \code{ncol(fit)}.
 \author{Gordon Smyth}
 \seealso{
 See \link{arrayWeights}.
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 \examples{
 \dontrun{

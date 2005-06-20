@@ -9,8 +9,11 @@ convest <- function(p,niter=100,doplot=FALSE,doreport=FALSE)
 # from http://www.math.ntnu.no/~mettela/
 #	Written by Egil Ferkingstad.
 #	Received from Mette Langaas 26 Jun 2004.
-#	Modified slightly for limma by Gordon Smyth, 29 Oct 2004.
+#	Modified for limma by Gordon Smyth, 29 Oct 2004.  Last revised 28 May 2005.
 {
+	if(!length(p)) return(NA)
+	if(any(is.na(p))) stop("Missing values in p not allowed")
+	if(any(p<0 | p>1)) stop("All p-values must be between 0 and 1")
 	k <- niter
 	ny <- 1e-6 # accuracy of the bisectional search for finding a new
 		#convex combination of the current iterate and the mixing density

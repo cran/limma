@@ -78,6 +78,6 @@ MA$genes$Status <- status
 plotMA(MA,main="MA-Plot with Simulated Data")
 }
 \seealso{
-An overview of diagnostic functions available in LIMMA is given in \link{7.Diagnostics}.
+An overview of diagnostic functions available in LIMMA is given in \link{09.Diagnostics}.
 }
 \keyword{hplot}

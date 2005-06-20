@@ -1,5 +1,5 @@
-\name{3.ReadingData}
-\alias{3.ReadingData}
+\name{03.ReadingData}
+\alias{03.ReadingData}
 \title{Reading Microarray Data from Files}
 
 \description{

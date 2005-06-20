@@ -5,11 +5,11 @@
 readGAL <- function(galfile=NULL,path=NULL,header=TRUE,sep="\t",quote="\"",skip=NULL,as.is=TRUE,...) {
 #	Read GenePix Array List (GAL) file
 #	Gordon Smyth
-#	1 Mar 2003.  Last revised 26 Dec 2003.
+#	1 Mar 2003.  Last revised 2 May 2005.
 
 	if(is.null(galfile)) {
 		if(is.null(path)) path <- "."
-		galfile <- dir(path=path,pattern="*\\.gal$")
+		galfile <- dir(path=path,pattern="\\.gal$")
 		nfiles <- length(galfile)
 		if(nfiles == 0) stop("Cannot find GAL file")
 		if(nfiles > 1) {

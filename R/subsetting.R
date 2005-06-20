@@ -87,9 +87,18 @@ assign("[.MArrayLM",
 function(object, i, j, ...) {
 #  Subsetting for MArrayLM objects
 #  Gordon Smyth
-#  16 Aug 2004.
+#  26 April 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
+	if(!is.null(object$coefficients)) object$coefficients <- as.matrix(object$coefficients)
+	if(!is.null(object$stdev.unscaled)) object$stdev.unscaled <- as.matrix(object$stdev.unscaled)
+	if(!is.null(object$weights)) object$weights <- as.matrix(object$weights)
+	if(!is.null(object$p.value)) object$p.value <- as.matrix(object$p.value)
+	if(!is.null(object$lods)) object$lods <- as.matrix(object$lods)
+	if(!is.null(object$targets)) object$targets <- as.data.frame(object$targets)
+	if(!is.null(object$cov.coefficients)) object$cov.coefficients <- as.matrix(object$cov.coefficients)
+	if(!is.null(object$design)) object$design <- as.matrix(object$design)
+	if(!is.null(object$genes)) object$genes <- as.data.frame(object$genes)
 	if(missing(i)) {
 		if(missing(j))
 			return(object)

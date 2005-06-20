@@ -39,7 +39,7 @@ This matrix must be of size n by (n-1), where n is the number of unique RNA sour
 \seealso{
 \code{\link[stats]{model.matrix}} in the stats package.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 
 \author{Gordon Smyth}

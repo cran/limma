@@ -51,7 +51,7 @@ It differs from \code{maImage} in that any statistic may be plotted and in its u
 \seealso{
 \code{\link[marray]{maImage}}, \code{\link[graphics]{image}}.
 
-An overview of diagnostic functions available in LIMMA is given in \link{7.Diagnostics}.
+An overview of diagnostic functions available in LIMMA is given in \link{09.Diagnostics}.
 }
 \examples{
 M <- rnorm(8*4*16*16)

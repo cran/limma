@@ -30,12 +30,12 @@ The linear model is fit for each gene by calling the function \code{rlm} from th
 Warning: don't use weights with this function unless you understand how \code{rlm} treats weights.
 The treatment of weights is somewhat different from that of \code{lm.series} and \code{gls.series}.
 
-The function \code{rlm.series} is equivalent to \code{rlm} but is deprecated and will be removed at some time in the future.
+The function \code{rlm.series} is equivalent to \code{mrlm} but is deprecated and will be removed at some time in the future.
 }
 \seealso{
 \code{\link[MASS]{rlm}}.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
 \examples{

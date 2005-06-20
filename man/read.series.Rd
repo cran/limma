@@ -30,7 +30,7 @@ The files names are given by the elements of \code{slides} and the suffix is giv
 \seealso{
 \code{\link[base]{read.table}}.
 
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 
 \keyword{file}

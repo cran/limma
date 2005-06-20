@@ -39,7 +39,7 @@ The functions \code{\link{ebayes}} and \code{\link{classifyTestsF}} accept \code
 \author{Gordon Smyth}
 
 \seealso{
-  \link{2.Classes} gives an overview of all the classes defined by this package.
+  \link{02.Classes} gives an overview of all the classes defined by this package.
 }
 
 \keyword{classes}

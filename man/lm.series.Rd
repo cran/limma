@@ -25,7 +25,7 @@ The linear model is fit for each gene by calling the function \code{lm.fit} or \
 \seealso{
 \code{\link[base:lmfit]{lm.fit}}.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \examples{
 #  Simulate gene expression data,

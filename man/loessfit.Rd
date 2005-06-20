@@ -43,7 +43,7 @@ A list with components
 \author{Gordon Smyth}
 
 \seealso{
-An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 
 See also \code{\link[stats]{lowess}} and \code{\link[stats]{loess}} in the stats package.
 }

@@ -54,7 +54,7 @@ Improved background correction for spotted DNA microarrays.
 }
 	
 \seealso{
-\link{4.Normalization} gives an overview of normalization and background correction functions defined in the LIMMA package.
+\link{04.Background} gives an overview of background correction functions defined in the LIMMA package.
 }
 
 \examples{

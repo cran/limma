@@ -25,7 +25,7 @@ The printer layout information is used to re-arrange the values of each column a
 Numeric matrix of same dimension as \code{x} containing smoothed values
 }
 \seealso{
-An overview of functions for normalization and background correction are given in \code{\link{4.Normalization}}.
+An overview of functions for background correction are given in \code{\link{04.Background}}.
 }
 \examples{
 x <- matrix(c(2,5,3,1,6,3,10,12,4,6,4,8,2,1,9,0),4,4)

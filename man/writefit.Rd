@@ -32,6 +32,6 @@ This function writes a tab-delimited text file containing for each gene (1) the 
 \seealso{
 \code{\link[base]{write}} in the base library.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \keyword{IO}

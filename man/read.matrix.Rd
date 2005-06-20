@@ -24,7 +24,7 @@ A numeric matrix with column names.
 \seealso{
 \code{\link[base]{read.table}}, \code{\link[base]{scan}}.
 
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 
 \keyword{file}

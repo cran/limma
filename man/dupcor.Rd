@@ -50,7 +50,7 @@ The consensus estimator computed by this function will not be materially affecte
 \seealso{
 These functions use \code{\link[statmod]{randomizedBlockFit}} from the statmod package.
 
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
 \references{

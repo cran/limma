@@ -100,7 +100,7 @@ fit$stdev.unscaled
 fit$sigma
 fit$df.residual
 
-### rlm.series
+### mrlm
 
 fit <- mrlm(M,design)
 fit$coef

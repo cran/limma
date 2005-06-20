@@ -22,4 +22,8 @@ blockDiag(a,b)
 
 \author{Gordon Smyth}
 
+\seealso{
+\link{10.Other}
+}
+
 \keyword{array}

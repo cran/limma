@@ -31,7 +31,7 @@ An \code{\link[limma:rglist]{RGList}} or \code{\link[limma:malist]{MAList}} obje
 \seealso{
   \code{\link[base]{cbind}} in the base package.
   
-  \link{3.ReadingData} gives an overview of data input and manipulation functions in LIMMA.
+  \link{03.ReadingData} gives an overview of data input and manipulation functions in LIMMA.
 }
 \examples{
 M <- A <- matrix(11:14,4,2)

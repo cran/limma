@@ -57,7 +57,7 @@ In terms of \code{design} and \code{contrasts}, \code{cor.matrix} is obtained by
 to a correlation matrix.
 }
 \seealso{
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of multiple testing functions is given in \link{08.Tests}.
 }
 \author{Gordon Smyth}
 \examples{

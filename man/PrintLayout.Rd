@@ -29,7 +29,7 @@ Objects of this class contains no slots but should contain the following list co
 \author{Gordon Smyth}
 
 \seealso{
-  \link{2.Classes} gives an overview of all the classes defined by this package.
+  \link{02.Classes} gives an overview of all the classes defined by this package.
 }
 
 \examples{

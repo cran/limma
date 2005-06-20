@@ -15,7 +15,7 @@ A \code{show} method is defined for objects of class \code{LargeDataObject} whic
 \author{Gordon Smyth}
 
 \seealso{
-  \link{2.Classes} gives an overview of all the classes defined by this package.
+  \link{02.Classes} gives an overview of all the classes defined by this package.
 }
 
 \examples{

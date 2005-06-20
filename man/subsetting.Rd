@@ -24,7 +24,7 @@ An object of the same class as \code{object} holding data from the specified sub
 \seealso{
   \code{\link[base]{Extract}} in the base package.
   
-  \link{3.ReadingData} gives an overview of data input and manipulation functions in LIMMA.
+  \link{03.ReadingData} gives an overview of data input and manipulation functions in LIMMA.
 }
 \examples{
 M <- A <- matrix(11:14,4,2)

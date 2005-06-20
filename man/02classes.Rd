@@ -1,5 +1,5 @@
-\name{2.Classes}
-\alias{2.Classes}
+\name{02.Classes}
+\alias{02.Classes}
 \title{Classes Defined by this Package}
 
 \description{

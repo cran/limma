@@ -31,7 +31,7 @@ Component matrices have the same rows names as in \code{x} but columns from \cod
 \seealso{
 R base provides a \code{\link[base]{merge}} method for merging data.frames.
 
-An overview of limma commands for reading, subsetting and merging data is given in \link{3.ReadingData}.
+An overview of limma commands for reading, subsetting and merging data is given in \link{03.ReadingData}.
 }
 \examples{
 M <- A <- matrix(11:14,4,2)

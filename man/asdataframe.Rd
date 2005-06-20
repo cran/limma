@@ -24,6 +24,7 @@ A data.frame.
 \seealso{
   \code{\link[base]{as.data.frame}} in the base package.
   
-  \link{2.Classes} gives an overview of data classes used in LIMMA.
+  \link{02.Classes} gives an overview of data classes used in LIMMA.
+  \link{06.LinearModels} gives an overview of linear model functions in LIMMA.
 }
 \keyword{array}

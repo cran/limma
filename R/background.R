@@ -58,10 +58,10 @@ backgroundCorrect <- function(RG, method="subtract", offset=0, printer=RG$printe
 	},
 	normexp={
 	for (j in 1:ncol(RG$R)) {
-		out <- fit.normexp(foreground=RG$G[,j],background=RG$Gb[,j])
-		RG$G[,j] <- signal.normexp(mu=out$beta+RG$Gb[,j],out$sigma,out$alpha,foreground=RG$G[,j])
-		out <- fit.normexp(foreground=RG$R[,j],background=RG$Rb[,j])
-		RG$R[,j] <- signal.normexp(mu=out$beta+RG$Rb[,j],out$sigma,out$alpha,foreground=RG$R[,j])
+		out <- normexp.fit(foreground=RG$G[,j],background=RG$Gb[,j])
+		RG$G[,j] <- normexp.signal(mu=out$beta+RG$Gb[,j],out$sigma,out$alpha,foreground=RG$G[,j])
+		out <- normexp.fit(foreground=RG$R[,j],background=RG$Rb[,j])
+		RG$R[,j] <- normexp.signal(mu=out$beta+RG$Rb[,j],out$sigma,out$alpha,foreground=RG$R[,j])
 		if(verbose) cat("Corrected array",j,"\n")
 	}
 	})
@@ -130,70 +130,80 @@ ma3x3.spottedarray <- function(x,printer,FUN=mean,na.rm=TRUE,...)
 
 #  NORMAL + EXPONENTIAL ADAPTIVE MODEL
 
-fit.normexp0 <- function(foreground,background=NULL,background.matrix=NULL,trace=0,beta.start=NULL) {
-#	Fit background=normal + signal=exponential model using Nelder-Mead.
-#	Gordon Smyth
-#	24 Aug 2002.  Last modified 15 Dec 2004.
-
-	f <- foreground
-
-#	Starting values
-	mu <- quantile(f,0.03,na.rm=TRUE,names=FALSE)
-	if(is.null(background) && is.null(background.matrix)) {
-		nbeta <- 1
-		beta <- mu
-	} else {
-		if(!is.null(background)) {
-			nbeta <- 1
-			beta <- mu - mean(background,na.rm=TRUE)
-		} else {
-			nbeta <- ncol(background.matrix)
-			beta <- rep(0,nbeta)
-			beta[1] <- mu
-			if(!is.null(beta.start)) beta <- beta.start
-		}
-	}
-	sigma <- sqrt(mean((f[f<mu]-mu)^2,na.rm=TRUE))
-	if(!is.finite(sigma) || sigma < 1) sigma <- 1
-	alpha <- mean(f,na.rm=TRUE) - mu
-	theta <- c(beta,log(sigma),log(alpha))
-	
-#	Nelder-Mead optimization
-	out <- optim(theta,m2loglik.normexp,control=list(trace=trace),foreground=f,background=background,background.matrix=background.matrix)
-
-	if(out$convergence==1) warning("optim iteration limit reached")
-	if(out$convergence==10) stop("optim failure: degeneracy of the Nelder-Mead simplex")
-	list(beta=out$par[1:nbeta],sigma=exp(out$par[nbeta+1]),alpha=exp(out$par[nbeta+2]),m2loglik=out$value,convergence=out$convergence)
-}
-
-m2loglik.normexp <- function(theta,foreground,background=NULL,background.matrix=NULL) {
-#	Marginal log-likelihood of foreground values for normal + exponential model.
-#	Gordon Smyth
-#	24 Aug 2002.
-
-	if(is.null(background) && is.null(background.matrix)) {
-		nbeta <- 1
-		mu <- theta[1]
-	} else {
-		if(!is.null(background)) {
-			nbeta <- 1
-			mu <- theta[1]+background
-		} else {
-			nbeta <- ncol(background.matrix)
-			mu <- background.matrix %*% theta[1:nbeta]
-		}
-	}
-	sigma <- exp(theta[nbeta+1])
-	alpha <- exp(theta[nbeta+2])
-	mu.sf <- foreground-mu-sigma^2/alpha
-	-2*sum(-log(alpha) - (foreground-mu)/alpha + sigma^2/alpha^2/2 + pnorm(0,mean=mu.sf,sd=sigma,lower.tail=FALSE,log.p=TRUE))
-}
-
-signal.normexp <- function(mu,sigma,alpha,foreground) {
+normexp.signal <- function(mu,sigma,alpha,foreground)
 #	Expected value of signal given foreground in normal + exponential model
 #	Gordon Smyth
-#	24 Aug 2002. Last modified 23 Jan 2005.
-
+#	24 Aug 2002. Last modified 18 June 2005.
+{
+	if(alpha <= 0) stop("alpha must be positive")
+	if(sigma <= 0) stop("sigma must be positive")
 	mu.sf <- foreground-mu-sigma^2/alpha
-	mu.sf + sigma^2 * exp(dnorm(0,mean=mu.sf,sd=sigma,log=TRUE) - pnorm(0,mean=mu.sf,sd=sigma,lower.tail=FALSE,log=TRUE))
+	signal <- mu.sf + sigma^2 * exp(dnorm(0,mean=mu.sf,sd=sigma,log=TRUE) - pnorm(0,mean=mu.sf,sd=sigma,lower.tail=FALSE,log=TRUE))
+	if(any(signal<0)) {
+		warning("Limit of numerical accuracy reached with very low intensity or very high background:\nsetting adjusted intensity to small value")
+		signal <- pmax(signal,1e-6)
+	}
+	signal
 }
+
+normexp.fit <- function(foreground,background=0,trace=0)
+#	Fit background=normal + signal=exponential model using BFGS.
+#	Gordon Smyth and Jeremy Silver
+#	24 Aug 2002. Last modified 18 June 2005.
+{
+	x <- foreground-background
+	isna <- is.na(x)
+	if(any(isna)) x <- x[!isna]
+	if(length(x)<4) stop("Not enough data: need at least 4 non-missing corrected intensities")
+	
+#	Starting values for parameters beta, alpha and sigma
+	q <- quantile(x, c(0,0.05,0.1,1), na.rm = TRUE, names = FALSE)
+	if(q[1]==q[4]) return(list(beta=q[1],sigma=1,alpha=1,m2loglik=NA,convergence=0))
+	if(q[2] > q[1]) {
+		beta <- q[2]
+	} else {
+		if(q[3] > q[1]) {
+			beta <- q[3]
+		} else {
+			beta <- q[1] + 0.05*(q[4]-q[1])
+		}
+	}
+	sigma <- sqrt(mean((x[x<beta]-beta)^2, na.rm = TRUE))
+	alpha <- mean(x,na.rm = TRUE) - beta
+
+	Results <- optim(par=c(beta,log(sigma),log(alpha)), fn=normexp.m2loglik, gr=normexp.grad, method=c("BFGS"), control=list(trace=trace), foreground=x, background=0)
+	list(beta=Results$par[1], sigma=exp(Results$par[2]), alpha=exp(Results$par[3]),m2loglik=Results$value, convergence=Results$convergence)
+}
+
+normexp.grad <- function(theta,foreground,background=0)
+#	Gradient of norm-exp log-likelihood (summed over all spots)
+#	Jeremy Silver.
+#	21 Jan 2005. Last modified 18 June 2005.
+{
+	beta<-theta[1]
+	logsigma<-theta[2]
+	logalpha<-theta[3]
+	mu <- beta + background
+	mu.sf <- foreground - mu - exp(2*logsigma - logalpha)
+
+	dlogdbeta <- -2 * sum(exp(-logalpha) - exp(dnorm(0,mu.sf,exp(logsigma),log = TRUE) - pnorm(0,mu.sf,exp(logsigma),lower.tail = FALSE,log.p = TRUE)))
+	dlogdlogsigma <- -2 * sum(exp(2*logsigma - 2*logalpha) - (2*exp(2*logsigma - logalpha) + mu.sf)*exp( dnorm(0,mu.sf,exp(logsigma),log = TRUE) - pnorm(0,mu.sf,exp(logsigma),lower.tail = FALSE,log.p = TRUE)))
+	dlogdlogalpha <- -2 * sum(-1 +(foreground - mu)*exp( -logalpha) - exp(2*logsigma - 2*logalpha) + exp(2*logsigma - logalpha+dnorm(0,mu.sf,exp(logsigma),log = TRUE) - pnorm(0,mu.sf,exp(logsigma),lower.tail = FALSE,log.p = TRUE)))
+
+	c(dlogdbeta,dlogdlogsigma,dlogdlogalpha)
+}
+
+normexp.m2loglik <- function(theta,foreground,background=0)
+#	Minus twice the norm-exp log-likelihood (summed over all spots)
+#	Jeremy Silver and Gordon Smyth
+#	24 Aug 2002. Last modified 18 June 2005.
+{
+	beta<-theta[1]
+	logsigma<-theta[2]
+	logalpha<-theta[3]
+	mu <- beta + background
+	mu.sf <- foreground - mu - exp(2*logsigma - logalpha)
+	
+	-2*sum(-logalpha - (foreground - mu)/exp(logalpha) + 0.5*exp(2*logsigma - 2*logalpha) + log(pnorm(0,mu.sf,exp(logsigma),lower.tail = FALSE)))
+}
+

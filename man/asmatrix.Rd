@@ -27,6 +27,6 @@ A numeric matrix.
 \seealso{
   \code{\link[base]{as.matrix}} in the base package.
   
-  \link{2.Classes} gives an overview of data classes used in LIMMA.
+  \link{02.Classes} gives an overview of data classes used in LIMMA.
 }
 \keyword{array}

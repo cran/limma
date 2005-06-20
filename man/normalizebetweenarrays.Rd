@@ -72,7 +72,7 @@ In: D. R. Goldstein (ed.), \emph{Science and Statistics: A Festschrift for Terry
 }
 
 \seealso{
-  An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+  An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 
   See also \code{\link[marrayNorm]{maNormScale}} in the marrayNorm package, \code{\link[affy:normalize-methods]{normalize}} in the affy package and \code{\link[vsn]{vsn}} in the vsn package.
 }

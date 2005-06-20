@@ -29,6 +29,6 @@ Bolstad, B. M., Irizarry R. A., Astrand, M., and Speed, T. P. (2003), A comparis
 }
 \author{Gordon Smyth}
 \seealso{
-An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 }  
 \keyword{models}

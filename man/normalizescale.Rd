@@ -26,7 +26,7 @@ Here the median-absolute value is used for preference to as to not re-center the
 }
 \author{Gordon Smyth}
 \seealso{
-  An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+  An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 }
 \examples{
 M <- cbind(Array1=rnorm(10),Array2=2*rnorm(10))

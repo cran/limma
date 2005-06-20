@@ -28,7 +28,7 @@ Note that the defaults for \code{adjust.method} are different for \code{decideTe
 \code{method="nestedF"} adjusts down genes and then uses \code{classifyTestsF} to classify contrasts as significant or not for the selected genes.
 }
 \seealso{
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of multiple testing functions is given in \link{08.Tests}.
 }
 \author{Gordon Smyth}
 \keyword{htest}

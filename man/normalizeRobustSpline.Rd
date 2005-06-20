@@ -26,7 +26,7 @@ Numeric vector containing normalized M-values.
 The function is based on unpublished work by the author.
 }
 \seealso{
-  An overview of LIMMA functions for normalization is given in \link{4.Normalization}.
+  An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
 }
 \examples{
 library(sma)

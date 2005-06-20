@@ -27,7 +27,7 @@ numeric model matrix with half as many rows as \code{design}
 \seealso{
 \code{\link[stats]{model.matrix}} in the stats package.
 
-An overview of individual channel linear model functions in limma is given by \link{6.SingleChannel}.
+An overview of individual channel linear model functions in limma is given by \link{07.SingleChannel}.
 }
 
 \author{Gordon Smyth}

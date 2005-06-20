@@ -23,7 +23,7 @@ A plot is created on the current graphics device.
 If there are missing values in the data, then the vector of row numbers for spots with missing values is invisibly returned, as for \code{coplot}.
 }
 \seealso{
-An overview of diagnostic functions available in LIMMA is given in \link{7.Diagnostics}.
+An overview of diagnostic functions available in LIMMA is given in \link{09.Diagnostics}.
 }
 \author{Gordon Smyth}
 \keyword{hplot}

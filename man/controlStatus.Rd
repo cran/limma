@@ -37,7 +37,7 @@ Attributes contain plotting parameters associated with each spot type.
 }
 \author{Gordon Smyth}
 \seealso{
-An overview of LIMMA functions for reading data is given in \link{3.ReadingData}.
+An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }
 \examples{
 genes <- data.frame(ID=c("Control","Control","Control","Control","AA1","AA2","AA3","AA4"),

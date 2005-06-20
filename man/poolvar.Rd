@@ -48,6 +48,10 @@ Welch, B. L. (1947). The generalization of 'Student's' problem when several diff
 Welch, B. L. (1949). Further note on Mrs. Aspin's tables and on certain approximations to the tabled function. \emph{Biometrika} \bold{36}, 293-296.
 }
 
+\seealso{
+\link{10.Other}
+}
+
 \examples{
 #  Welch's t-test with unequal variances
 x <- rnorm(10,mean=1,sd=2)

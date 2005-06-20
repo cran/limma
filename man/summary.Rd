@@ -23,6 +23,6 @@ A table.
 \seealso{
   \code{\link[base]{summary}} in the base package.
   
-  \link{2.Classes} gives an overview of data classes used in LIMMA.
+  \link{02.Classes} gives an overview of data classes used in LIMMA.
 }
 \keyword{methods}

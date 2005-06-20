@@ -17,7 +17,7 @@ Matrix which columns corresponding to contrasts.
 }
 
 \seealso{
-An overview of linear model functions in limma is given by \link{5.LinearModels}.
+An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 
 \author{Gordon Smyth}

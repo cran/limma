@@ -35,7 +35,7 @@ Any pair of columns named by \code{channel.columns} will now be one column.
 \seealso{
 \code{targetsA2C} is used by the \code{\link[convert:coerce]{coerce}} method from \code{RGList} for \code{exprSet} in the convert package.
 
-An overview of methods for single channel analysis in limma is given by \link{6.SingleChannel}.
+An overview of methods for single channel analysis in limma is given by \link{07.SingleChannel}.
 }
 \examples{
 targets <- data.frame(FileName=c("file1.gpr","file2.gpr"),Cy3=c("WT","KO"),Cy5=c("KO","WT"))

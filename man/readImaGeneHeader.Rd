@@ -36,6 +36,6 @@ A list with components
 \author{Gordon Smyth}
 \seealso{\code{\link{read.imagene}}
 
-An overview of LIMMA functions to read data is given in \link{3.ReadingData}.
+An overview of LIMMA functions to read data is given in \link{03.ReadingData}.
 }
 \keyword{file}

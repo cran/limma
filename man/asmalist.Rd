@@ -21,7 +21,7 @@ Object of class \code{\link[limma:MAList]{MAList}}
 \author{Gordon Smyth}
 
 \seealso{
-  \link{2.Classes} gives an overview of all the classes defined by this package.
+  \link{02.Classes} gives an overview of all the classes defined by this package.
 }
 
 \keyword{classes}

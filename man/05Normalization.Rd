@@ -1,5 +1,5 @@
-\name{4.Normalization}
-\alias{4.Normalization}
+\name{05.Normalization}
+\alias{05.Normalization}
 \title{Normalization of Microarray Data}
 
 \description{
@@ -20,20 +20,6 @@ For more details see the \emph{\link[limma:../doc/usersguide]{LIMMA User's Guide
 
 \code{normalizeWithinArrays} uses utility functions \code{\link{MA.RG}}, \code{\link{loessFit}} and \code{\link{normalizeRobustSpline}}.
 \code{normalizeBetweenArrays} uses utility functions \code{\link{normalizeMedians}}, \code{\link{normalizeMedianDeviations}} and \code{\link{normalizeQuantiles}}, none of which need to be called directly by users.
-}
-
-\section{Backgound Correction}{
-Usually one doesn't need to explicitly ask for background correction of the intensities because this is done by default by \code{\link{normalizeWithinArrays}},
-which subtracts the background from the foreground intensities before applying the normalization method.
-This default background correction method can be over-ridden by using \code{\link{backgroundCorrect}} which offers a number of alternative
-background correct methods to simple subtraction.
-Simply use \code{backgroundCorrect} to correct the \code{RGList} before applying \code{normalizeWithinArrays}.
-
-\code{backgroundCorrect} uses utility functions \code{\link{ma3x3.matrix}}, \code{\link{ma3x3.spottedarray}}, \code{\link{fit.normexp}}, \code{\link{signal.normexp}} and \code{\link{m2loglik.normexp}}.
-
-\code{\link{kooperberg}} is a Bayesian background correction tool designed specifically for GenePix data.
-\code{kooperberg} is not currently used as the default method for GenePix data because it is computationally intensive.
-It requires several columns of the GenePix data files which are not read in by read.maimages, so you will need to use \code{read.series} instead of \code{read.maimages} if you wish to use \code{kooperberg}.
 }
 
 \author{Gordon Smyth}

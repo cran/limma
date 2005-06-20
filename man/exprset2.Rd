@@ -31,7 +31,7 @@ It is an experimental class to investigate the possibility of a unified data cla
 \author{Gordon Smyth}
 
 \seealso{
-  \link{2.Classes} gives an overview of all the classes defined by this package.
+  \link{02.Classes} gives an overview of all the classes defined by this package.
   
   \code{\link[Biobase:exprSet-class]{exprSet}} is the corresponding class in the Biobase package.
 }
