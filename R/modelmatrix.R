@@ -10,10 +10,10 @@ modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
 #	'parameters' specifies desired coefficients corresponding to columns of design matrix
 #	'ref' is common reference if such exists
 #	Gordon Smyth
-#	25 June 2003. Last modified 28 May 2005.
+#	25 June 2003. Last modified 1 Aug 2005.
 {
-	targets <- as.matrix(targets)
 	if(missing(targets)) stop("targets is required argument")
+	targets <- as.matrix(targets)
 	if(!all(c("Cy3","Cy5") %in% colnames(targets))) stop("targets should contain columns: Cy3 and Cy5")
 	if(is.null(parameters)==is.null(ref)) stop("exactly one of the arguments parameters and ref should be specified")
 

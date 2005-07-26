@@ -180,7 +180,7 @@ RG.MA <- function(object) {
 normalizeWithinArrays <- function(object,layout=object$printer,method="printtiploess",weights=object$weights,span=0.3,iterations=4,controlspots=NULL,df=5,robust="M",bc.method="subtract",offset=0)
 #	Within array normalization
 #	Gordon Smyth
-#	2 March 2003.  Last revised 8 Oct 2004.
+#	2 March 2003.  Last revised 29 July 2005.
 {
 	if(!is(object,"MAList")) object <- MA.RG(object,bc.method=bc.method,offset=offset)
 	choices <- c("none","median","loess","printtiploess","composite","robustspline")
@@ -188,7 +188,10 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 	if(method=="none") return(object)
 	narrays <- ncol(object$M)
 	if(method=="median") {
-		for (j in 1:narrays) object$M[,j] <- object$M[,j] - median(object$M[,j],na.rm=TRUE)
+		if(is.null(weights))
+			for (j in 1:narrays) object$M[,j] <- object$M[,j] - median(object$M[,j],na.rm=TRUE)
+		else
+			for (j in 1:narrays) object$M[,j] <- object$M[,j] - weighted.median(object$M[,j],weights[,j],na.rm=TRUE)
 		return(object)
 	}
 #	All remaining methods use regression of M-values on A-values
@@ -206,6 +209,9 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 			ngr <- layout$ngrid.r
 			ngc <- layout$ngrid.c
 			nspots <- layout$nspot.r * layout$nspot.c
+			nprobes <- ngr*ngc*nspots
+			if(nprobes != NROW(object$M)) stop("printer layout information does not match M row dimension")
+			if(nprobes != NROW(object$A)) stop("printer layout information does not match A row dimension")
 			for (j in 1:narrays) {
 				spots <- 1:nspots
 				for (gridr in 1:ngr)

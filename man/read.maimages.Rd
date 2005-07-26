@@ -6,19 +6,19 @@
 Reads an RGList from a series of microarray image analysis output files
 }
 \usage{
-read.maimages(files,source="spot",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",\dots)
+read.maimages(files,source=NULL,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",\dots)
 read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...)
 }
 \arguments{
   \item{files}{character vector giving the names of the files containing image analysis output or, for Imagene data, a character matrix of names of files.
   If omitted, then all files with extension \code{ext} in the specified directory will be read in alphabetical order.}
-  \item{source}{character string specifing the image analysis program which produced the output files.  Choices are \code{"agilent"}, \code{"arrayvision"}, \code{"genepix"}, \code{"imagene"}, \code{"quantarray"}, \code{"smd.old"}, \code{"smd"}, \code{"spot"} or \code{"spot.close.open"}.}
+  \item{source}{character string specifing the image analysis program which produced the output files.  Choices are \code{"agilent"}, \code{"arrayvision"}, \code{"bluefuse"}, \code{"genepix"}, \code{"genepix.median}, \code{"imagene"}, \code{"quantarray"}, \code{"smd.old"}, \code{"smd"}, \code{"spot"} or \code{"spot.close.open"}.}
   \item{path}{character string giving the directory containing the files.
   If \code{NULL}, the current working directory is assumed.}
   \item{ext}{character string giving optional extension to be added to each file name}
   \item{names}{character vector of names to be associated with each array as column name.
   If \code{NULL}, the filenames minus any common extension will be used.}
-  \item{columns}{list with fields \code{Rf}, \code{Gf}, \code{Rb} and \code{Gb} giving the column names to be used for red and green foreground and background or, in the case of Imagene data, a list with fields \code{f} and \code{b}.  This argument is not usually specified by the user but, if it is, it over-rides \code{source}.}
+  \item{columns}{list with fields \code{R}, \code{G}, \code{Rb} and \code{Gb} giving the column names to be used for red and green foreground and background or, in the case of Imagene data, a list with fields \code{f} and \code{b}.  This argument is optional if \code{source} is specified, otherwise it is required.}
   \item{other.columns}{character vector of names of other columns to be read containing spot-specific information}
   \item{annotation}{character vector of names of columns containing annotation information about the probes}
   \item{wt.fun}{function to calculate spot quality weights}
@@ -30,7 +30,7 @@ read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbos
 \details{
 This is the main data input function for the LIMMA package.
 It extracts the foreground and background intensities from a series of files, produced by an image analysis program, and assembles them into the components of one list.
-The image analysis programs Agilent Feature Extraction, ArrayVision, GenePix, ImaGene, QuantArray, Stanford Microarray Database (SMD) and SPOT are supported explicitly.
+The image analysis programs Agilent Feature Extraction, ArrayVision, BlueFuse, GenePix, ImaGene, QuantArray, Stanford Microarray Database (SMD) and SPOT are supported explicitly.
 Data from some other image analysis programs can be read if the appropriate column names containing the foreground and background intensities are specified using the \code{columns} argument.
 (This will work if the column names are unique and if there are no rows in the file after the last line of data.
 Header lines are ok.)
@@ -38,6 +38,7 @@ Header lines are ok.)
 SMD data should consist of raw data files from the database, in tab-delimited text form.
 There are two possible sets of column names depending on whether the data was entered into the database before or after September 2003.
 \code{source="smd.old"} indicates that column headings in use prior to September 2003 should be used.
+In the case of GenePix, two possible foreground estimators are supported: \code{source="genepix"} uses the mean foreground estimates while \code{source="genepix.median"} uses median foreground estimates.
 In the case of SPOT, two possible background estimators are supported:
 if \code{source="spot.close.open"} then background intensities are estimated from \code{morph.close.open} rather than \code{morph}.
 

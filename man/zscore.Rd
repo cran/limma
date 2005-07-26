@@ -3,7 +3,7 @@
 \alias{zscoreT}
 \alias{tZscore}
 
-\title{z-score equivalents}
+\title{Z-score Equivalents}
 
 \description{
 Compute z-score equivalents of for gamma or t-distribution random deviates.

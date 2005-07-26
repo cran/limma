@@ -1,3 +1,27 @@
+- modelMatrix() was not giving helpful error message if 'targets' was missing
+- normalizeWithinArrays(method="printtiploess") now gives informative
+  error if layout is incompatible with data dimension
+
+26 July 2005: limma 2.0.4
+
+- the general form for 'columns' in read.maimages() introduced in limma 2.0.3
+  caused an error with agilent input.  Now fixed.
+- added Duffinck et al 2005 reference to User's Guide
+- new possible value "genepix.median" for source argument of read.maimages()
+- default value for source argument of read.maimages() is now NULL
+
+18 July 2005: limma 2.0.3
+
+- documentation on components Amean, F.stat and F.p.value added to MArrayLM.Rd
+- columns argument of read.maimages() now can be arbitrary, provided the two foreground channels are included. Inclusion of background columns is now optional.
+- support for BlueFuse files added to read.maimages()
+- new function readBlueFuseHeader()
+- re-wording revision of CITATION entry, now points to http://bioinf.wehi.edu.au
+- normalizeWithinArrays(method="median") now uses a weighted median where appropriate
+- new function weighted.median()
+- bug fix to RGList subsetting: targets component was subsetted incorrectly with j but missing i
+- small fix to readGPRHeader.Rd
+
 20 June 2005: limma 2.0.2
 
 - last mentions of designMatrix and classifyTests removed from help docs

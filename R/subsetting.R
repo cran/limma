@@ -4,7 +4,7 @@ assign("[.RGList",
 function(object, i, j, ...) {
 #  Subsetting for RGList objects
 #  Gordon Smyth
-#  29 June 2003.  Last modified 10 Oct 2004.
+#  29 June 2003.  Last modified 30 June 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	oc <- names(object$other)
@@ -17,7 +17,6 @@ function(object, i, j, ...) {
 			object$Rb <- object$Rb[,j,drop=FALSE]
 			object$Gb <- object$Gb[,j,drop=FALSE]
 			object$weights <- object$weights[,j,drop=FALSE]
-			object$targets <- object$targets[j,,drop=FALSE]
 			object$targets <- object$targets[j,,drop=FALSE]
 			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][,j,drop=FALSE]
 		}

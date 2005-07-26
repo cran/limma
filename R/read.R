@@ -260,10 +260,10 @@ read.matrix <- function(file,nrows=0,skip=0,...) {
 	x
 }
 
-read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
+read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth
-#	1 Nov 2002.  Last revised 29 Jan 2005.
+#	1 Nov 2002.  Last revised 26 July 2005.
 
 	if(missing(files)) {
 		if(missing(ext))
@@ -274,22 +274,39 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 			files <- sub(extregex,"",files)
 		}
 	}
-	source <- match.arg(source,c("agilent","arrayvision","genepix","imagene","quantarray","smd.old","smd","spot","spot.close.open"))
-	if(source=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
+	if(is.null(source)) {
+		source <- "generic"
+	} else {
+		source <- match.arg(source,c("agilent","arrayvision","bluefuse","genepix","genepix.median","imagene","quantarray","smd.old","smd","spot","spot.close.open"))
+		if(source=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
+	}
 	slides <- as.vector(as.character(files))
 	if(!is.null(ext)) slides <- paste(slides,ext,sep=".")
 	nslides <- length(slides)
 	if(is.null(names)) names <- removeExt(files)
 
-	if(is.null(columns)) columns <- switch(source,
-		agilent = list(Gf="gMeanSignal",Gb="gBGMedianSignal",Rf="rMeanSignal",Rb="rBGMedianSignal"),
-		smd.old = list(Gf="CH1I_MEAN",Gb="CH1B_MEDIAN",Rf="CH2I_MEAN",Rb="CH2B_MEDIAN"),
-		smd = list(Gf="Ch1 Intensity (Mean)",Gb="Ch1 Background (Median)",Rf="Ch2 Intensity (Mean)",Rb="Ch2 Background (Median)"),
-		spot = list(Rf="Rmean",Gf="Gmean",Rb="morphR",Gb="morphG"),
-		spot.close.open = list(Rf="Rmean",Gf="Gmean",Rb="morphR.close.open",Gb="morphG.close.open"),
-		genepix = list(Rf="F635 Mean",Gf="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
-		quantarray = list(Rf="ch2 Intensity",Gf="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background")
-	)
+	if(is.null(columns)) {
+		if(is.null(source)) stop("At least one of 'source' or 'columns' must be given")
+		columns <- switch(source,
+			agilent = list(G="gMeanSignal",Gb="gBGMedianSignal",R="rMeanSignal",Rb="rBGMedianSignal"),
+			bluefuse = list(G="AMPCH1",R="AMPCH2"),
+			genepix = list(R="F635 Mean",G="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
+			genepix.median = list(R="F635 Median",G="F532 Median",Rb="B635 Median",Gb="B532 Median"),
+			quantarray = list(R="ch2 Intensity",G="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background"),
+			smd.old = list(G="CH1I_MEAN",Gb="CH1B_MEDIAN",R="CH2I_MEAN",Rb="CH2B_MEDIAN"),
+			smd = list(G="Ch1 Intensity (Mean)",Gb="Ch1 Background (Median)",R="Ch2 Intensity (Mean)",Rb="Ch2 Background (Median)"),
+			spot = list(R="Rmean",G="Gmean",Rb="morphR",Gb="morphG"),
+			spot.close.open = list(R="Rmean",G="Gmean",Rb="morphR.close.open",Gb="morphG.close.open"),
+			NULL
+		)
+	} else {
+		if(!is.list(columns)) stop("columns must be a list")
+		names(columns)[names(columns)=="Gf"] <- "G"
+		names(columns)[names(columns)=="Rf"] <- "R"
+		if(is.null(columns$G) || is.null(columns$R)) stop("columns must specify foreground G and R")
+		if(!all(names(columns) %in% c("G","R","Gb","Rb"))) warning("non-standard columns specified")
+	}
+	cnames <- names(columns)
 
 #	Read first file to get nspots
 	fullname <- slides[1]
@@ -307,8 +324,12 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		if(length(fg) != 2) stop(paste("Cannot find foreground columns in",fullname))
 		bg <- grep("Bkgd",cn)
 		if(length(fg) != 2) stop(paste("Cannot find background columns in",fullname))
-		columns <- list(Rf=fg[1],Rb=bg[1],Gf=fg[2],Gb=bg[2])
+		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",...)
+		nspots <- nrow(obj)
+	}, bluefuse = {
+		skip <- readBlueFuseHeader(fullname)$NHeaderRecords
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char= "",fill=TRUE,...)
 		nspots <- nrow(obj)
 	}, "genepix" = {
 		skip <- readGPRHeader(fullname)$NHeaderRecords
@@ -323,7 +344,7 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE,...)
 		nspots <- nrow(obj)
 	}, {
-		skip <- grep(protectMetachar(columns$Rf),readLines(fullname,n=80)) - 1
+		skip <- grep(protectMetachar(columns$R),readLines(fullname,n=80)) - 1
 		if(length(skip)==0)
 			stop("Cannot find column heading in image output file")
 		else
@@ -335,13 +356,15 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 #	Initialize RG list object
 	Y <- matrix(0,nspots,nslides)
 	colnames(Y) <- names
-	RG <- list(R=Y,G=Y,Rb=Y,Gb=Y)
+	RG <- columns
+	for (a in cnames) RG[[a]] <- Y
 	if(!is.null(wt.fun)) RG$weights <- Y
 	RG$targets <- data.frame(FileName=I(files),row.names=names)
 
 #	Set annotation information
 	if(is.null(annotation)) annotation <- switch(source,
 		agilent = c("Row","Col","Start","Sequence","SwissProt","GenBank","Primate","GenPept","ProbeUID","ControlType","ProbeName","GeneName","SystematicName","Description"),
+		bluefuse = c("ROW","COL","SUBGRIDROW","SUBGRIDCOL","BLOCK","NAME","ID"),   
 		genepix = c("Block","Row","Column","ID","Name"),
 		smd = c("Spot","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","Locuslink ID","Name","Sequence Type","X Grid Coordinate (within sector)","Y Grid Coordinate (within sector)","Sector","Failed","Plate Number","Plate Row","Plate Column","Clone Source","Is Verified","Is Contaminated","Luid"),
 		smd.old = c("SPOT","NAME","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","SUID"),
@@ -380,12 +403,10 @@ read.maimages <- function(files,source="spot",path=NULL,ext=NULL,names=NULL,colu
 			fullname <- slides[i]
 			if(!is.null(path)) fullname <- file.path(path,fullname)
 			if(source=="genepix") skip <- readGPRHeader(fullname)$NHeaderRecords
-			obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots,...)
+			if(source=="bluefuse") skip <- readBlueFuseHeader(fullname)$NHeaderRecords
+            obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots,...)
 		}
-		RG$R[,i] <- obj[,columns$Rf]
-		RG$G[,i] <- obj[,columns$Gf]
-		RG$Rb[,i] <- obj[,columns$Rb]
-		RG$Gb[,i] <- obj[,columns$Gb]
+		for (a in cnames) RG[[a]][,i] <- obj[,columns[[a]]]
 		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)
 		if(!is.null(other.columns)) for (j in other.columns) {
 			RG$other[[j]][,i] <- obj[,j] 
@@ -507,11 +528,11 @@ readImaGeneHeader <- function(file) {
 	out
 }
 
-readSMDHeader <- function(file) {
+readSMDHeader <- function(file)
 #	Read header information from a Stanford Microarray Database (SMD) raw data file
 #	Gordon Smyth
 #	3 June 2004
-
+{
 	con <- file(file, "r")	
  	on.exit(close(con))
  	out <- list()
@@ -530,6 +551,37 @@ readSMDHeader <- function(file) {
  	}
  	out$NHeaderRecords <- i
  	out
+}
+
+readBlueFuseHeader <- function(file)
+#	Initial version from Gregory Lefebvre, Sanger, 6 July 2005
+#	Gordon Smyth
+#	16 July 2005
+{
+	con <- file(file, "r")
+	on.exit(close(con))
+	out <- list()
+	i <- 0
+   
+#	First line contains BlueFuse version	
+	i <- i+1
+	txt <- readLines(con,n=1)
+	if(!length(grep("BlueFuse",txt))) warning("No BlueFuse version entry in first line")
+	out$BlueFuseVersion <- txt
+
+#	Second line is blank
+	i <- i+1
+	if(readLines(con,n=1) != "") stop("Second line not blank")
+
+#	Read headers from 3rd line until a new blank line
+	while( (txt <- readLines(con,n=1)) != "") {
+		i <- i+1
+		txts <- strsplit(sub("\"$","",sub("^\"","",txt)),split=": ")[[1]]
+		out[[i-1]] <- txts[2]
+		names(out)[i-1] <- txts[1]
+	}
+	out$NHeaderRecords <- i+1
+	out
 }
 
 rg.series.spot <- function(slides,path=NULL,names.slides=names(slides),suffix="spot",wt.fun=NULL,verbose=TRUE,...) {

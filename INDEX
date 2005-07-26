@@ -109,9 +109,9 @@ QualityWeights          Spot Quality Weights
 read.maimages           Read RGList from Image Analysis Output Files
 read.matrix             Read Matrix with Headers from File
 read.series             Read series of image files
-readGAL                 Read a GAL file
-readGPRHeader           Read Header Information from Image Analysis
+readBlueFuseHeader      Read Header Information from Image Analysis
                         Raw Data File
+readGAL                 Read a GAL file
 readImaGeneHeader       Read ImaGene Header Information
 readSpotTypes           Read Spot Types File
 readTargets             Read Targets File
@@ -142,5 +142,6 @@ unwrapdups              Unwrap Duplicate Spot Values from Rows into
                         Columns
 vennCounts              Venn Diagrams
 volcanoplot             Volcano Plot
+weighted.median         Weighted Median
 write.fit               Write MArrayLM Object to a File
-zscoreGamma             z-score equivalents
+zscoreGamma             Z-score Equivalents
