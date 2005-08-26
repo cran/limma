@@ -39,6 +39,8 @@ SMD data should consist of raw data files from the database, in tab-delimited te
 There are two possible sets of column names depending on whether the data was entered into the database before or after September 2003.
 \code{source="smd.old"} indicates that column headings in use prior to September 2003 should be used.
 In the case of GenePix, two possible foreground estimators are supported: \code{source="genepix"} uses the mean foreground estimates while \code{source="genepix.median"} uses median foreground estimates.
+GenePix 6.0 and later also supplies some custom background options, notably morphological background.
+If the GPR files have been written using a custom background, you may read it using \code{source="genepix.custom"}. 
 In the case of SPOT, two possible background estimators are supported:
 if \code{source="spot.close.open"} then background intensities are estimated from \code{morph.close.open} rather than \code{morph}.
 

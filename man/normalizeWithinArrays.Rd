@@ -15,7 +15,7 @@ RG.MA(object)
   \item{object}{object of class \code{list}, \code{RGList} or \code{MAList} containing two-color microarray data}
   \item{layout}{list specifying the dimensions of the spot matrix and the grid matrix. For details see \code{\link[limma:PrintLayout]{PrintLayout-class}}.}
   \item{method}{character string specifying the normalization method.
-  Choices are \code{"none"}, \code{"median"}, \code{"loess"}, \code{"printtiploess"}, \code{"composite"} and \code{"robustspline"}.
+  Choices are \code{"none"}, \code{"median"}, \code{"loess"}, \code{"printtiploess"}, \code{"composite"}, \code{"control"} and \code{"robustspline"}.
   A partial string sufficient to uniquely identify the choice is permitted.}
   \item{weights}{numeric matrix or vector of the same size and shape as the components of \code{object}. Will use by default weights found in \code{object} if they exist.}
   \item{span}{numeric scalar giving the smoothing parameter for the \code{loess} fit}
@@ -34,6 +34,7 @@ This function normalizes M-values (log-ratios) for dye-bias within each array.
 Apart from \code{method="none"} and \code{method="median"}, all the normalization methods make use of the relationship between dye-bias and intensity.
 The loess normalization methods were proposed by Yang et al (2001, 2002).
 Smyth and Speed (2003) give a detailed statement of the methods.
+The \code{"control"} method fits a global loess curve through a set of control spots, such as a whole-library titration series, and applies that curve to all the other spots.
 
 More information on the loess control parameters \code{span} and \code{iterations} can be found under \code{\link{loessFit}}.
 The default values given here are equivalent to those for the older function \code{stat.ma} in the SMA package.

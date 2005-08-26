@@ -1,3 +1,30 @@
+- note added to dupcor.Rd about minimum number of arrays needed for
+  duplicateCorrelation() to return statistcally useful results.
+
+26 August: limma 2.0.7
+
+- new option source="genepix.custom" for read.maimages()
+- new method "control" for normalizeWithinArrays()
+
+23 August 2005: limma 2.0.6
+
+- arrayWeights() was returning an error for PLMset objects, now works
+  correctly on the chip level coefficients
+- eBayes now returns F.p.value component as vector rather than matrix
+- changes to write.fit to make it tolerant of not finding expected
+  components such as Amean in fit object
+- bug fix to as.data.frame.MArrayLM when the fit contains only one contrast
+  and there are matrices stored as vectors
+- several updates to Weaver case study in User's Guide:
+     new url to download data,
+     wt.fun error fixed,
+     and work-around for R 2.1 bug which affects readSpotTypes()
+- new sections on getting help and on citation in User's Guide
+
+8 August 2005: limma 2.0.5
+
+- Dentritic cell direct comparison example in User's Guide now uses modelMatrix()
+- arrayWeights() now includes full "reml" option
 - modelMatrix() was not giving helpful error message if 'targets' was missing
 - normalizeWithinArrays(method="printtiploess") now gives informative
   error if layout is incompatible with data dimension
@@ -7,7 +34,7 @@
 - the general form for 'columns' in read.maimages() introduced in limma 2.0.3
   caused an error with agilent input.  Now fixed.
 - added Duffinck et al 2005 reference to User's Guide
-- new possible value "genepix.median" for source argument of read.maimages()
+- new option souce="genepix.median" for read.maimages()
 - default value for source argument of read.maimages() is now NULL
 
 18 July 2005: limma 2.0.3

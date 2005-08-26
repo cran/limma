@@ -8,13 +8,13 @@ citEntry(entry="inbook",
 	publisher="Springer",
 	address="New York",
     year = 2005,
-    pages ="Chapter 23",
+    pages ="397--420",
 
     textVersion = 
     paste("Smyth, G. K. (2005). Limma: linear models for microarray",
          "data. In: 'Bioinformatics and Computational Biology Solutions",
          "using R and Bioconductor'. R. Gentleman, V. Carey, S. Dudoit,",
-         "R. Irizarry, W. Huber (eds), Springer, New York, 2005.")
+         "R. Irizarry, W. Huber (eds), Springer, New York, pages 397--420.")
     )
 
 citFooter("We have invested a lot of time and effort in creating limma,",

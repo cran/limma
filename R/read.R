@@ -263,7 +263,7 @@ read.matrix <- function(file,nrows=0,skip=0,...) {
 read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth
-#	1 Nov 2002.  Last revised 26 July 2005.
+#	1 Nov 2002.  Last revised 26 August 2005.
 
 	if(missing(files)) {
 		if(missing(ext))
@@ -277,7 +277,7 @@ read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,column
 	if(is.null(source)) {
 		source <- "generic"
 	} else {
-		source <- match.arg(source,c("agilent","arrayvision","bluefuse","genepix","genepix.median","imagene","quantarray","smd.old","smd","spot","spot.close.open"))
+		source <- match.arg(source,c("agilent","arrayvision","bluefuse","genepix","genepix.median","genepix.custom","imagene","quantarray","smd.old","smd","spot","spot.close.open"))
 		if(source=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
 	}
 	slides <- as.vector(as.character(files))
@@ -292,6 +292,7 @@ read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,column
 			bluefuse = list(G="AMPCH1",R="AMPCH2"),
 			genepix = list(R="F635 Mean",G="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
 			genepix.median = list(R="F635 Median",G="F532 Median",Rb="B635 Median",Gb="B532 Median"),
+			genepix.custom = list(R="F635 Mean",G="F532 Mean",Rb="B635",Gb="B532"),
 			quantarray = list(R="ch2 Intensity",G="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background"),
 			smd.old = list(G="CH1I_MEAN",Gb="CH1B_MEDIAN",R="CH2I_MEAN",Rb="CH2B_MEDIAN"),
 			smd = list(G="Ch1 Intensity (Mean)",Gb="Ch1 Background (Median)",R="Ch2 Intensity (Mean)",Rb="Ch2 Background (Median)"),
@@ -311,13 +312,14 @@ read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,column
 #	Read first file to get nspots
 	fullname <- slides[1]
 	if(!is.null(path)) fullname <- file.path(path,fullname)
-	switch(source, "quantarray" = {
+	switch(source,
+	   quantarray = {
 		firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE)
 		skip <- grep("Begin Data",firstfield)
 		if(length(skip)==0) stop("Cannot find \"Begin Data\" in image output file")
 		nspots <- grep("End Data",firstfield) - skip -2
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",nrows=nspots,...)
-	}, "arrayvision" = {
+	}, arrayvision = {
 		skip <- 1
 		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)
 		fg <- grep(" Dens - ",cn)
@@ -331,15 +333,13 @@ read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,column
 		skip <- readBlueFuseHeader(fullname)$NHeaderRecords
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char= "",fill=TRUE,...)
 		nspots <- nrow(obj)
-	}, "genepix" = {
-		skip <- readGPRHeader(fullname)$NHeaderRecords
+	}, genepix=,genepix.median=,genepix.custom = {
+		h <- readGPRHeader(fullname)
+		if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
+		skip <- h$NHeaderRecords
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE,...)
 		nspots <- nrow(obj)
-	}, "smd.old" = {
-		skip <- readSMDHeader(fullname)$NHeaderRecords
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE,...)
-		nspots <- nrow(obj)
-	}, "smd" = {
+	}, smd=,smd.old = {
 		skip <- readSMDHeader(fullname)$NHeaderRecords
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE,...)
 		nspots <- nrow(obj)
@@ -365,7 +365,7 @@ read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,column
 	if(is.null(annotation)) annotation <- switch(source,
 		agilent = c("Row","Col","Start","Sequence","SwissProt","GenBank","Primate","GenPept","ProbeUID","ControlType","ProbeName","GeneName","SystematicName","Description"),
 		bluefuse = c("ROW","COL","SUBGRIDROW","SUBGRIDCOL","BLOCK","NAME","ID"),   
-		genepix = c("Block","Row","Column","ID","Name"),
+		genepix=,genepix.median=,genepix.custom = c("Block","Row","Column","ID","Name"),
 		smd = c("Spot","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","Locuslink ID","Name","Sequence Type","X Grid Coordinate (within sector)","Y Grid Coordinate (within sector)","Sector","Failed","Plate Number","Plate Row","Plate Column","Clone Source","Is Verified","Is Contaminated","Luid"),
 		smd.old = c("SPOT","NAME","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","SUID"),
 		NULL
@@ -402,7 +402,12 @@ read.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,column
 		if(i > 1) {
 			fullname <- slides[i]
 			if(!is.null(path)) fullname <- file.path(path,fullname)
-			if(source=="genepix") skip <- readGPRHeader(fullname)$NHeaderRecords
+			if(source %in% c("genepix","genepix.median")) skip <- readGPRHeader(fullname)$NHeaderRecords
+			if(source=="genepix.custom") {
+				h <- readGPRHeader(fullname)
+				if(verbose) cat("Custom background:",h$Background,"\n")
+				skip <- h$NHeaderRecords
+			}
 			if(source=="bluefuse") skip <- readBlueFuseHeader(fullname)$NHeaderRecords
             obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots,...)
 		}

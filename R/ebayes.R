@@ -4,7 +4,7 @@ eBayes <- function(fit,proportion=0.01,stdev.coef.lim=c(0.1,4)) {
 #	Empirical Bayes statistics to select differentially expressed genes
 #	Object orientated version
 #	Gordon Smyth
-#	4 August 2003.  Last modified 20 June 2005.
+#	4 August 2003.  Last modified 24 August 2005.
 
 	eb <- ebayes(fit=fit,proportion=proportion,stdev.coef.lim=stdev.coef.lim)
 	fit$df.prior <- eb$df.prior
@@ -21,9 +21,9 @@ eBayes <- function(fit,proportion=0.01,stdev.coef.lim=c(0.1,4)) {
 		df1 <- attr(F.stat,"df1")
 		df2 <- attr(F.stat,"df2")
 		if(df2[1] > 1e6) # Work around bug in R 2.1
-			fit$F.p.value <- pchisq(df1*F.stat,df1,lower.tail=FALSE)
+			fit$F.p.value <- pchisq(df1*fit$F,df1,lower.tail=FALSE)
 		else
-			fit$F.p.value <- pf(F.stat,df1,df2,lower.tail=FALSE)
+			fit$F.p.value <- pf(fit$F,df1,df2,lower.tail=FALSE)
 	}
 	fit
 }
@@ -305,23 +305,6 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 		tab <- tab[ord,]
 	}
 	tab
-}
-
-as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
-#	Convert MAList object to data.frame
-#	Gordon Smyth
-#	6 April 2005
-{
-	x <- unclass(x)
-	if(is.null(x$coefficients)) return(data.frame())
-	cn <- names(x)
-	nprobes <- NROW(x$coefficients)
-	include.comp <- cn[unlist(lapply(x,NROW))==nprobes]
-	other.comp <- setdiff(names(x),include.comp)
-	if(length(other.comp)) for (a in other.comp) x[[a]] <- NULL
-	coef.comp <- c("coefficients","stdev.unscaled","t","p.value","lods")
-	for (a in coef.comp) if(!is.null(x[[a]]) && NCOL(x[[a]])==1) colnames(x[[a]]) <- paste(a,colnames(x[[a]]),sep=".")
-	as.data.frame(x,row.names=row.names,optional=optional)
 }
 
 squeezeVar <- function(var, df)

@@ -40,6 +40,8 @@ functions \code{lmFit} or \code{gls.series}.
 At this time it is not possible to estimate correlations between duplicate spots and between technical replicates simultaneously.
 If \code{block} is not null, then the function will set \code{ndups=1}.
 
+For this function to return statistically useful results, the number of arrays must be at least two greater than the column rank of \code{design} (the number of coefficients to be estimated).
+
 The function may take long time to execute as it fits a mixed linear model for each gene for an iterative algorithm.
 It is not uncommon for the function to return a small number of warning messages that correlation estimates cannot be computed for some individual genes.
 This is not a serious concern providing that there are only a few such warnings and the total number of genes is large.

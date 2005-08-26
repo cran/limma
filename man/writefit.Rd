@@ -8,16 +8,16 @@ Write a microarray linear model fit a file.
 }
 
 \usage{
-write.fit(fit, results=NULL, FStat=NULL, file, digits=2, adjust="none")
+write.fit(fit, results=NULL, file, digits=2, adjust="none", sep="\t")
 }
 
 \arguments{
 \item{fit}{object of class \code{MArrayLM} containing the results of a linear model fit}
 \item{results}{object of class \code{TestResults}}
-\item{FStat}{numeric vector such as \code{FStat(fit)}}
 \item{file}{character string giving name of file}
 \item{digits}{integer indicating precision to be used}
 \item{adjust}{character string specifying method to use to adjust the P-values for multiple testing, e.g., "holm" or "fdr". See \code{\link[ctest]{p.adjust}} for the available options. If \code{NULL} or \code{"none"} then the P-values are not adjusted.}
+\item{sep}{the field separator string. Values in the output file will be separated by this string.}
 }
 
 \value{

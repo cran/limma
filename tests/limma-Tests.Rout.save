@@ -1,6 +1,6 @@
 
 R : Copyright 2005, The R Foundation for Statistical Computing
-Version 2.1.0  (2005-04-18), ISBN 3-900051-07-0
+Version 2.1.1  (2005-06-20), ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
 You are welcome to redistribute it under certain conditions.
@@ -901,10 +901,6 @@ $F
 
 $F.p.value
 [1] 5.581800e-03 2.988923e-05 5.080726e-03 1.050148e-02 2.320274e-02
-attr(,"df1")
-[1] 2
-attr(,"df2")
-[1] 15.30615 15.30615 15.30615 15.30615 13.30615
 
 > 
 > ### uniquegenelist

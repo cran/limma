@@ -75,8 +75,8 @@ After the above steps the results may be displayed or further processed using:
 	Volcano plot of fold change versus the B-statistic for any fitted coefficient.}
 
 \item{ \code{\link{write.fit}} }{
-	Writes an \code{MarrayLM} object to a file,
-	as does \code{write.table} itself, implicitly using the \code{as.data.frame} method for \code{MArrayLM} objects.}
+	Writes an \code{MarrayLM} object to a file.
+	Note that if \code{fit} is an \code{MArrayLM} object, either \code{write.fit} or \code{write.table} can be used to write the results to a delimited text file.}
 }
 For multiple testing functions which operate on linear model fits, see \link{08.Tests}.
 }
