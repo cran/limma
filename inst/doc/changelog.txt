@@ -1,5 +1,13 @@
+18 September: limma 2.0.8
+
+- readImaGeneHeader entirely re-written: now supports
+  ImaGene 6.0 and multiple sub-array fields
+- fixed documentation bug in normalizeWithinArrays.Rd:
+  RG.MA produces unlogged intensities
+- Koorperberg ref added to User's Guide
+- methods package added to Depends field of DESCRIPTION file
 - note added to dupcor.Rd about minimum number of arrays needed for
-  duplicateCorrelation() to return statistcally useful results.
+  duplicateCorrelation() to return statistically useful results.
 
 26 August: limma 2.0.7
 

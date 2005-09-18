@@ -44,7 +44,7 @@ The \code{"robustspline"} method calls \code{\link{normalizeRobustSpline}}.
 \code{MA.RG} converts an unlogged \code{RGList} object into an \code{MAList} object.
 \code{MA.RG(object)} is equivalent to \code{normalizeWithinArrays(object,method="none")}.
 
-\code{RG.MA(object)} converts back from an \code{MAList} object to a \code{RGList} object with intensities on the log2 scale.
+\code{RG.MA(object)} converts back from an \code{MAList} object to a \code{RGList} object with unlogged intensities.
 }
 \value{
 An object of class \code{\link[limma:malist]{MAList}}.

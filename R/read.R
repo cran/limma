@@ -426,7 +426,7 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 #	Imagene requires special treatment because red and green channel
 #	intensities are in different files.
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 2 July 2004.
+#	14 Aug 2003.  Last modified 18 September 2005.
 
 	if(is.null(dim(files))) {
 		if(length(files)%%2==0)
@@ -449,22 +449,23 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 	headers <- readImaGeneHeader(fullname)
 	if(verbose) cat("Read header information\n")
 	skip <- headers$NHeaderRecords
-	printer <- headers$FieldDimensions[c("Metarows","Metacols","Rows","Cols")]
-	names(printer) <- c("ngrid.r","ngrid.c","nspot.r","nspot.c")
-	if(length(printer) != 4) stop("Cannot read field dimension information")
-	nspots <- prod(unlist(printer))
+	FD <- headers[["Field Dimensions"]]
+	nspots <- prod(FD)
 
 #	Now read data
 	Y <- matrix(0,nspots,narrays)
 	colnames(Y) <- names
-	RG <- list(R=Y,G=Y,Rb=Y,Gb=Y,printer=printer)
+	RG <- list(R=Y,G=Y,Rb=Y,Gb=Y,Image.Program="ImaGene",Field.Dimensions=FD)
 	if(!is.null(wt.fun)) RG$weights <- Y
+	if(nrow(FD)==1) {
+		RG$printer <- list(ngrid.r=FD[1,"Metarows"],ngrid.c=FD[1,"Metacols"],nspot.r=FD[1,"Rows"],nspot.c=FD[1,"Cols"])
+	}
 	for (i in 1:narrays) {
 		fullname <- files[i,1]
 		if(!is.null(path)) fullname <- file.path(path,fullname)
 		if(i > 1) {
 			headers <- readImaGeneHeader(fullname)
-			if(any(unlist(printer) != unlist(headers$FieldDimensions[c("Metarows","Metacols","Rows","Cols")])))
+			if(any(headers[["Field Dimensions"]] != RG$Field.Dimensions))
 				stop(paste("Field dimensions of array",i,"not same as those of first array"))
 			skip <- headers$NHeaderRecords
 		}
@@ -504,33 +505,62 @@ readGPRHeader <- function(file) {
 	out
 }
 
-readImaGeneHeader <- function(file) {
+readImaGeneHeader <- function(file)
 #	Extracts header information from an Imagene analysis output file
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 14 April 2005.
-
-	firstfield <- scan(file,what="",sep="\t",quote="\"",nlines=100,flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscape=FALSE)
-	NHeaderRecords <- grep("Begin Raw Data",firstfield)
-	txt <- scan(file,what="",sep="\t",quote="\"",nlines=NHeaderRecords-1,quiet=TRUE,allowEscape=FALSE)
-	out <- list(NHeaderRecords=NHeaderRecords,BeginRawData=NHeaderRecords)
-	out$Version <- txt[grep("^version$",txt)+1]
-	out$Date <- txt[grep("^Date$",txt)+1]
-	out$ImageFile <- txt[grep("^Image File$",txt)+1]
-	out$Inverted <- as.logical(txt[grep("^Inverted$",txt)+1])
-	out$FieldDimensions <- list()
-	out$FieldDimensions$Field <- txt[grep("^Field$",txt)+7]
-	out$FieldDimensions$Metarows <- as.integer(txt[grep("^Metarows$",txt)+7])
-	out$FieldDimensions$Metacols <- as.integer(txt[grep("^Metacols$",txt)+7])
-	out$FieldDimensions$Rows <- as.integer(txt[grep("^Rows$",txt)+7])
-	out$FieldDimensions$Cols <- as.integer(txt[grep("^Cols$",txt)+7])
-	out$MeasurementParameters <- list()
-	out$MeasurementParameters$SignalLow <- txt[grep("^Signal Low$",txt)+1]
-	out$MeasurementParameters$SignalHigh <- txt[grep("^Signal High$",txt)+1]
-	out$MeasurementParameters$BackgroundLow <- txt[grep("^Background Low$",txt)+1]
-	out$MeasurementParameters$BackgroundHigh <- txt[grep("^Background High$",txt)+1]
-	out$MeasurementParameters$BackgroundBuffer <- txt[grep("^Background Buffer$",txt)+1]
-	out$MeasurementParameters$BackgroundWidth <- txt[grep("^Background Width$",txt)+1]
-	out
+#	14 Aug 2003.  Last modified 18 September 2005.
+{
+	con <- file(file, "r")	
+ 	on.exit(close(con))
+ 	out <- list(Header=list())
+ 	iline <- 0
+ 	CompName <- character(0)
+ 	repeat {
+ 		txt <- sub("^\t+","",readLines(con,n=1))
+ 		if(!length(txt)) break
+		iline <- iline+1
+		if (length(grep("^Begin",txt))) {
+			CompName <- c(CompName,sub("^Begin ","",txt))
+			if(CompName[1] != "Header") stop("Begin Header missing or mis-matched Begin/Ends")
+			out[[CompName]] <- list()
+		} else {
+			if (length(grep("^End",txt))) {
+				CompName <- CompName[-length(CompName)]
+	 			if(txt=="End Header") {
+	 				out <- out$Header
+	 				out$NHeaderRecords <- iline+1
+	 				if(!is.null(out[["Field Dimensions"]])) {
+	 					cn <- out[[c("Field Dimensions","Field")]]
+	 					rn <- names(out[["Field Dimensions"]])[-1]
+	 					x <- matrix(as.integer(0),length(rn),length(cn),dimnames=list("Field"=rn,cn))
+	 					for(a in rn) x[a,] <- as.integer(out[[c("Field Dimensions",a)]])
+	 					out[["Field Dimensions"]] <- x
+	 				}
+	 				if(!is.null(out[["Alerts"]])) {
+	 					cn <- out[[c("Alerts","Control Type")]]
+	 					rn <- names(out[["Alerts"]])[-1]
+	 					x <- matrix("",length(rn),length(cn),dimnames=list("Control Type"=rn,cn))
+	 					for(a in rn) x[a,] <- out[[c("Alerts",a)]]
+	 					out[["Alerts"]] <- x
+	 				}
+					return(out)
+	 			}
+			} else {
+				split <- "\t"
+				if(!length(grep(split,txt))) split <- ": "
+ 				txtsplit <- strsplit(txt,split=split)[[1]]
+ 				n <- length(txtsplit)
+ 				if(n>0) {
+ 					FieldName <- txtsplit[1]
+ 					if(n>1) FieldValue <- txtsplit[-1] else FieldValue <- ""
+					a <- c(CompName,FieldName)					
+					out[[a]] <- FieldValue
+				}
+			}
+		}
+ 	}
+ 	warning("End of file encountered before End Header")
+ 	out
 }
 
 readSMDHeader <- function(file)
