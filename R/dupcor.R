@@ -1,19 +1,16 @@
 #  DUPCOR.R
 
-duplicateCorrelation <- function(object,design=rep(1,ncol(M)),ndups=2,spacing=1,block=NULL,trim=0.15,weights=NULL)
-{
+duplicateCorrelation <- function(object,design=rep(1,ncol(as.matrix(object))),ndups=2,spacing=1,block=NULL,trim=0.15,weights=NULL)
 #	Estimate the correlation between duplicates given a series of arrays
 #	Gordon Smyth
-#	25 Apr 2002. Last revised 7 March 2005.
-
+#	25 Apr 2002. Last revised 25 Oct 2005.
+{
+	M <- as.matrix(object)
 	if(is(object,"MAList")) {
-		M <- object$M
 		if(missing(design) && !is.null(object$design)) design <- object$design
 		if(missing(ndups) && !is.null(object$printer$ndups)) ndups <- object$printer$ndups
 		if(missing(spacing) && !is.null(object$printer$spacing)) spacing <- object$printer$spacing
 		if(missing(weights) && !is.null(object$weights)) weights <- object$weights
-	} else {
-		M <- as.matrix(object)
 	}
 	narrays <- ncol(M)
 	if(is.null(block)) {
@@ -32,7 +29,7 @@ duplicateCorrelation <- function(object,design=rep(1,ncol(M)),ndups=2,spacing=1,
 		nspacing <- 1
 		Array <- block
 	}
-	require( "statmod" ) # need randomizedBlockFit function
+	require( "statmod" ) # need mixedModel2Fit function
 	design <- as.matrix(design)
 	if(nrow(design) != narrays) stop("Number of rows of design matrix does not match number of arrays")
 	if(!is.null(weights)) {
@@ -59,9 +56,9 @@ duplicateCorrelation <- function(object,design=rep(1,ncol(M)),ndups=2,spacing=1,
 			Z <- model.matrix(~0+A)
 			if(!is.null(weights)) {
 				w <- drop(weights[i,])[o]
-				s <- randomizedBlockFit(y,X,Z,w,only.varcomp=TRUE,maxit=20)$varcomp
+				s <- mixedModel2Fit(y,X,Z,w,only.varcomp=TRUE,maxit=20)$varcomp
 			} else
-				s <- randomizedBlockFit(y,X,Z,only.varcomp=TRUE,maxit=20)$varcomp
+				s <- mixedModel2Fit(y,X,Z,only.varcomp=TRUE,maxit=20)$varcomp
 			rho[i] <- s[2]/sum(s)
 		}
 	}
@@ -70,17 +67,3 @@ duplicateCorrelation <- function(object,design=rep(1,ncol(M)),ndups=2,spacing=1,
 	list(cor=rhom,consensus.correlation=rhom,all.correlations=rho)
 }
 
-dupcor.series <- function(M,design=rep(1,ncol(M)),ndups=2,spacing=1,initial=0.8,trim=0.15,weights=NULL)
-{
-#	Estimate the correlation between duplicates given a series of arrays
-#	Gordon Smyth
-#	25 Apr 2002.  Last modified 5 May 2004.
-#	This function is deprecated 2 Feb 2004.
-
-	.Deprecated("duplicateCorrelation")
-	m <- as.list(match.call())
-	m[[1]] <- as.name("duplicateCorrelation")
-	m$object <- m$M
-	m$M <- m$initial <- NULL
-	eval(as.call(m))
-}

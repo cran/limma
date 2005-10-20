@@ -1,3 +1,53 @@
+25 October 2005: limma 2.3.3
+
+- read.maimages(souce="genepix.custom",verbose=TRUE) outputs background
+  correction method again.
+- calls to statmod:randomizedBlockFit changed to statmod:mixedModel2Fit
+- deprectated function dupcor.series() removed
+
+19 October 2005: limma 2.3.2
+
+- normalizeMedianDeviations and normalizeMedians replaced by
+  normalizeMedianAbsValues. New function resistant to floating underflow.
+- default method for normalizeBetweenArrays changed to "Aquantile"
+
+15 October 2005: limma 2.3.1
+
+- read.maimages() now uses the colClasses argument to read.table, resulting
+  in a several-fold speed improvement.  Changes courtesy of Marcus Davy.
+- new path argument and slightly changed output names for plotMA3by2,
+  to bring into line with imageplot3by2 changes
+- fix to normexp.m2loglik to prevent infinite likelihoods
+- fix to normexp.fit to prevent non-positive alpha
+
+11 October 2005: limma 2.3.0 Bioconductor developmental version
+11 October 2005: limma 2.2.0 Bioconductor release 1.7
+
+- kooperberg() now accepts an RGList object instead of requiring each gpr
+  file to be read into a separate data.frame.  The old function is renamed
+  to kooperberg_old()
+
+6 October: limma 2.0.12
+
+- formatting changes to User's Guide.  Guide converted to LaTeX report style.
+
+2 October: limma 2.0.11
+
+- update citation, installation and help sections of User's Guide
+
+30 September: limma 2.0.10
+
+- "fdr" changed to "BH" throughout as a p.adjust() method
+- default for topTable adjust.method changed to "BH"
+- point size 20 and new path argument added to imageplot3by2
+- fix errors in technical replication section of User's Guide
+- normalizeWithinArrays now checks whether M or A are vectors
+
+29 September: limma 2.0.9
+
+- biocViews added to DESCRIPTION
+- fix to normexp.signal to allow NAs in signal
+
 18 September: limma 2.0.8
 
 - readImaGeneHeader entirely re-written: now supports
@@ -305,6 +355,8 @@ Same as limma 1.9.6. Version number bumped for Bioconductor devel repository.
 - bug fixes to decideTests() for method="heirarchical" and method="nestedF"
 
 2 September 2004: limma 1.7.5
+
+This version was first posted to CRAN as well as to Bioconductor
 
 - Now passes R CMD check under R 2.0
 - example into User's Guide of wt.fun arg of read.maimages() using multiple columns

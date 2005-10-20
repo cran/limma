@@ -6,8 +6,8 @@
 Extract a table of the top-ranked genes from a linear model fit.
 }
 \usage{
-topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="holm",sort.by="B",resort.by=NULL)
-toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="holm",sort.by="B",resort.by=NULL,...)
+topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="BH",sort.by="B",resort.by=NULL)
+toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="BH",sort.by="B",resort.by=NULL,...)
 }
 \arguments{
   \item{fit}{list containing a linear model fit produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{mrlm}.

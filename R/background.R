@@ -133,15 +133,16 @@ ma3x3.spottedarray <- function(x,printer,FUN=mean,na.rm=TRUE,...)
 normexp.signal <- function(mu,sigma,alpha,foreground)
 #	Expected value of signal given foreground in normal + exponential model
 #	Gordon Smyth
-#	24 Aug 2002. Last modified 18 June 2005.
+#	24 Aug 2002. Last modified 26 Sept 2005.
 {
 	if(alpha <= 0) stop("alpha must be positive")
 	if(sigma <= 0) stop("sigma must be positive")
 	mu.sf <- foreground-mu-sigma^2/alpha
 	signal <- mu.sf + sigma^2 * exp(dnorm(0,mean=mu.sf,sd=sigma,log=TRUE) - pnorm(0,mean=mu.sf,sd=sigma,lower.tail=FALSE,log=TRUE))
-	if(any(signal<0)) {
+	o <- !is.na(signal)
+	if(any(signal[o]<0)) {
 		warning("Limit of numerical accuracy reached with very low intensity or very high background:\nsetting adjusted intensity to small value")
-		signal <- pmax(signal,1e-6)
+		signal[o] <- pmax(signal[o],1e-6)
 	}
 	signal
 }
@@ -149,7 +150,7 @@ normexp.signal <- function(mu,sigma,alpha,foreground)
 normexp.fit <- function(foreground,background=0,trace=0)
 #	Fit background=normal + signal=exponential model using BFGS.
 #	Gordon Smyth and Jeremy Silver
-#	24 Aug 2002. Last modified 18 June 2005.
+#	24 Aug 2002. Last modified 6 October 2005.
 {
 	x <- foreground-background
 	isna <- is.na(x)
@@ -170,6 +171,7 @@ normexp.fit <- function(foreground,background=0,trace=0)
 	}
 	sigma <- sqrt(mean((x[x<beta]-beta)^2, na.rm = TRUE))
 	alpha <- mean(x,na.rm = TRUE) - beta
+	if(alpha <= 0) alpha <- 1e-6
 
 	Results <- optim(par=c(beta,log(sigma),log(alpha)), fn=normexp.m2loglik, gr=normexp.grad, method=c("BFGS"), control=list(trace=trace), foreground=x, background=0)
 	list(beta=Results$par[1], sigma=exp(Results$par[2]), alpha=exp(Results$par[3]),m2loglik=Results$value, convergence=Results$convergence)
@@ -196,7 +198,7 @@ normexp.grad <- function(theta,foreground,background=0)
 normexp.m2loglik <- function(theta,foreground,background=0)
 #	Minus twice the norm-exp log-likelihood (summed over all spots)
 #	Jeremy Silver and Gordon Smyth
-#	24 Aug 2002. Last modified 18 June 2005.
+#	24 Aug 2002. Last modified 6 October 2005.
 {
 	beta<-theta[1]
 	logsigma<-theta[2]
@@ -204,6 +206,7 @@ normexp.m2loglik <- function(theta,foreground,background=0)
 	mu <- beta + background
 	mu.sf <- foreground - mu - exp(2*logsigma - logalpha)
 	
-	-2*sum(-logalpha - (foreground - mu)/exp(logalpha) + 0.5*exp(2*logsigma - 2*logalpha) + log(pnorm(0,mu.sf,exp(logsigma),lower.tail = FALSE)))
+	m2loglik <- -2*sum(-logalpha - (foreground - mu)/exp(logalpha) + 0.5*exp(2*logsigma - 2*logalpha) + pnorm(0,mu.sf,exp(logsigma),lower.tail = FALSE, log.p=TRUE))
+	max(min(m2loglik,.Machine$double.xmax),.Machine$double.xmin)
 }
 

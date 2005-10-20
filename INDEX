@@ -26,17 +26,16 @@ bwss.matrix             Between and within sums of squares for matrix
 cbind.RGList            Combine RGList or MAList Objects
 changeLog               Limma Change Log
 contrasts.fit           Compute Contrasts from Linear Model Fit
-controlStatus           Set Status of each Spot from List of Spot
-                        Types
+controlStatus           Set Status of each Spot from List of Spot Types
 convest                 Estimate Proportion of True Null Hypotheses
 decideTests             Compute Matrix of Hypothesis Test Results
-designI2M               Convert Individual Channel Design Matrix to
-                        M-A Format
-dim.RGList              Retrieve the Dimensions of an RGList, MAList
-                        or MArrayLM Object
+designI2M               Convert Individual Channel Design Matrix to M-A
+                        Format
+dim.RGList              Retrieve the Dimensions of an RGList, MAList or
+                        MArrayLM Object
 dimnames.RGList         Retrieve the Dimension Names of an RGList,
                         MAList or MArrayLM Object
-dupcor.series           Correlation Between Duplicates
+duplicateCorrelation    Correlation Between Duplicates
 ebayes                  Empirical Bayes Statistics for Differential
                         Expression
 exprSet2-class          Expression Set - class
@@ -44,6 +43,8 @@ fitFDist                Moment Estimation of Scaled F-Distribution
 FStat                   Treat Simultaneous T-Tests as Classification
                         Problem
 geneSetTest             Gene Set Test
+getColClasses           Construct colClasses vector for use within
+                        read.table
 getLayout               Extract the Print Layout of an Array from the
                         GAL File
 getSpacing              Get Numerical Spacing
@@ -67,8 +68,7 @@ lmscFit                 Fit Linear Model to Individual Channels of
 loessFit                Fast Simple Loess
 m.spot                  Extract M or A-values from SPOT data.frame or
                         matrix
-ma3x3.matrix            Two dimensional Moving Averages with 3x3
-                        Window
+ma3x3.matrix            Two dimensional Moving Averages with 3x3 Window
 makeContrasts           Construct Matrix of Custom Contrasts
 makeUnique              Make Values of Character Vector Unique
 MAList-class            M-value, A-value Expression List - class
@@ -82,19 +82,19 @@ normalizeBetweenArrays
                         Normalize Between Arrays
 normalizeForPrintorder
                         Print-Order Normalization
-normalizeMedianDeviations
-                        Normalize Columns of a Matrix to have the Same
-                        Scale
+normalizeMedianAbsValues
+                        Normalize Columns of a Matrix to have the
+                        Median Absolute Value
 normalizeQuantiles      Normalize Columns of a Matrix to have the same
                         Quantiles
-normalizeRobustSpline   Normalize Single Microarray Using Shrunk
-                        Robust Splines
+normalizeRobustSpline   Normalize Single Microarray Using Shrunk Robust
+                        Splines
 normalizeWithinArrays   Normalize Within Arrays
 normexp.fit             Fit Normal+Exp Convolution Model to Observed
                         Intensities
 normexp.m2loglik        Normal + Exponential Log-Likelihood
-normexp.signal          Expected Signal Given Observed Foreground
-                        Under Normal+Exp Model
+normexp.signal          Expected Signal Given Observed Foreground Under
+                        Normal+Exp Model
 plotDensities           Individual-channel Densities Plot
 plotMA                  MA-Plot
 plotMA3by2              Write MA-Plots to Files
@@ -109,8 +109,8 @@ QualityWeights          Spot Quality Weights
 read.maimages           Read RGList from Image Analysis Output Files
 read.matrix             Read Matrix with Headers from File
 read.series             Read series of image files
-readBlueFuseHeader      Read Header Information from Image Analysis
-                        Raw Data File
+readBlueFuseHeader      Read Header Information from Image Analysis Raw
+                        Data File
 readGAL                 Read a GAL file
 readImaGeneHeader       Read ImaGene Header Information
 readSpotTypes           Read Spot Types File
@@ -122,8 +122,8 @@ rg.quantarray           Extract RGList from data.frames Containing
                         Quantarray Data
 rg.series.spot          Read RGList from SPOT Image Analysis Output
                         Files
-rg.spot                 Extract RGList from data.frames Containing
-                        SPOT Data
+rg.spot                 Extract RGList from data.frames Containing SPOT
+                        Data
 RGList-class            Red, Green Intensity List - class
 rlm.series              Robust Linear Model for Series of Microarrays
 splitName               Split Composite Gene Names
@@ -144,4 +144,5 @@ vennCounts              Venn Diagrams
 volcanoplot             Volcano Plot
 weighted.median         Weighted Median
 write.fit               Write MArrayLM Object to a File
+wtVariables             Read RGList from Image Analysis Output Files
 zscoreGamma             Z-score Equivalents

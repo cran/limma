@@ -20,15 +20,15 @@ setMethod("show","TestResults",function(object) {
 	printHead(object@.Data)
 })
 
-decideTests <- function(object,method="separate",adjust.method="fdr",p.value=0.05)
+decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05)
 #	Accept or reject hypothesis tests across genes and contrasts
 #	Gordon Smyth
-#	17 Aug 2004. Last modified 25 April 2005.
+#	17 Aug 2004. Last modified 30 September 2005.
 {
 	if(!is(object,"MArrayLM")) stop("Need MArrayLM object")
 	if(is.null(object$t)) object <- eBayes(object)
 	method <- match.arg(method,c("separate","global","heirarchical","nestedF"))
-	adjust.method <- match.arg(adjust.method,c("none","bonferroni","holm","fdr"))
+	adjust.method <- match.arg(adjust.method,c("none","bonferroni","holm","BH","fdr"))
 	switch(method,separate={
 		p <- as.matrix(object$p.value)
 		tstat <- as.matrix(object$t)
@@ -52,7 +52,7 @@ decideTests <- function(object,method="separate",adjust.method="fdr",p.value=0.0
 			none=1,
 			bonferroni=1/n,
 			holm=1/(n-i+1),
-			fdr=i/n
+			BH,fdr=i/n
 		)
 		results <- new("TestResults",array(0,dim(object$t)))
 		colnames(results) <- colnames(object$t)

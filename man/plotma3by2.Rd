@@ -5,11 +5,12 @@
 Write MA-plots to files in PNG format, six plots to a file in a 3 by 2 grid arrangement.
 }
 \usage{
-plotMA3by2(MA, prefix="MA", main=colnames(MA), zero.weights=FALSE, common.lim=TRUE, ...)
+plotMA3by2(MA, prefix="MA", path=NULL, main=colnames(MA), zero.weights=FALSE, common.lim=TRUE, ...)
 }
 \arguments{
   \item{MA}{an \code{MAList} or \code{RGList} object, or any list with components \code{M} containing log-ratios and \code{A} containing average intensities}
   \item{prefix}{character string giving prefix to attach to file names}
+  \item{path}{character string specifying directory for output files}
   \item{main}{character vector giving titles for plots}
   \item{zero.weights}{logical, should points with non-positive weights be plotted}
   \item{common.lim}{logical, should all plots on a page use the same axis limits}
@@ -17,7 +18,9 @@ plotMA3by2(MA, prefix="MA", main=colnames(MA), zero.weights=FALSE, common.lim=TR
 }
 
 \details{
-This function writes plots in PNG format in an arrangement optimized for A4-sized paper.
+This function writes a series of PNG format files to disk.
+Each file contains six MA-plots in three rows and two columns.
+The layout is optimized for A4-sized paper.
 }
 
 \value{

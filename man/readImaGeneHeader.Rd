@@ -12,23 +12,14 @@ readImaGeneHeader(file)
   \item{file}{character string giving file name or path}
 }
 \details{
-The raw data files exported by the image analysis software ImaGene include a number of header lines which contain information about the printing process.
+The raw data files exported by the image analysis software ImaGene include a number of header lines which contain information about the printing and scanning processes.
 This function extracts that information and locates the line where the intensity data begins.
 }
 \value{
-A list with components
-  \item{NHeaderRecords}{number of lines in the file before the intensity data begins}
-  \item{Version}{version number of ImaGene software}
-  \item{Date}{character string giving time and data that array was scanned}
-  \item{ImageFile}{character string giving original file name to which data was written by ImaGene}
-  \item{Inverted}{logical}
-  \item{FieldDimension}{list with components
-    \code{Field} containing a character string,
-    \code{Metarows} containing number of grid rows,
-    \code{Metacols} containing number of grid columns,
-    \code{Rows} containing number of spot rows in each grid,
-    \code{Cols} containing number of spot columns in each grid}
-  \item{MeasurementParameters}{list with numerical components \code{SignalLow}, \code{SignalHigh}, \code{BackgroundLow}, \code{BackgroundHigh}, \code{BackgroundBuffer} and \code{BackgroundWidth}}
+A list containing information read from the header of the ImaGene file.
+Each Begin-End environment found in the file header will become a recursive list in the output object, with components corresponding to fields in the file.
+See the ImaGene documentation for further information.
+The output object will also contain a component \code{NHeaderRecords}giving the number of lines in the file before the intensity data begins.
 }
 \references{
 \url{http://www.biodiscovery.com/imagene.asp}
@@ -37,5 +28,12 @@ A list with components
 \seealso{\code{\link{read.imagene}}
 
 An overview of LIMMA functions to read data is given in \link{03.ReadingData}.
+}
+\examples{\dontrun{
+h <- readImaGeneHeader("myImaGenefile.txt")
+names(h)
+h$NHeaderRecords
+h[["Field Dimensions"]]
+}
 }
 \keyword{file}

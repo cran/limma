@@ -19,7 +19,7 @@ Single channel normalization uses further options of the \code{\link{normalizeBe
 For more details see the \emph{\link[limma:../doc/usersguide]{LIMMA User's Guide}} which includes a section on single-channel normalization.
 
 \code{normalizeWithinArrays} uses utility functions \code{\link{MA.RG}}, \code{\link{loessFit}} and \code{\link{normalizeRobustSpline}}.
-\code{normalizeBetweenArrays} uses utility functions \code{\link{normalizeMedians}}, \code{\link{normalizeMedianDeviations}} and \code{\link{normalizeQuantiles}}, none of which need to be called directly by users.
+\code{normalizeBetweenArrays} uses utility functions \code{\link{normalizeMedianAbsValues}} and \code{\link{normalizeQuantiles}}, none of which need to be called directly by users.
 }
 
 \author{Gordon Smyth}

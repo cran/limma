@@ -56,10 +56,12 @@ imageplot <- function(z, layout, low=NULL, high=NULL, ncolors=123, zerocenter=NU
 	invisible()
 }
 
-imageplot3by2 <- function(RG, z="Gb", prefix="image", zlim=NULL, common.lim=TRUE, ...)
+imageplot3by2 <- function(RG, z="Gb", prefix=paste("image",z,sep="-"), path=NULL, zlim=NULL, common.lim=TRUE, ...)
 #	Make files of image plots, six to a page
 #	Gordon Smyth  10 June 2004.
+#	Suggestions of Marcus Davy implemented 30 September 2005.
 {
+	if(is.null(path)) path="."
 	narrays <- ncol(RG)
 	npages <- ceiling(narrays/6)
 	cnames <- colnames(RG)
@@ -67,7 +69,8 @@ imageplot3by2 <- function(RG, z="Gb", prefix="image", zlim=NULL, common.lim=TRUE
 	for (ipage in 1:npages) {
 		i1 <- ipage*6-5
 		i2 <- min(ipage*6,narrays)
-		png(filename=paste(prefix,i1,"-",i2,".png",sep=""),width=6.5*140,height=10*140)
+		fn <- file.path(path, paste(prefix,"-",i1,"-",i2,".png",sep=""))
+		png(filename=fn,width=6.5*140,height=10*140,pointsize=20)
 		par(mfrow=c(3,2))
 		for (i in i1:i2) {
 			imageplot(RG[[z]][,i],RG$printer,zlim=zlim,mar=c(2,2,4,2),main=cnames[i],...)

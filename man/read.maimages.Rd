@@ -6,13 +6,13 @@
 Reads an RGList from a series of microarray image analysis output files
 }
 \usage{
-read.maimages(files,source=NULL,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",\dots)
+read.maimages(files,source=NULL,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",DEBUG=FALSE,\dots)
 read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...)
 }
 \arguments{
   \item{files}{character vector giving the names of the files containing image analysis output or, for Imagene data, a character matrix of names of files.
   If omitted, then all files with extension \code{ext} in the specified directory will be read in alphabetical order.}
-  \item{source}{character string specifing the image analysis program which produced the output files.  Choices are \code{"agilent"}, \code{"arrayvision"}, \code{"bluefuse"}, \code{"genepix"}, \code{"genepix.median}, \code{"imagene"}, \code{"quantarray"}, \code{"smd.old"}, \code{"smd"}, \code{"spot"} or \code{"spot.close.open"}.}
+  \item{source}{character string specifing the image analysis program which produced the output files.  Choices are \code{"agilent"}, \code{"arrayvision"}, \code{"bluefuse"}, \code{"genepix"}, \code{"genepix.custom"}, \code{"genepix.median}, \code{"imagene"}, \code{"quantarray"}, \code{"smd.old"}, \code{"smd"}, \code{"spot"} or \code{"spot.close.open"}.}
   \item{path}{character string giving the directory containing the files.
   If \code{NULL}, the current working directory is assumed.}
   \item{ext}{character string giving optional extension to be added to each file name}
@@ -25,6 +25,7 @@ read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbos
   \item{verbose}{logical, \code{TRUE} to report each time a file is read}
   \item{sep}{the field separator character}
   \item{quote}{character string of characters to be treated as quote marks}
+  \item{DEBUG}{a logical value, if TRUE, a series of echo statements will be printed for each file. Details on the file, skip, and selected columns in a colClasses format for read.table will be displayed}
   \item{\dots}{any other arguments are passed to \code{read.table}}
 }
 \details{
@@ -76,13 +77,13 @@ An \code{\link[limma:rglist]{RGList}} object containing the components
   \item{targets}{data frame with column \code{FileName} giving the names of the files read}
   \item{other}{list containing matrices corresponding to \code{other.columns} if given}
 }
-\author{Gordon Smyth}
+\author{Gordon Smyth, with speed improvements by Marcus Davy}
 \references{
 Web pages for the image analysis software packages mentioned here are listed at \url{http://www.statsci.org/micrarra/image.html}
 }
 \seealso{
 \code{read.maimages} is based on \code{\link[base]{read.table}} in the base package.
-\code{\link[marrayInput]{read.marrayRaw}} is the corresponding function in the marrayInput package.
+\code{\link[marray]{read.marrayRaw}} is the corresponding function in the marray package.
 
 An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
 }

@@ -25,7 +25,7 @@ This function will be removed in future versions of LIMMA.
 
 \code{\link{read.maimages}} uses utility functions \code{\link{removeExt}}, \code{\link{read.matrix}}, \code{\link{read.imagene}} and \code{\link{readImaGeneHeader}}.
 
-The function \link{as.MAList} can be used to convert a \code{marrayNorm} object to an \code{MAList} object if the data was read and normalized using the marrayInput and marrayNorm packages.
+The function \link{as.MAList} can be used to convert a \code{marrayNorm} object to an \code{MAList} object if the data was read and normalized using the marray and marrayNorm packages.
 }
 
 \section{Reading the Gene List}{

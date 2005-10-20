@@ -2,39 +2,28 @@
 \name{kooperberg}
 \alias{kooperberg}
 \description{
-This function uses a Bayesian model to background correct
-data from a series of microarray experiments.
-It currently works only with GenePix data.
+This function uses a Bayesian model to 
+background correct GenePix microarray data.
 }
 
 \usage{
-kooperberg(names, fg="mean", bg="median", a=TRUE, layout)
+kooperberg(RG, a=TRUE, layout=RG$printer, verbose=TRUE)
 }
 \arguments{
-\item{names}{character vector giving the names of data.frames containing GenePix data}
-\item{fg}{character string giving foreground estimator.
-Choices are \code{"mean"} or \code{"median"}.}
-\item{bg}{character string giving foreground estimator.
-Choices are \code{"mean"} or \code{"median"}.}
+\item{RG}{an RGList of GenePix data, read in using \code{read.maimages}, with \code{other.columns=c("F635 SD","B635 SD","F532 SD","B532 SD","B532 Mean","B635 Mean","F Pixels","B Pixels", "Block")}.}
 \item{a}{logical.  If \code{TRUE}, the 'a' parameters in the model (equation 3 and 4) are estimated for each slide.  If \code{FALSE} the 'a' parameters are set to unity.}
-\item{layout}{list containing print layout with components \code{ngrid.r}, \code{ngrid.c}, \code{nspot.r} and \code{nspot.c}}
+\item{layout}{list containing print layout with components \code{ngrid.r}, \code{ngrid.c}, \code{nspot.r} and \code{nspot.c}.  Defaults to \code{RG$printer}.}
+\item{verbose}{logical.  If \code{TRUE}, progress is reported to standard output.}
 }
 
 \details{
 This function is for use with GenePix data and is designed to cope with the problem of large numbers of negative intensities and hence missing values on the log-intensity scale.
 It avoids missing values in most cases and at the same time dampens down the variability of log-ratios for low intensity spots.
-See Kooperberg et al (2003) for more details.
+See Kooperberg et al (2002) for more details.
 
-\code{kooperberg} serially extracts the foreground and background intensities, standard
-deviations and number of pixels from GenePix data frames.
-This information is used to compute empirical estimates of the model parameters
-as described in equation 2 of Kooperberg et al (2003).
-
-The foreground and background estimates extracted from the GenePix files may be based on means or medians of pixel values.
-Setting \code{fg="mean"} uses the GenePix column \code{F635.Mean} for red foreground and
-the GenePix column \code{F532.Mean} for green foreground.
-Setting \code{fg="median"} uses columns \code{F635.Median} and \code{F532.Median}.
-Similarly for the background, \code{bg="mean"} uses columns \code{B635.Mean} and \code{B532.Mean} while \code{bg="median"} uses columns \code{B635.Median} and \code{B532.Median}.
+\code{kooperberg} uses the foreground and background intensities, standard
+deviations, number of pixels, and block information to compute empirical 
+estimates of the model parameters as described in equation 2 of Kooperberg et al (2002).
 }
 
 \value{
@@ -42,7 +31,7 @@ An \code{RGList} containing the components
 \item{R}{matrix containing the background adjusted intensities for
 the red channel for each spot for each array}
 \item{G}{matrix containing the background adjusted intensities for the green channel for each spot for each array}
-\item{printer}{list containing printer layout, as input in \code{layout}}
+\item{printer}{list containing print layout}
 }
 
 \author{Matthew Ritchie}
@@ -63,10 +52,11 @@ Improved background correction for spotted DNA microarrays.
 #  provided).
 \dontrun{
 genepixFiles <- dir(pattern="*\\\\.gpr$") # get the names of the GenePix image analysis output files in the current directory
-read.series(genepixFiles, suffix=NULL, skip=26, sep="\t") # read the files into data.frames, assuming headers of 26 lines
-layout <- getLayout(get(genepixFiles[1]))
-RGmodel <- kooperberg(genepixFiles, layout=layout) # model-based background correction
-MA <- normalizeWithinArrays(RGModel) # normalize the data
+RG <- read.maimages(genepixFiles, source="genepix", other.columns=c("F635 SD","B635 SD","F532 SD","B532 SD","B532 Mean","B635 Mean","F Pixels","B Pixels", "Block"))
+gal <- readGAL()
+RG$printer <- getLayout(gal)
+RGmodel <- kooperberg(RG)
+MA <- normalizeWithinArrays(RGModel)
 }
 }
 

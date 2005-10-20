@@ -180,12 +180,15 @@ RG.MA <- function(object) {
 normalizeWithinArrays <- function(object,layout=object$printer,method="printtiploess",weights=object$weights,span=0.3,iterations=4,controlspots=NULL,df=5,robust="M",bc.method="subtract",offset=0)
 #	Within array normalization
 #	Gordon Smyth
-#	2 March 2003.  Last revised 26 August 2005.
+#	2 March 2003.  Last revised 30 September 2005.
 {
 	if(!is(object,"MAList")) object <- MA.RG(object,bc.method=bc.method,offset=offset)
 	choices <- c("none","median","loess","printtiploess","composite","control","robustspline")
 	method <- match.arg(method,choices)
 	if(method=="none") return(object)
+	if(is.vector(object$M)) object$M <- as.matrix(object$M)
+	if(is.vector(object$A)) object$A <- as.matrix(object$A)
+	if(is.vector(weights)) weights <- as.matrix(weights)
 	narrays <- ncol(object$M)
 	if(method=="median") {
 		if(is.null(weights))
@@ -448,10 +451,10 @@ plotPrintorder <- function(object,layout,start="topleft",slide=1,method="loess",
 
 #  BETWEEN ARRAY NORMALIZATION
 
-normalizeBetweenArrays <- function(object, method="scale", targets=NULL, ...) {
+normalizeBetweenArrays <- function(object, method="Aquantile", targets=NULL, ...) {
 #	Normalize between arrays
 #	Gordon Smyth
-#	12 Apri 2003.  Last revised 9 December 2004.
+#	12 Apri 2003.  Last revised 19 October 2005.
 
 	choices <- c("none","scale","quantile","Aquantile","Gquantile","Rquantile","Tquantile","vsn")
 	method <- match.arg(method,choices)
@@ -460,7 +463,7 @@ normalizeBetweenArrays <- function(object, method="scale", targets=NULL, ...) {
 		if(!(method %in% c("none","scale","quantile","vsn"))) stop("method not applicable to matrix objects")
 		return(switch(method,
 			none = object,
-			scale = normalizeMedianDeviations(object),
+			scale = normalizeMedianAbsValues(object),
 			quantile = normalizeQuantiles(object, ...),
 			vsn = vsn(intensities=object,...)@exprs/log(2)
 		))
@@ -487,8 +490,8 @@ normalizeBetweenArrays <- function(object, method="scale", targets=NULL, ...) {
 	if(is.null(object$M) || is.null(object$A)) stop("object doesn't appear to be RGList or MAList object")
 	switch(method,
 		scale = {
-			object$M <- normalizeMedianDeviations(object$M)
-			object$A <- normalizeMedians(object$A)
+			object$M <- normalizeMedianAbsValues(object$M)
+			object$A <- normalizeMedianAbsValues(object$A)
 		},
 		quantile = {
 			narrays <- NCOL(object$M)
@@ -572,31 +575,16 @@ normalizeQuantiles <- function(A, ties=TRUE) {
 	A
 }
 
-normalizeMedianDeviations <- function(x)
+normalizeMedianAbsValues <- function(x) 
 {
 #	Normalize columns of a matrix to have the same median absolute value
 #	Gordon Smyth
-#	14 Mar 2002.  Last revised 12 Apr 2003.
+#	12 April 2003.  Last modified 19 Oct 2005.
 
 	narrays <- NCOL(x)
 	if(narrays==1) return(x)
-	medabs <- function(x) median(abs(as.numeric(x[!is.na(x)])))
-	xmat.mav <- apply(x, 2, medabs)
-	denom <- (prod(xmat.mav))^(1/narrays)
-	si <- xmat.mav/denom
-	t(t(x)/si)
-}
-
-normalizeMedians <- function(x) 
-{
-#	Normalize columns of a matrix to have the same median value
-#	Gordon Smyth
-#	12 April 2003
-
-	narrays <- NCOL(x)
-	if(narrays==1) return(x)
-	a.med <- apply(x, 2, median, na.rm=TRUE)
-	a.med <- a.med / (prod(a.med))^(1/narrays)
-	t(t(x)/a.med)
+	cmed <- log(apply(abs(x), 2, median, na.rm=TRUE))
+	cmed <- exp(cmed - mean(cmed))
+	t(t(x)/cmed)
 }
 

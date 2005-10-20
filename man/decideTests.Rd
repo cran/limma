@@ -5,7 +5,7 @@
 Classify a series of related t-statistics as up, down or not significant.
 }
 \usage{
-decideTests(object,method="separate",adjust.method="fdr",p.value=0.05)
+decideTests(object,method="separate",adjust.method="BH",p.value=0.05)
 }
 \arguments{
   \item{object}{\code{MArrayLM} object output from \code{eBayes} from which the t-statistics may be extracted.}
