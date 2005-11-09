@@ -1,3 +1,31 @@
+9 November 2005: limma 2.3.7
+
+- bug fix to ensure that makeContrasts() works correctly when level
+  names happen to be the same as local variable names
+- editing help files for lm.series, gls.series and mrlm to make clarify
+  that they are utility functions called by lmFit
+- editing lmFit.Rd to make clearer the role of correlation argument
+- argument correlation in lmFit() now has no default value
+- vennDiagram example now uses decideTests() instead of classifyTestsF()
+
+6 November 2005: limma 2.3.6
+
+- MAList subsetting now supports 'other' component
+- cbind and rbind now support 'other' component in RGList and MAList objects
+- limma now formally depends on R >= 2.2.0 (because of allowEscapes in read.table)
+- editing of help files to clarify difference between decideTests() and classifyTests
+- decideTests() failed with method="nestedF",adjust.method="BH", now fixed
+- decideTests() now supports adjust.method="BY"
+
+31 October 2005: limma 2.3.5
+
+- kooperberg() now gives informative error message if input not RGList
+
+27 October 2005: limma 2.3.4
+
+- bug fix to merge.RGList and merge.MAList. These used to break there
+  were any components to the data objects other than intensity matrices.
+
 25 October 2005: limma 2.3.3
 
 - read.maimages(souce="genepix.custom",verbose=TRUE) outputs background
@@ -19,6 +47,7 @@
   to bring into line with imageplot3by2 changes
 - fix to normexp.m2loglik to prevent infinite likelihoods
 - fix to normexp.fit to prevent non-positive alpha
+- kooperberg_old() deleted
 
 11 October 2005: limma 2.3.0 Bioconductor developmental version
 11 October 2005: limma 2.2.0 Bioconductor release 1.7
@@ -37,7 +66,7 @@
 
 30 September: limma 2.0.10
 
-- "fdr" changed to "BH" throughout as a p.adjust() method
+- "fdr" changed to "BH" throughout as p.adjust() method
 - default for topTable adjust.method changed to "BH"
 - point size 20 and new path argument added to imageplot3by2
 - fix errors in technical replication section of User's Guide

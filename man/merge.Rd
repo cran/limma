@@ -1,4 +1,4 @@
-\name{merge.RGList}
+\name{merge}
 \alias{merge.RGList}
 \alias{merge.MAList}
 \title{Merge RGList or MAList Data Objects}

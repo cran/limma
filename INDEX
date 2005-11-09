@@ -28,7 +28,7 @@ changeLog               Limma Change Log
 contrasts.fit           Compute Contrasts from Linear Model Fit
 controlStatus           Set Status of each Spot from List of Spot Types
 convest                 Estimate Proportion of True Null Hypotheses
-decideTests             Compute Matrix of Hypothesis Test Results
+decideTests             Multiple Testing Across Genes and Contrasts
 designI2M               Convert Individual Channel Design Matrix to M-A
                         Format
 dim.RGList              Retrieve the Dimensions of an RGList, MAList or
@@ -40,8 +40,7 @@ ebayes                  Empirical Bayes Statistics for Differential
                         Expression
 exprSet2-class          Expression Set - class
 fitFDist                Moment Estimation of Scaled F-Distribution
-FStat                   Treat Simultaneous T-Tests as Classification
-                        Problem
+FStat                   Multiple Testing Genewise Across Contrasts
 geneSetTest             Gene Set Test
 getColClasses           Construct colClasses vector for use within
                         read.table

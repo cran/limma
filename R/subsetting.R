@@ -4,7 +4,7 @@ assign("[.RGList",
 function(object, i, j, ...) {
 #  Subsetting for RGList objects
 #  Gordon Smyth
-#  29 June 2003.  Last modified 30 June 2005.
+#  29 June 2003.  Last modified 6 November 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	oc <- names(object$other)
@@ -18,7 +18,7 @@ function(object, i, j, ...) {
 			object$Gb <- object$Gb[,j,drop=FALSE]
 			object$weights <- object$weights[,j,drop=FALSE]
 			object$targets <- object$targets[j,,drop=FALSE]
-			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][,j,drop=FALSE]
+			for(k in oc) object$other[[k]] <- object$other[[k]][,j,drop=FALSE]
 		}
 	else
 		if(missing(j)) {
@@ -28,7 +28,7 @@ function(object, i, j, ...) {
 			object$Gb <- object$Gb[i,,drop=FALSE]
 			object$weights <- object$weights[i,,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
-			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][i,,drop=FALSE]
+			for(k in oc) object$other[[k]] <- object$other[[k]][i,,drop=FALSE]
 		} else {
 			object$R <- object$R[i,j,drop=FALSE]
 			object$G <- object$G[i,j,drop=FALSE]
@@ -37,7 +37,7 @@ function(object, i, j, ...) {
 			object$weights <- object$weights[i,j,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
 			object$targets <- object$targets[j,,drop=FALSE]
-			if(!is.null(oc)) for(k in oc) object$other[[k]] <- object$other[[k]][i,j,drop=FALSE]
+			for(k in oc) object$other[[k]] <- object$other[[k]][i,j,drop=FALSE]
 		}
 	object
 })
@@ -46,9 +46,10 @@ assign("[.MAList",
 function(object, i, j, ...) {
 #  Subsetting for MAList objects
 #  Gordon Smyth
-#  29 June 2003.  Last modified 29 Oct 2003.
+#  29 June 2003.  Last modified 6 Nov 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
+	other <- names(object$other)
 	if(missing(i))
 		if(missing(j))
 			return(object)
@@ -61,6 +62,7 @@ function(object, i, j, ...) {
 				object$design <- as.matrix(object$design)[j,,drop=FALSE]
 				if(!is.fullrank(object$design)) warning("design matrix is singular",call.=FALSE)
 			}
+			for(a in other) object$other[[a]] <- object$other[[a]][,j,drop=FALSE]
 		}
 	else
 		if(missing(j)) {
@@ -68,6 +70,7 @@ function(object, i, j, ...) {
 			object$A <- object$A[i,,drop=FALSE]
 			object$weights <- object$weights[i,,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
+			for(a in other) object$other[[a]] <- object$other[[a]][i,,drop=FALSE]
 		} else {
 			object$M <- object$M[i,j,drop=FALSE]
 			object$A <- object$A[i,j,drop=FALSE]
@@ -78,6 +81,7 @@ function(object, i, j, ...) {
 				object$design <- as.matrix(object$design)[j,,drop=FALSE]
 				if(!is.fullrank(object$design)) warning("design matrix is singular",call.=FALSE)
 			}
+			for(a in other) object$other[[a]] <- object$other[[a]][i,j,drop=FALSE]
 		}
 	object
 })
@@ -154,11 +158,12 @@ function(object, i, j, ...) {
 cbind.RGList <- function(..., deparse.level=1) {
 #  Combine RGList objects assuming same genelists
 #  Gordon Smyth
-#  27 June 2003
+#  27 June 2003. Last modified 6 Nov 2005.
 
 	objects <- list(...)
 	nobjects <- length(objects)
 	out <- objects[[1]]
+	other <- names(objects[[1]]$other)
 	if(nobjects > 1)
 	for (i in 2:nobjects) {
 		out$R <- cbind(out$R,objects[[i]]$R)
@@ -167,6 +172,7 @@ cbind.RGList <- function(..., deparse.level=1) {
 		out$Gb <- cbind(out$Gb,objects[[i]]$Gb)
 		out$weights <- cbind(out$weights,objects[[i]]$weights)
 		out$targets <- rbind(out$targets,objects[[i]]$targets)
+		for (a in other) out$other[[a]] <- cbind(out$other[[a]],objects[[i]]$other[[a]])
 	}
 	out
 }
@@ -174,17 +180,19 @@ cbind.RGList <- function(..., deparse.level=1) {
 cbind.MAList <- function(..., deparse.level=1) {
 #  Combine MAList objects assuming same genelists
 #  Gordon Smyth
-#  27 June 2003
+#  27 June 2003. Last modified 6 Nov 2005.
 
 	objects <- list(...)
 	nobjects <- length(objects)
 	out <- objects[[1]]
+	other <- names(objects[[1]]$other)
 	if(nobjects > 1)
 	for (i in 2:nobjects) {
 		out$M <- cbind(out$M,objects[[i]]$M)
 		out$A <- cbind(out$A,objects[[i]]$A)
 		out$weights <- cbind(out$weights,objects[[i]]$weights)
 		out$targets <- rbind(out$targets,objects[[i]]$targets)
+		for (a in other) out$other[[a]] <- cbind(out$other[[a]],objects[[i]]$other[[a]])
 	}
 	out
 }
@@ -192,11 +200,12 @@ cbind.MAList <- function(..., deparse.level=1) {
 rbind.RGList <- function(..., deparse.level=1) {
 #  Combine RGList objects assuming same array lists
 #  Gordon Smyth
-#  6 Dec 2003
+#  6 Dec 2003. Last modified 6 Nov 2005.
 
 	objects <- list(...)
 	nobjects <- length(objects)
 	out <- objects[[1]]
+	other <- names(objects[[1]]$other)
 	if(nobjects > 1)
 	for (i in 2:nobjects) {
 		out$R <- rbind(out$R,objects[[i]]$R)
@@ -205,6 +214,7 @@ rbind.RGList <- function(..., deparse.level=1) {
 		out$Gb <- rbind(out$Gb,objects[[i]]$Gb)
 		out$weights <- rbind(out$weights,objects[[i]]$weights)
 		out$genes <- rbind(out$genes,objects[[i]]$genes)
+		for (a in other) out$other[[a]] <- rbind(out$other[[a]],objects[[i]]$other[[a]])
 	}
 	out
 }
@@ -212,17 +222,19 @@ rbind.RGList <- function(..., deparse.level=1) {
 rbind.MAList <- function(..., deparse.level=1) {
 #  Combine MAList objects assuming same array lists
 #  Gordon Smyth
-#  7 Dec 2003
+#  7 Dec 2003. Last modified 6 Nov 2005.
 
 	objects <- list(...)
 	nobjects <- length(objects)
 	out <- objects[[1]]
+	other <- names(objects[[1]]$other)
 	if(nobjects > 1)
 	for (i in 2:nobjects) {
 		out$M <- rbind(out$M,objects[[i]]$M)
 		out$A <- rbind(out$A,objects[[i]]$A)
 		out$weights <- rbind(out$weights,objects[[i]]$weights)
 		out$genes <- rbind(out$genes,objects[[i]]$genes)
+		for (a in other) out$other[[a]] <- rbind(out$other[[a]],objects[[i]]$other[[a]])
 	}
 	out
 }
@@ -249,7 +261,7 @@ makeUnique <- function(x) {
 merge.RGList <- function(x,y,...) {
 #  Merge RGList y into x aligning by row names
 #  Gordon Smyth
-#  11 April 2003
+#  11 April 2003.  Last modified 28 Oct 2005.
 
 	if(!is(y,"RGList")) stop("both x and y must be RGList objects")
 	genes1 <- rownames(x$R)
@@ -265,14 +277,13 @@ merge.RGList <- function(x,y,...) {
 	if(!identical(fields1,fields2)) stop("The two RGLists have different components")
 
 	ord2 <- match(makeUnique(genes1), makeUnique(genes2))
-	for (i in fields1) x[[i]] <- cbind(x[[i]],y[[i]][ord2,])
-	x
+	cbind(x,y[ord2,])
 }
 
 merge.MAList <- function(x,y,...) {
 #  Merge MAList y into x aligning by row names
 #  Gordon Smyth
-#  7 May 2004
+#  7 May 2004.  Last modified 28 Oct 2005.
 
 	if(!is(y,"MAList")) stop("both x and y must be MAList objects")
 	genes1 <- rownames(x$M)
@@ -288,6 +299,6 @@ merge.MAList <- function(x,y,...) {
 	if(!identical(fields1,fields2)) stop("The two MALists have different components")
 
 	ord2 <- match(makeUnique(genes1), makeUnique(genes2))
-	for (i in fields1) x[[i]] <- cbind(x[[i]],y[[i]][ord2,])
-	x
+	cbind(x,y[ord2,])
 }
+

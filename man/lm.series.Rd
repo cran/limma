@@ -19,6 +19,9 @@
   \item{qr}{QR-decomposition of \code{design}}
 }
 \details{
+This is a utility function used by the higher level function \code{\link{lmFit}}.
+Most users should not use this function directly but should use \code{\link{lmFit}} instead.
+
 The linear model is fit for each gene by calling the function \code{lm.fit} or \code{lm.wfit} from the base library.
 }
 \author{Gordon Smyth}

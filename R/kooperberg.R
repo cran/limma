@@ -6,11 +6,10 @@ kooperberg <- function (RG, a = TRUE, layout=RG$printer, verbose=TRUE)
 #	Kooperberg Bayesian background correction
 #	Matt Ritchie
 #	Charles Kooperberg contributed 'a' estimation functions (.getas, .varaux1, .varaux2)
-#	Last modified 19 October 2005
+#	Last modified 31 October 2005
 {
-    if (is.null(RG$printer))
-            RG$printer <- layout
-    if(is.null(RG$printer))
+	if(!is(RG,"RGList")) stop("RG must be an RGList object")
+    if(is.null(layout))
 	    stop("\nNeed to specify array layout")
     if (is.null(RG$other$"F635 SD") | is.null(RG$other$"B635 SD") | is.null(RG$other$"F532 SD") | is.null(RG$other$"B532 SD") | is.null(RG$other$"B532 Mean") | is.null(RG$other$"B635 Mean") |is.null(RG$other$"F Pixels") | is.null(RG$other$"B Pixels"))
             stop("\nData missing from RG$other: re-run read.maimages with\n other=c(\"F635 SD\",\"B635 SD\",\"F532 SD\",\"B532 SD\",\"B532 Mean\",\"B635 Mean\",\"F Pixels\",\"B Pixels\")")

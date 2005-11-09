@@ -27,7 +27,10 @@ Fit is by generalized least squares allowing for correlation between duplicate s
   \item{qr}{QR decomposition of the generalized linear squares problem, i.e., the decomposition of \code{design} standardized by the Choleski-root of the correlation matrix defined by \code{correlation}}
 }
 \details{
-This is the low level function for fitting gene-wise linear models when some of the expression values are correlated.
+This is a utility function used by the higher level function \code{\link{lmFit}}.
+Most users should not use this function directly but should use \code{\link{lmFit}} instead.
+
+This function is for fitting gene-wise linear models when some of the expression values are correlated.
 The correlated groups may arise from replicate spots on the same array (duplicate spots) or from a biological or technical replicate grouping of the arrays.
 This function is normally called by \code{lmFit} and is not normally called directly by users.
 

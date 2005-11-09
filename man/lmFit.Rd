@@ -3,7 +3,7 @@
 \title{Linear Model for Series of Arrays}
 \description{Fit linear model for each gene given a series of arrays}
 \usage{
-lmFit(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) 
+lmFit(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...) 
 }
 \arguments{
   \item{object}{object of class \code{numeric}, \code{matrix}, \code{MAList}, \code{marrayNorm}, \code{exprSet} or \code{PLMset} containing log-ratios or log-values of expression for a series of microarrays}
@@ -22,12 +22,19 @@ Object of class \code{\link[limma:marraylm]{MArrayLM}}
 }
 
 \details{
-This function accepts data from a experiment involving a series of microarrays with the same set of probes.
+This function fits multiple linear models.
+It accepts data from a experiment involving a series of microarrays with the same set of probes.
 A linear model is fitted to the expression data for each probe.
 The expression data should be log-ratios for two-color array platforms or log-expression values for one-channel platforms.
 (To fit linear models to the individual channels of two-color array data, see \code{\link{lmscFit}}.)
 The coefficients of the fitted models describe the differences between the RNA sources hybridized to the arrays.
-The genewise fitted model results are stored in a compact form suitable for further processing by other functions in the limma package.
+The probe-wise fitted model results are stored in a compact form suitable for further processing by other functions in the limma package.
+
+The function allows for missing values and accepts quantitative weights through the \code{weights} argument.
+It also supports two different correlation structures.
+If \code{block} is not \code{NULL} then different arrays are assumed to be correlated.
+If \code{block} is \code{NULL} and \code{ndups} is greater than one then replicate spots on the same array are assumed to be correlated.  
+It is not possible at this time to fit models with both a block structure and a duplicate-spot correlation structure simultaneously.
 
 If \code{object} is a matrix then it should contain log-ratios or log-expression data with rows corresponding to probes and columns to arrays.
 (A numeric vector is treated the same as a matrix with one column.)
@@ -43,7 +50,6 @@ If \code{object} is an \code{PLMset}, then weights are computed as \code{1/pmax(
 If \code{object} is an \code{exprSet} object, then weights are not computed.
 
 If the argument \code{block} is used, then it is assumed that \code{ndups=1}.
-It is not possible at this time to fit models with both a block structure and a duplicate-spot structure simultaneously.
 
 The \code{correlation} argument has a default value of \code{0.75}, but in normal use this default value should not be relied on and the correlation value should be estimated using the function \code{duplicateCorrelation}.
 The default value is likely to be too high in particular if used with the \code{block} argument.

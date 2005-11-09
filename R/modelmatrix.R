@@ -46,7 +46,7 @@ modelMatrix <- function(targets, parameters=NULL, ref=NULL, verbose=TRUE)
 makeContrasts <- function(..., levels)
 #	Construct matrix of custom contrasts
 #	Gordon Smyth
-#	30 June 2003.  Last modified 12 June 2005.
+#	30 June 2003.  Last modified 9 November 2005.
 {
 	if(is.factor(levels)) levels <- levels(levels)
 	if(is.matrix(levels)) levels <- colnames(levels)
@@ -59,7 +59,8 @@ makeContrasts <- function(..., levels)
 		out[i] <- 1
 		out
 	}
-	for (i in 1:n) assign(levels[i], indicator(i,n))
+	levelsenv <- new.env(parent=NULL)
+	for (i in 1:n) assign(levels[i], indicator(i,n), pos=levelsenv)
 	e <- substitute(list(...))
 	ne <- length(e)
 	cm <- matrix(0,n,ne-1)
@@ -75,12 +76,12 @@ makeContrasts <- function(..., levels)
 	for (j in 1:(ne-1)) {
 		ej <- e[[j+1]]
 		if(is.character(ej)) ej <- parse(text=ej)
-		ej <- eval(ej)
+		ej <- eval(ej, envir=levelsenv)
 #		was original argument a variable?
 		if(!is.numeric(ej)) {
 			colnames(cm)[j] <- as.character(ej)
 			if(is.character(ej)) ej <- parse(text=ej)
-			ej <- eval(ej)
+			ej <- eval(ej, envir=levelsenv)
 		}
 		cm[,j] <- ej
 	}

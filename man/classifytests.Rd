@@ -3,9 +3,9 @@
 \alias{classifyTestsF}
 \alias{classifyTestsT}
 \alias{classifyTestsP}
-\title{Treat Simultaneous T-Tests as Classification Problem}
+\title{Multiple Testing Genewise Across Contrasts}
 \description{
-Classify a series of related t-statistics as up, down or not significant.
+For each gene, classify a series of related t-statistics as up, down or not significant.
 }
 \usage{
 classifyTestsF(object, cor.matrix=NULL, df=Inf, p.value=0.01, fstat.only=FALSE)
@@ -31,9 +31,13 @@ This is essentially a numeric matrix with elements \code{-1}, \code{0} or \code{
 \code{FStat} produces a numeric vector of F-statistics with attributes \code{df1} and \code{df2} giving the corresponding degrees of freedom.
 }
 \details{
+Note that these functions do not adjust for multiple testing across genes.
+The adjustment for multiple testing is across the contrasts rather than the more usual control across genes.
+The functions described here are called by \code{\link{decideTests}}.
+Most users should use \code{decideTests} rather than using these functions directly.
+
 These functions implement multiple testing procedures for determining whether each statistic in a matrix of t-statistics should be considered significantly different from zero.
 Rows of \code{tstat} correspond to genes and columns to coefficients or contrasts.
-The adjustment for multiple testing is across the contrasts rather than the more usual control across genes.
 
 \code{FStat} computes the gene-wise F-statistics for testing all the contrasts equal to zero.
 It is equivalent to \code{classifyTestsF} with \code{fstat.only=TRUE}.

@@ -18,7 +18,8 @@ toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="BH",so
   If not specified, this will be taken from the \code{genes} component of \code{fit}.}
   \item{A}{matrix of A-values or vector of average A-values.}
   \item{eb}{output list from \code{ebayes(fit)}}
-  \item{adjust.method}{method to use to adjust the p-values for multiple testing.  Options are \code{"bonferroni"}, \code{"holm"}, \code{"hochberg"}, \code{"hommel"}, \code{"fdr"} and \code{"none"}. If \code{"none"} then the p-values are not adjusted. A \code{NULL} value will result in the default adjustment method, which is \code{"holm"}.}
+  \item{adjust.method}{method used to adjust the p-values for multiple testing.  Options, in increasing conservatism, include \code{"none"}, \code{"BH"}, \code{"BY"} and \code{"holm"}.
+  See \code{\link{p.adjust}} for the complete list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
   \item{sort.by}{character string specifying statistic to rank genes by.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}.}
   \item{resort.by}{character string specifying statistic to sort the selected genes by in the output data.frame.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}.}
   \item{...}{any other arguments are passed to \code{ebayes} if \code{eb} is \code{NULL}}

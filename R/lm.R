@@ -1,9 +1,9 @@
 #  LINEAR MODELS
 
-lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.75,weights=NULL,method="ls",...) {
+lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 20 March 2005.
+#	30 June 2003.  Last modified 7 Nov 2005.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -45,8 +45,10 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation=0.
 	else
 		if(ndups < 2 && is.null(block))
 			fit <- lm.series(M,design=design,ndups=ndups,spacing=spacing,weights=weights)
-		else
+		else {
+			if(missing(correlation)) stop("the correlation must be set, see duplicateCorrelation")
 			fit <- gls.series(M,design=design,ndups=ndups,spacing=spacing,block=block,correlation=correlation,weights=weights,...)
+		}
 	fit$method <- method
 	fit$design <- design
 	if(is(object,"MAList")) {

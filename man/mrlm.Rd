@@ -25,7 +25,10 @@ rlm.series(x,...)
   \item{qr}{QR decomposition of \code{design}.}
 }
 \details{
-The linear model is fit for each gene by calling the function \code{rlm} from the MASS library.
+This is a utility function used by the higher level function \code{\link{lmFit}}.
+Most users should not use this function directly but should use \code{\link{lmFit}} instead.
+
+This function fits linear models each gene by calling the function \code{rlm} from the MASS library.
 
 Warning: don't use weights with this function unless you understand how \code{rlm} treats weights.
 The treatment of weights is somewhat different from that of \code{lm.series} and \code{gls.series}.
