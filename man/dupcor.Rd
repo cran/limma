@@ -21,9 +21,9 @@ duplicateCorrelation(object,design=rep(1,ncol(as.matrix(object))),ndups=2,spacin
 }
 \value{
   A list with components
-  \item{consensus.correlation}{the average estimated inter-duplicate correlation. The average is the 0.1 trimmed mean of the correlations for individual genes on the tanh-transformed scale.}
+  \item{consensus.correlation}{the average estimated inter-duplicate correlation. The average is the trimmed mean of the individual correlations on the atanh-transformed scale.}
   \item{cor}{same as \code{consensus.correlation}, for compatibility with earlier versions of the software}
-  \item{all.correlations}{a numeric vector of length \code{nrow(object)/ndups} giving the individual genewise correlations.}
+  \item{atanh.correlations}{numeric vector of length \code{nrow(object)/ndups} giving the individual genewise atanh-transformed correlations.}
 }
 \details{
 When \code{block=NULL}, this function estimates the correlation between duplicate spots (regularly spaced within-array replicate spots).
@@ -54,6 +54,14 @@ Smyth, G. K., Michaud, J., and Scott, H. (2005). The use of within-array replica
 \url{http://www.statsci.org/smyth/pubs/dupcor.pdf}
 }
 \examples{
-#  See gls.series for an example
+#  Also see lmFit examples
+
+\dontrun{
+corfit <- duplicateCorrelation(MA, ndups=2, design)
+all.correlations <- tanh(corfit$atanh.correlations)
+boxplot(all.correlations)
+fit <- lmFit(MA, design, ndups=2, correlation=corfit$consensus)
+}
+}
 }
 \keyword{multivariate}

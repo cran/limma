@@ -90,7 +90,7 @@ toptable(fit)
 
 cor.out <- duplicateCorrelation(M)
 cor.out$consensus.correlation
-cor.out$all.correlations
+cor.out$atanh.correlations
 
 ### gls.series
 

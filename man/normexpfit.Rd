@@ -19,6 +19,9 @@ These functions use maximum likelihood estimation to fit a model to the foregrou
 The model is a $normal(\mu,\sigma^2)+exponential(\alpha)$ convolution model for the foreground intensities in which $\mu$ is a linear function of the background.
 \code{normexp.fit} uses a BFGS modified Newton-Raphson iteration maxmize the likelihood.
 \code{normexp.fit} assumes that $\mu$ is a constant plus the observed background.
+
+This is essentially the same model which is used by \code{bg.correct.rma} in the affy package.
+The difference is that the parameters are estimated by maximum likelihood and that the estimated background is subtracted before applying the model-based background.
 }
 \value{
 A list containing the components

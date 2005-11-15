@@ -59,14 +59,6 @@ See also \code{\link[stats]{p.adjust}} in the \code{stats} package.
 }
 \author{Gordon Smyth}
 \examples{
-#  Simulate gene expression data,
-#  6 microarrays and 100 genes with first gene differentially expressed
-M <- matrix(rnorm(100*6,sd=0.3),100,6)
-M[1,1:3] <- M[1,1:3] + 2
-#  Design matrix includes two treatments, one for first 3 and one for last 3 arrays
-design <- cbind(First3Arrays=c(1,1,1,0,0,0),Last3Arrays=c(0,0,0,1,1,1))
-fit <- lmFit(M, design=design)
-fit <- eBayes(fit)
-topTable(fit)
+#  See lmFit examples
 }
 \keyword{htest}

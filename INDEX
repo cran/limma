@@ -47,8 +47,8 @@ getColClasses           Construct colClasses vector for use within
 getLayout               Extract the Print Layout of an Array from the
                         GAL File
 getSpacing              Get Numerical Spacing
-gls.series              Generalized Least Squares for Series of
-                        Microarrays
+gls.series              Fit Linear Model to Microarray Data by
+                        Generalized Least Squares
 gridr                   Row and Column Positions on Microarray
 heatdiagram             Stemmed Heat Diagram
 helpMethods             Prompt for Method Help Topics
@@ -60,7 +60,8 @@ isNumeric               Test for Numeric Argument
 kooperberg              Kooperberg Model-Based Background Correction
 LargeDataObject-class   Large Data Object - class
 limmaUsersGuide         View Limma User's Guide
-lm.series               Linear Model for Series of Arrays
+lm.series               Fit Linear Model to Microrray Data by Ordinary
+                        Least Squares
 lmFit                   Linear Model for Series of Arrays
 lmscFit                 Fit Linear Model to Individual Channels of
                         Two-Color Data
@@ -124,7 +125,8 @@ rg.series.spot          Read RGList from SPOT Image Analysis Output
 rg.spot                 Extract RGList from data.frames Containing SPOT
                         Data
 RGList-class            Red, Green Intensity List - class
-rlm.series              Robust Linear Model for Series of Microarrays
+rlm.series              Fit Linear Model to Microrray Data by Robust
+                        Regression
 splitName               Split Composite Gene Names
 squeezeVar              Smooth Sample Variances
 summary.RGList          Summaries of Microarray Data Objects

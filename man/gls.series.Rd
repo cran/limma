@@ -1,14 +1,15 @@
 \name{gls.series}
 \alias{gls.series}
-\title{Generalized Least Squares for Series of Microarrays}
+\title{Fit Linear Model to Microarray Data by Generalized Least Squares}
 \description{
-Fit linear models for each gene to a series of microarrays.
-Fit is by generalized least squares allowing for correlation between duplicate spots or between related arrays.
+Fit a linear model genewise to expression data from a series of microarrays.
+The fit is by generalized least squares allowing for correlation between duplicate spots or related arrays.
+This is a utility function for \code{lmFit}.
 }
 \usage{gls.series(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NULL,weights=NULL,...)}
 \arguments{
   \item{M}{numeric matrix containing log-ratio or log-expression values for a series of microarrays, rows correspond to genes and columns to arrays.}
-  \item{design}{design matrix of the microarray experiment, with rows corresponding to arrays and columns to comparisons to be estimated. The number of rows must match the number of columns of \code{M}. Defaults to the unit vector meaning that the arrays are treated as replicates.} 
+  \item{design}{numeric design matrix defining the linear model, with rows corresponding to arrays and columns to comparisons to be estimated. The number of rows must match the number of columns of \code{M}. Defaults to the unit vector meaning that the arrays are treated as replicates.} 
   \item{ndups}{positive integer giving the number of times each gene is printed on an array. \code{nrow(M)} must be divisible by \code{ndups}.}
   \item{spacing}{the spacing between the rows of \code{M} corresponding to duplicate spots, \code{spacing=1} for consecutive spots}
   \item{block}{vector or factor specifying a blocking variable on the arrays.
@@ -43,11 +44,6 @@ If \code{correlation=NULL} then a call is made to \code{duplicateCorrelation} to
 An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
-\examples{
-M <- matrix(rnorm(10*6),10,6)
-dupcor <- duplicateCorrelation(M)
-fit <- gls.series(M,correlation=dupcor$consensus.correlation)
-}
 \keyword{models}
 \keyword{regression}
 

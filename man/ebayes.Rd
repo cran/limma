@@ -51,6 +51,8 @@ Smyth, G. K. (2004). Linear models and empirical Bayes methods for assessing dif
 \emph{Statistical Applications in Genetics and Molecular Biology}, \bold{3}, No. 1, Article 3. \url{http://www.bepress.com/sagmb/vol3/iss1/art3}
 }
 \examples{
+#  See also lmFit examples
+
 #  Simulate gene expression data,
 #  6 microarrays and 100 genes with one gene differentially expressed
 set.seed(2004); invisible(runif(100))

@@ -3,7 +3,7 @@
 duplicateCorrelation <- function(object,design=rep(1,ncol(as.matrix(object))),ndups=2,spacing=1,block=NULL,trim=0.15,weights=NULL)
 #	Estimate the correlation between duplicates given a series of arrays
 #	Gordon Smyth
-#	25 Apr 2002. Last revised 25 Oct 2005.
+#	25 Apr 2002. Last revised 14 Nov 2005.
 {
 	M <- as.matrix(object)
 	if(is(object,"MAList")) {
@@ -62,8 +62,8 @@ duplicateCorrelation <- function(object,design=rep(1,ncol(as.matrix(object))),nd
 			rho[i] <- s[2]/sum(s)
 		}
 	}
-	rho <- pmax(-1,rho)
-	rhom <- tanh(mean(atanh(rho),trim=trim,na.rm=TRUE))
-	list(cor=rhom,consensus.correlation=rhom,all.correlations=rho)
+	arho <- atanh(pmax(-1,rho))
+	mrho <- tanh(mean(arho,trim=trim,na.rm=TRUE))
+	list(consensus.correlation=mrho,cor=mrho,atanh.correlations=arho)
 }
 

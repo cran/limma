@@ -24,4 +24,7 @@ A volcano plot is any plot which displays fold changes versus a measure of stati
 \seealso{
 An overview of presentation plots following the fitting of a linear model in LIMMA is given in \link{06.LinearModels}.
 }
+\examples{
+#  See lmFit examples
+}
 \keyword{hplot}

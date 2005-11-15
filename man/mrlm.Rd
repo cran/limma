@@ -1,8 +1,10 @@
 \name{rlm}
 \alias{rlm.series}
 \alias{mrlm}
-\title{Robust Linear Model for Series of Microarrays}
-\description{Fit linear models for each gene to a series of microarrays. Fit is by robust M-estimation.}
+\title{Fit Linear Model to Microrray Data by Robust Regression}
+\description{Fit a linear model genewise to expression data from a series of arrays.
+The fit is by robust M-estimation allowing for a small proportion of outliers.
+This is a utility function for \code{lmFit}.}
 \usage{
 mrlm(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
 rlm.series(x,...)
@@ -10,7 +12,7 @@ rlm.series(x,...)
 \arguments{
   \item{M}{numeric matrix containing log-ratio or log-expression values for a series of microarrays, rows correspond to genes and columns to arrays.}
   \item{x}{same as \code{M}}
-  \item{design}{the design matrix of the microarray experiment, with rows corresponding to arrays and columns to comparisons to be estimated. The number of rows must match the number of columns of \code{M}. Defaults to the unit vector meaning that the arrays are treated as replicates.} 
+  \item{design}{numeric design matrix defining the linear model, with rows corresponding to arrays and columns to comparisons to be estimated. The number of rows must match the number of columns of \code{M}. Defaults to the unit vector meaning that the arrays are treated as replicates.} 
   \item{ndups}{a positive integer giving the number of times each gene is printed on an array. \code{nrow(M)} must be divisible by \code{ndups}.}
   \item{spacing}{the spacing between the rows of \code{M} corresponding to duplicate spots, \code{spacing=1} for consecutive spots.}
   \item{weights}{numeric matrix of the same dimension as \code{M} containing weights. If it is of different dimension to \code{M}, it will be filled out to the same size. \code{NULL} is equivalent to equal weights.}
@@ -41,18 +43,5 @@ The function \code{rlm.series} is equivalent to \code{mrlm} but is deprecated an
 An overview of linear model functions in limma is given by \link{06.LinearModels}.
 }
 \author{Gordon Smyth}
-\examples{
-#  Simulate gene expression data,
-#  6 microarrays and 100 genes with one gene differentially expressed in first 3 arrays
-M <- matrix(rnorm(100*6,sd=0.3),100,6)
-M[1,1:3] <- M[1,1:3] + 2
-#  Design matrix includes two treatments, one for first 3 and one for last 3 arrays
-design <- cbind(First3Arrays=c(1,1,1,0,0,0),Last3Arrays=c(0,0,0,1,1,1))
-fit <- mrlm(M,design=design)
-eb <- ebayes(fit)
-#  Large values of eb$t indicate differential expression
-qqt(eb$t[,1],df=fit$df+eb$df.prior)
-abline(0,1)
-}
 \keyword{models}
 \keyword{regression}

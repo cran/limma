@@ -26,7 +26,10 @@ In fact \code{qqt(y,df=Inf)} is identical to \code{qqnorm(y)} in all respects ex
 \author{Gordon Smyth}
 \seealso{\code{\link[stats]{qqnorm}}}
 \examples{
+#  See also the lmFit examples
+
 y <- rt(50,df=4)
 qqt(y,df=4)
+abline(0,1)
 }
 \keyword{distribution}

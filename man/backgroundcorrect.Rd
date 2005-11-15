@@ -9,7 +9,7 @@ backgroundCorrect(RG, method="subtract", offset=0, printer=RG$printer, verbose=T
 }
 \arguments{
   \item{RG}{an \code{\link[limma:rglist]{RGList}} object or a unclassed list containing the same components as an \code{RGList}}
-  \item{method}{character string specifying correction method.  Possible values are \code{"none"}, \code{"subtract"}, \code{"half"}, \code{"minimum"}, \code{"movingmin"}, \code{"edwards"} or \code{normexp}.}
+  \item{method}{character string specifying correction method.  Possible values are \code{"none"}, \code{"subtract"}, \code{"half"}, \code{"minimum"}, \code{"movingmin"}, \code{"edwards"}, \code{"normexp"} or \code{"rma"}.}
   \item{offset}{numeric value to add to intensities}
   \item{printer}{a list containing printer layout information, see \code{\link{PrintLayout-class}}}
   \item{verbose}{logical, should progress be reported to standard output}

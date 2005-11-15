@@ -1,1 +1,278 @@
-#	READ IMAGE ANALYSIS FILES INTO RGListread.maimages <- function(files,source=NULL,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"", DEBUG = FALSE, ...)#	Extracts an RG list from a series of image analysis output files#	Gordon Smyth. Use of colClasses added by Marcus Davy.#	1 Nov 2002.  Last revised 14 October 2005.{	debugVars <- function(DEBUG){		if(DEBUG) {            print(paste("FILE:", fullname))            print(paste("SKIP:", skip))            print("SELECTED COLUMNS")            print(colClasses)        }    }	if(missing(files)) {		if(missing(ext))			stop("Must specify input files")		else {			extregex <- paste("\\.",ext,"$",sep="")			files <- dir(path=ifelse(is.null(path),".",path),pattern=extregex)			files <- sub(extregex,"",files)		}	}	if(is.null(source)) {		source <- "generic"	} else {		source <- match.arg(source,c("agilent","arrayvision","bluefuse","genepix","genepix.median","genepix.custom","imagene","quantarray","smd.old","smd","spot","spot.close.open"))		if(source=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))	}	slides <- as.vector(as.character(files))	if(!is.null(ext)) slides <- paste(slides,ext,sep=".")	nslides <- length(slides)	if(is.null(names)) names <- removeExt(files)	if(is.null(columns)) {		if(is.null(source)) stop("At least one of 'source' or 'columns' must be given")		columns <- switch(source,			agilent = list(G="gMeanSignal",Gb="gBGMedianSignal",R="rMeanSignal",Rb="rBGMedianSignal"),			bluefuse = list(G="AMPCH1",R="AMPCH2"),			genepix = list(R="F635 Mean",G="F532 Mean",Rb="B635 Median",Gb="B532 Median"),			genepix.median = list(R="F635 Median",G="F532 Median",Rb="B635 Median",Gb="B532 Median"),			genepix.custom = list(R="F635 Mean",G="F532 Mean",Rb="B635",Gb="B532"),			quantarray = list(R="ch2 Intensity",G="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background"),			smd.old = list(G="CH1I_MEAN",Gb="CH1B_MEDIAN",R="CH2I_MEAN",Rb="CH2B_MEDIAN"),			smd = list(G="Ch1 Intensity (Mean)",Gb="Ch1 Background (Median)",R="Ch2 Intensity (Mean)",Rb="Ch2 Background (Median)"),			spot = list(R="Rmean",G="Gmean",Rb="morphR",Gb="morphG"),			spot.close.open = list(R="Rmean",G="Gmean",Rb="morphR.close.open",Gb="morphG.close.open"),			NULL		)	} else {		if(!is.list(columns)) stop("columns must be a list")		names(columns)[names(columns)=="Gf"] <- "G"		names(columns)[names(columns)=="Rf"] <- "R"		if(is.null(columns$G) || is.null(columns$R)) stop("columns must specify foreground G and R")		if(!all(names(columns) %in% c("G","R","Gb","Rb"))) warning("non-standard columns specified")	}		#	Set annotation information	if(is.null(annotation)) annotation <- switch(source,		agilent = c("Row","Col","Start","Sequence","SwissProt","GenBank","Primate","GenPept","ProbeUID","ControlType","ProbeName","GeneName","SystematicName","Description"),		bluefuse = c("ROW","COL","SUBGRIDROW","SUBGRIDCOL","BLOCK","NAME","ID"),   		genepix=,genepix.median=,genepix.custom = c("Block","Row","Column","ID","Name"),		smd = c("Spot","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","Locuslink ID","Name","Sequence Type","X Grid Coordinate (within sector)","Y Grid Coordinate (within sector)","Sector","Failed","Plate Number","Plate Row","Plate Column","Clone Source","Is Verified","Is Contaminated","Luid"),		smd.old = c("SPOT","NAME","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","SUID"),		NULL	)		cnames <- names(columns)#	Read first file to get nspots	fullname <- slides[1]	if(!is.null(path)) fullname <- file.path(path,fullname)	switch(source,	   quantarray = {		firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE)		skip <- grep("Begin Data",firstfield)		if(length(skip)==0) stop("Cannot find \"Begin Data\" in image output file")		nspots <- grep("End Data",firstfield) - skip -2		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)        debugVars(DEBUG)		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",nrows=nspots, colClasses=colClasses, ...)	}, arrayvision = {		skip <- 1		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)		fg <- grep(" Dens - ",cn)		if(length(fg) != 2) stop(paste("Cannot find foreground columns in",fullname))		bg <- grep("Bkgd",cn)		if(length(fg) != 2) stop(paste("Cannot find background columns in",fullname))		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)        debugVars(DEBUG)		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="", colClasses=colClasses, ...)		nspots <- nrow(obj)	}, bluefuse = {		skip <- readBlueFuseHeader(fullname)$NHeaderRecords		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)        debugVars(DEBUG)		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char= "",fill=TRUE, colClasses=colClasses, ...)		nspots <- nrow(obj)	}, genepix=,genepix.median=,genepix.custom = {		h <- readGPRHeader(fullname)		if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")		skip <- h$NHeaderRecords		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)        debugVars(DEBUG)		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)		nspots <- nrow(obj)	}, smd=,smd.old = {		skip <- readSMDHeader(fullname)$NHeaderRecords		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)        debugVars(DEBUG)		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)		nspots <- nrow(obj)	}, {		skip <- grep(protectMetachar(columns$R),readLines(fullname,n=80)) - 1		if(length(skip)==0)			stop("Cannot find column heading in image output file")		else			skip <- skip[1]		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)        debugVars(DEBUG)		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)		nspots <- nrow(obj)	})#	Initialize RG list object (object.size for matrix of NAs is smaller)	Y <- matrix(NA,nspots,nslides)	colnames(Y) <- names	RG <- columns	for (a in cnames) RG[[a]] <- Y	if(!is.null(wt.fun)) RG$weights <- Y	RG$targets <- data.frame(FileName=I(files),row.names=names)	if(!is.null(annotation)) {		j <- match(annotation,colnames(obj),0)		if(any(j>0)) RG$genes <- data.frame(obj[,j,drop=FALSE])	}#	Set printer layout	if(source=="agilent") {		if(!is.null(RG$genes$Row) && !is.null(RG$genes$Col)) {			nr <- length(unique(RG$genes$Row))			nc <- length(unique(RG$genes$Col))			if(nspots==nr*nc) RG$printer <- list(ngrid.r=1,ngrid.c=1,nspot.r=nr,nspot.c=nc)		}	}#	Other columns	if(!is.null(other.columns)) {		other.columns <- as.character(other.columns)		j <- match(other.columns,colnames(obj),0)		if(any(j>0)) {			other.columns <- colnames(obj)[j]			RG$other <- list()			for (j in other.columns) RG$other[[j]] <- Y 		} else {			other.columns <- NULL		}	}#	Now read remainder of files	for (i in 1:nslides) {		if(i > 1) {			fullname <- slides[i]			if(!is.null(path)) fullname <- file.path(path,fullname)			switch(source,			   quantarray = {                   firstfield <- scan(fullname, what = "", sep = "\t", flush = TRUE,                                       quiet = TRUE, blank.lines.skip = FALSE, multi.line = FALSE,                                       allowEscapes = FALSE, nlines=100)                   skip <- grep("Begin Data", firstfield)               },  arrayvision = {                   skip <- 1               }, bluefuse = {                   skip <- readBlueFuseHeader(fullname)$NHeaderRecords               }, genepix = , genepix.median = , genepix.custom = {				   skip <- readGPRHeader(fullname)$NHeaderRecords               }, smd = , smd.old = {                   skip <- readSMDHeader(fullname)$NHeaderRecords               }, {                   skip <- grep(protectMetachar(columns$R), readLines(fullname, n = 80)) -1               })			if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")			allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)			colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)			debugVars(DEBUG)			obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots, colClasses=colClasses, ...)		}		for (a in cnames) RG[[a]][,i] <- obj[,columns[[a]]]		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)		if(!is.null(other.columns)) for (j in other.columns) {			RG$other[[j]][,i] <- obj[,j] 		}		if(verbose) cat(paste("Read",fullname,"\n"))	}	new("RGList",RG)}wtVariables <- function(x,fun)# Extracts variable names from weight functions such as wtarea, wtflags, # wtIgnore.Filter and user defined functions# Gordon Smyth# 11 Apr 2004 (Renamed from variablesinfunction){         x <- as.character(x)         a <- deparse(fun)         n <- length(x)         ind <- logical(n)         for (i in 1:n) {                 ind[i] <- as.logical(length(grep(x[i],a)))         }         x[ind]}getColClasses <- function(cols, ...)# Construct a colClasses vector for read.table from a vector of possible columns 'cols' # Uses wtVariables and ellipsis vectors and lists of character string variable names# to match against 'cols'# Marcus Davy # 20 Apr 2004 Last revised 3 October 2005.{	if(is.list(cols)){        stop("arg 'cols' must be a vector")    }    cols     <- as.character(cols)  x        <- rep("NULL", length(cols))  names(x) <- cols  wanted   <- list(...)  for(i in 1:length(wanted)) {    if(is.null(wanted[[i]]))      next    if(is.function(wanted[[i]])) {      include <- wtVariables(cols, wanted[[i]])    }     if(is.list(wanted[[i]]))       wanted[[i]] <- unlist(wanted[[i]])    if(is.character(wanted[[i]]))       include <- wanted[[i]]    ind <- match(include, cols, nomatch=0)    x[ind] <- NA  }  x}
+#	READ IMAGE ANALYSIS FILES INTO RGList
+
+read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
+#	Extracts an RG list from a series of image analysis output files
+#	Gordon Smyth. 
+#	1 Nov 2002.  Last revised 14 October 2005.
+#	Use of colClasses added by Marcus Davy, 14 October 2005.
+{
+#	For checking colClasses setup
+	debugVars <- function(DEBUG){
+		if(DEBUG) {
+            print(paste("FILE:", fullname))
+            print(paste("SKIP:", skip))
+            print("SELECTED COLUMNS")
+            print(colClasses)
+        }
+    }
+
+#	Begin check input arguments
+
+	if(missing(files)) {
+		if(is.null(ext))
+			stop("Must specify input files")
+		else {
+			extregex <- paste("\\.",ext,"$",sep="")
+			files <- dir(path=ifelse(is.null(path),".",path),pattern=extregex)
+			files <- sub(extregex,"",files)
+		}
+	}
+
+	source <- match.arg(source,c("generic","agilent","arrayvision","bluefuse","genepix","genepix.median","genepix.custom","imagene","quantarray","smd.old","smd","spot","spot.close.open"))
+	source2 <- strsplit(source,split=".",fixed=TRUE)[[1]][1]
+	if(is.null(quote)) if(source=="agilent") quote <- "" else quote <- "\""
+	if(source2=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
+
+	slides <- as.vector(as.character(files))
+	if(!is.null(ext)) slides <- paste(slides,ext,sep=".")
+	nslides <- length(slides)
+
+	if(is.null(names)) names <- removeExt(files)
+
+	if(is.null(columns)) {
+		if(source2=="generic") stop("must specify columns for generic input")
+		columns <- switch(source,
+			agilent = list(G="gMeanSignal",Gb="gBGMedianSignal",R="rMeanSignal",Rb="rBGMedianSignal"),
+			bluefuse = list(G="AMPCH1",R="AMPCH2"),
+			genepix = list(R="F635 Mean",G="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
+			genepix.median = list(R="F635 Median",G="F532 Median",Rb="B635 Median",Gb="B532 Median"),
+			genepix.custom = list(R="F635 Mean",G="F532 Mean",Rb="B635",Gb="B532"),
+			quantarray = list(R="ch2 Intensity",G="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background"),
+			smd.old = list(G="CH1I_MEAN",Gb="CH1B_MEDIAN",R="CH2I_MEAN",Rb="CH2B_MEDIAN"),
+			smd = list(G="Ch1 Intensity (Mean)",Gb="Ch1 Background (Median)",R="Ch2 Intensity (Mean)",Rb="Ch2 Background (Median)"),
+			spot = list(R="Rmean",G="Gmean",Rb="morphR",Gb="morphG"),
+			spot.close.open = list(R="Rmean",G="Gmean",Rb="morphR.close.open",Gb="morphG.close.open"),
+			NULL
+		)
+	} else {
+		if(!is.list(columns)) stop("columns must be a list")
+		names(columns)[names(columns)=="Gf"] <- "G"
+		names(columns)[names(columns)=="Rf"] <- "R"
+		if(is.null(columns$G) || is.null(columns$R)) stop("columns must specify foreground G and R")
+		if(!all(names(columns) %in% c("G","R","Gb","Rb"))) warning("non-standard columns specified")
+	}
+	cnames <- names(columns)
+	
+	if(is.null(annotation)) annotation <- switch(source,
+		agilent = c("Row","Col","Start","Sequence","SwissProt","GenBank","Primate","GenPept","ProbeUID","ControlType","ProbeName","GeneName","SystematicName","Description"),
+		bluefuse = c("ROW","COL","SUBGRIDROW","SUBGRIDCOL","BLOCK","NAME","ID"),   
+		genepix=,genepix.median=,genepix.custom = c("Block","Row","Column","ID","Name"),
+		smd = c("Spot","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","Locuslink ID","Name","Sequence Type","X Grid Coordinate (within sector)","Y Grid Coordinate (within sector)","Sector","Failed","Plate Number","Plate Row","Plate Column","Clone Source","Is Verified","Is Contaminated","Luid"),
+		smd.old = c("SPOT","NAME","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","SUID"),
+		NULL
+	)
+
+#	End check input arguments
+
+#	Read first file to get nspots
+	fullname <- slides[1]
+	if(!is.null(path)) fullname <- file.path(path,fullname)
+	switch(source2,
+		quantarray = {
+		firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE)
+		skip <- grep("Begin Data",firstfield)
+		if(length(skip)==0) stop("Cannot find \"Begin Data\" in image output file")
+		nspots <- grep("End Data",firstfield) - skip -2
+		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
+        debugVars(DEBUG)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",nrows=nspots, colClasses=colClasses, ...)
+	}, arrayvision = {
+		skip <- 1
+		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)
+		fg <- grep(" Dens - ",cn)
+		if(length(fg) != 2) stop(paste("Cannot find foreground columns in",fullname))
+		bg <- grep("Bkgd",cn)
+		if(length(fg) != 2) stop(paste("Cannot find background columns in",fullname))
+		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])
+		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
+        debugVars(DEBUG)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="", colClasses=colClasses, ...)
+		nspots <- nrow(obj)
+	}, bluefuse = {
+		skip <- readBlueFuseHeader(fullname)$NHeaderRecords
+		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
+        debugVars(DEBUG)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		nspots <- nrow(obj)
+	}, genepix = {
+		h <- readGPRHeader(fullname)
+		if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
+		skip <- h$NHeaderRecords
+		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun, "X")
+        debugVars(DEBUG)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		nspots <- nrow(obj)
+	}, smd = {
+		skip <- readSMDHeader(fullname)$NHeaderRecords
+		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
+        debugVars(DEBUG)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		nspots <- nrow(obj)
+	}, {
+		skip <- grep(protectMetachar(columns$R),readLines(fullname,n=80)) - 1
+		if(length(skip)==0)
+			stop("Cannot find column heading in image output file")
+		else
+			skip <- skip[1]
+		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
+        debugVars(DEBUG)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		nspots <- nrow(obj)
+	})
+
+#	Initialize RG list object (object.size for matrix of NAs is smaller)
+	Y <- matrix(NA,nspots,nslides)
+	colnames(Y) <- names
+	RG <- columns
+	for (a in cnames) RG[[a]] <- Y
+	if(!is.null(wt.fun)) RG$weights <- Y
+	RG$targets <- data.frame(FileName=I(files),row.names=names)
+
+#	Set annotation columns
+	if(!is.null(annotation)) {
+		j <- match(annotation,colnames(obj),0)
+		if(any(j>0)) RG$genes <- data.frame(obj[,j,drop=FALSE],check.names=FALSE)
+	}
+
+	RG$source <- source
+
+#	Set printer layout, if possible
+	if(source2=="agilent") {
+		if(!is.null(RG$genes$Row) && !is.null(RG$genes$Col)) {
+			nr <- length(unique(RG$genes$Row))
+			nc <- length(unique(RG$genes$Col))
+			if(nspots==nr*nc) RG$printer <- list(ngrid.r=1,ngrid.c=1,nspot.r=nr,nspot.c=nc)
+		}
+	}
+	if(source2=="genepix") {
+		if(!is.null(RG$genes$Block) && !is.null(RG$genes$Row) && !is.null(RG$genes$Column)) {
+			RG$printer <- getLayout(RG$genes,guessdups=TRUE)
+			if(!is.null(obj$X)) {
+				blocksize <- RG$printer$nspot.r*RG$printer$nspot.c
+				nblocks <- RG$printer$ngrid.r*RG$printer$ngrid.c
+				i <- (1:(nblocks-1))*blocksize
+				ngrid.r <- sum(obj$X[i] > obj$X[i+1]) + 1
+				if(nblocks%%ngrid.r==0) {
+					RG$printer$ngrid.r <- ngrid.r
+					RG$printer$ngrid.c <- nblocks/ngrid.r
+				} else {
+					warning("Can't determine number of grid rows")
+					RG$printer$ngrid.r <- RG$ngrid.c <- NA
+				}
+			}
+		}
+		
+	}
+
+#	Other columns
+	if(!is.null(other.columns)) {
+		other.columns <- as.character(other.columns)
+		j <- match(other.columns,colnames(obj),0)
+		if(any(j>0)) {
+			other.columns <- colnames(obj)[j]
+			RG$other <- list()
+			for (j in other.columns) RG$other[[j]] <- Y 
+		} else {
+			other.columns <- NULL
+		}
+	}
+
+#	Read remainder of files
+	for (i in 1:nslides) {
+		if(i > 1) {
+			fullname <- slides[i]
+			if(!is.null(path)) fullname <- file.path(path,fullname)
+			switch(source2,
+			   quantarray = {
+                   firstfield <- scan(fullname, what = "", sep = "\t", flush = TRUE, 
+                                      quiet = TRUE, blank.lines.skip = FALSE, multi.line = FALSE, 
+                                      allowEscapes = FALSE, nlines=100)
+                   skip <- grep("Begin Data", firstfield)
+               },  arrayvision = {
+                   skip <- 1
+               }, bluefuse = {
+                   skip <- readBlueFuseHeader(fullname)$NHeaderRecords
+               }, genepix = {
+				   skip <- readGPRHeader(fullname)$NHeaderRecords
+               }, smd = {
+                   skip <- readSMDHeader(fullname)$NHeaderRecords
+               }, {
+                   skip <- grep(protectMetachar(columns$R), readLines(fullname, n = 80)) -1
+               })
+			if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
+			allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+			colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
+			debugVars(DEBUG)
+			obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots, colClasses=colClasses, ...)
+		}
+		for (a in cnames) RG[[a]][,i] <- obj[,columns[[a]]]
+		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)
+		if(!is.null(other.columns)) for (j in other.columns) {
+			RG$other[[j]][,i] <- obj[,j] 
+		}
+		if(verbose) cat(paste("Read",fullname,"\n"))
+	}
+	new("RGList",RG)
+}
+
+wtVariables <- function(x,fun)
+# Extracts variable names from weight functions such as wtarea, wtflags, 
+# wtIgnore.Filter and user defined functions
+# Gordon Smyth
+# 11 Apr 2004 (Renamed from variablesinfunction)
+{
+         x <- as.character(x)
+         a <- deparse(fun)
+         n <- length(x)
+         ind <- logical(n)
+         for (i in 1:n) {
+                 ind[i] <- as.logical(length(grep(x[i],a)))
+         }
+         x[ind]
+}
+
+getColClasses <- function(cols, ...)
+# Construct a colClasses vector for read.table from a vector of possible columns 'cols' 
+# Uses wtVariables and ellipsis vectors and lists of character string variable names
+# to match against 'cols'
+# Marcus Davy 
+# 20 Apr 2004 Last revised 3 October 2005.
+{
+	if(is.list(cols)){
+        stop("arg 'cols' must be a vector")
+    }
+    cols     <- as.character(cols)
+  x        <- rep("NULL", length(cols))
+  names(x) <- cols
+  wanted   <- list(...)
+  for(i in 1:length(wanted)) {
+    if(is.null(wanted[[i]]))
+      next
+    if(is.function(wanted[[i]])) {
+      include <- wtVariables(cols, wanted[[i]])
+    } 
+    if(is.list(wanted[[i]])) 
+      wanted[[i]] <- unlist(wanted[[i]])
+    if(is.character(wanted[[i]])) 
+      include <- wanted[[i]]
+    ind <- match(include, cols, nomatch=0)
+    x[ind] <- NA
+  }
+  x
+}

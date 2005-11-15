@@ -5,10 +5,10 @@
 backgroundCorrect <- function(RG, method="subtract", offset=0, printer=RG$printer, verbose=TRUE) {
 #	Apply background correction to microarray data
 #	Gordon Smyth
-#	12 April 2003.  Last modified 8 Oct 2004.
+#	12 April 2003.  Last modified 11 Oct 2005.
 
 	if(is.null(RG$Rb) != is.null(RG$Gb)) stop("Background values exist for one channel but not the other")
-	method <- match.arg(method, c("none","subtract","half","minimum","movingmin","edwards","normexp"))
+	method <- match.arg(method, c("none","subtract","half","minimum","movingmin","edwards","normexp","rma"))
 	if(is.null(RG$Rb) && is.null(RG$Gb)) method <- "none"
 	switch(method,
 	subtract={
@@ -63,7 +63,11 @@ backgroundCorrect <- function(RG, method="subtract", offset=0, printer=RG$printe
 		out <- normexp.fit(foreground=RG$R[,j],background=RG$Rb[,j])
 		RG$R[,j] <- normexp.signal(mu=out$beta+RG$Rb[,j],out$sigma,out$alpha,foreground=RG$R[,j])
 		if(verbose) cat("Corrected array",j,"\n")
-	}
+	}},
+	rma={
+		require("affy")
+		RG$R <- apply(RG$R-RG$Rb,2,bg.adjust)
+		RG$G <- apply(RG$G-RG$Gb,2,bg.adjust)
 	})
 	RG$Rb <- NULL
 	RG$Gb <- NULL

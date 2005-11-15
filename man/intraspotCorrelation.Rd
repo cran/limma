@@ -16,8 +16,8 @@ intraspotCorrelation(object, design, trim=0.15)
 }
 \value{
   A list with components
-  \item{consensus.correlation}{the average estimated inter-duplicate correlation. The average is the 0.1 trimmed mean of the correlations for individual genes on the tanh-transformed scale.}
-  \item{all.correlations}{a numeric vector giving the individual genewise correlations on the atanh scale}
+  \item{consensus.correlation}{robust average of the estimated inter-duplicate correlations. The average is the trimmed mean of the correlations for individual genes on the atanh-transformed scale.}
+  \item{atanh.correlations}{a numeric vector giving the individual genewise correlations on the atanh scale}
   \item{df}{numeric matrix of degrees of freedom associated with the correlations. The first column gives the degrees of freedom for estimating the within-spot or M-value mean square while the second gives the degrees of freedom for estimating the between spot or A-value mean square.}
 }
 \details{
@@ -35,6 +35,11 @@ An overview of methods for single channel analysis in limma is given by \link{07
 }
 \examples{
 #  See lmscFit
+\dontrun{
+corfit <- dupclicateCorrelation(MA, design)
+all.correlations <- tanh(corfit$atanh.correlations)
+boxplot(all.correlations)
+}
 }
 \author{Gordon Smyth}
 \keyword{multivariate}
