@@ -449,3 +449,20 @@ nonEstimable <- function(x)
 		return(NULL)
 	}
 }
+
+fitted.MArrayLM <- function(object,design=object$design,...)
+#	Fitted values from MArray linear model fit
+#	Gordon Smyth
+#	29 November 2005
+{
+	object$coefficients %*% t(object$design)
+}
+
+residuals.MArrayLM <- function(object,y,...)
+#	Residuals from MArray linear model fit
+#	Gordon Smyth
+#	29 November 2005
+{
+	as.matrix(y) - fitted(object)
+}
+

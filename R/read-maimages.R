@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 14 October 2005.
+#	1 Nov 2002.  Last revised 22 October 2005.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -163,12 +163,12 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 	if(source2=="genepix") {
 		if(!is.null(RG$genes$Block) && !is.null(RG$genes$Row) && !is.null(RG$genes$Column)) {
 			RG$printer <- getLayout(RG$genes,guessdups=TRUE)
-			if(!is.null(obj$X)) {
+			nblocks <- RG$printer$ngrid.r*RG$printer$ngrid.c
+			if(!is.na(nblocks) && (nblocks>1) && !is.null(obj$X)) {
 				blocksize <- RG$printer$nspot.r*RG$printer$nspot.c
-				nblocks <- RG$printer$ngrid.r*RG$printer$ngrid.c
 				i <- (1:(nblocks-1))*blocksize
 				ngrid.r <- sum(obj$X[i] > obj$X[i+1]) + 1
-				if(nblocks%%ngrid.r==0) {
+				if(!is.na(ngrid.r) && nblocks%%ngrid.r==0) {
 					RG$printer$ngrid.r <- ngrid.r
 					RG$printer$ngrid.c <- nblocks/ngrid.r
 				} else {
@@ -177,7 +177,6 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 				}
 			}
 		}
-		
 	}
 
 #	Other columns
