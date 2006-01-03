@@ -4,34 +4,28 @@
 \title{Normal + Exponential Log-Likelihood}
 \description{
 Marginal log-likelihood of foreground values for normal + exponential model and its derivatives.
-This function is called by \code{backgroundCorrect} and is not normally called directly by the user.
+These functions are called by \code{normexp.fit} and are not normally called directly by the user.
 }
 \usage{
-normexp.m2loglik(theta,foreground,background=0)
-normexp.grad(theta,foreground,background=0)
+normexp.m2loglik(par,x)
+normexp.grad(par,x)
 }
 \arguments{
-  \item{theta}{numeric vector of parameters}
-  \item{foreground}{numeric vector of foreground intensities}
-  \item{background}{optional vector of background intensity values}
+  \item{par}{numeric vector of parameters}
+  \item{x}{numeric vector of (background corrected) intensities}
 }
 \details{
+The parameter vector \code{par} holds the normal mean, the normal log-standard deviation and the exponential mean.
+
 Computes minus twice the log-likelihood based on the $normal(\mu,\sigma^2)+exponential(\alpha)$ convolution model for the foreground intensities.
-The last two elements of \code{theta} are $\log(\sigma)$ and $\log(\alpha)$.
-The other elements are the vector $\beta$.
-
-The vector $\beta$ is related to $\mu$ through $\mu=X\beta$ if $X=$\code{background.matrix} is non-null.
-Otherwise $\mu=\beta_1+\beta_2$\code{background} if \code{background} is non-null.
-If both \code{background} and \code{background.matrix} are null, then $\mu=\beta_1$.
-
-\code{normexp.m2loglik} is minus-twice the log-likelihood.
-\code{normexp.grad} is the gradient vector.
+The elements of \code{par} are $\mu$, $\log(\sigma)$ and $\log(\alpha)$.
 }
 \value{
-Numeric scalar giving minus twice the log-likelihood
+\code{normexp.m2loglik} returns a numeric scalar holding minus-twice the log-likelihood.
+\code{normexp.grad} returns a numeric vector holding the derivatives with respect to the elements of \code{par}.
 }
 \author{Jeremy Silver and Gordon Smyth}
 \seealso{
-An overview of normalization and background correction functions is given in \code{\link{05.Normalization}}.
+An overview of background correction functions is given in \code{\link{04.Background}}.
 }
 \keyword{models}

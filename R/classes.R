@@ -121,6 +121,20 @@ length.RGList <- length.MAList <- length.MArrayLM <- function(x) prod(dim(x))
 dimnames.RGList <- function(x) dimnames(x$R)
 dimnames.MAList <- function(x) dimnames(x$M)
 dimnames.MArrayLM <- function(x) dimnames(x$coefficients)
+.setdimnames <- function(x, value)
+#  Dimension names for RGList-like objects
+#  Gordon Smyth
+#  17 Dec 2005.
+{
+	exprmatrices <- c("R","G","Rb","Gb","M","A","weights")
+	for (a in exprmatrices) if(!is.null(x[[a]])) dimnames(x[[a]]) <- value
+	for(a in names(x$other)) dimnames(object$other[[a]]) <- value
+	if(!is.null(x$targets)) row.names(x$targets) <- value[[2]]
+	if(!is.null(x$design)) rownames(x$design) <- value[[2]]
+	x
+}
+assign("dimnames<-.RGList",.setdimnames)
+assign("dimnames<-.MAList",.setdimnames)
 
 summary.MArrayLM <- summary.MAList <- summary.RGList <- function(object,...) summary(unclass(object))
 

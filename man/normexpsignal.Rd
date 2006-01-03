@@ -6,22 +6,23 @@ Adjust foreground intensities for observed background using Normal+Exp Model.
 This function is called by \code{backgroundCorrect} and is not normally called directly by the user.
 }
 \usage{
-normexp.signal(mu,sigma,alpha,foreground)
+normexp.signal(par, x)
 }
 \arguments{
-  \item{mu}{numeric vector giving expected values for signal}
-  \item{sigma}{numeric scalar giving standard deviation of background intensities}
-  \item{alpha}{numeric scaler giving exponential decay rate of foreground intensities}
-  \item{foreground}{numeric vector of foreground intensities}
+  \item{par}{numeric vector containing the parameters of the Normal+Exp distribution, see \code{normexp.fit}}
+  \item{x}{numeric vector of (background corrected) intensities}
 }
 \details{
-In general the vector \code{mu} is computed conditional on background at each spot.
+In general the vector \code{normmean} is computed conditional on background at each spot.
 }
 \value{
 Numeric vector containing adjusted intensities.
 }
 \author{Gordon Smyth}
 \seealso{
+\code{\link{normexp.fit}}
+
 An overview of background correction functions is given in \code{\link{04.Background}}.
 }
+\example{# See normexp.fit}
 \keyword{models}

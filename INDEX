@@ -35,6 +35,8 @@ dim.RGList              Retrieve the Dimensions of an RGList, MAList or
                         MArrayLM Object
 dimnames.RGList         Retrieve the Dimension Names of an RGList,
                         MAList or MArrayLM Object
+dnormexp                The Normal + Exponential Convolution
+                        Distribution
 duplicateCorrelation    Correlation Between Duplicates
 ebayes                  Empirical Bayes Statistics for Differential
                         Expression

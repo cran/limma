@@ -17,7 +17,7 @@ read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbos
   The default is the current working directory.}
   \item{ext}{character string giving optional extension to be added to each file name}
   \item{names}{character vector of names to be associated with each array as column name.
-  If default is the filenames, minus any common extension.}
+  Defaults to \code{removeExt(files)}.}
   \item{columns}{list with fields \code{R}, \code{G}, \code{Rb} and \code{Gb} giving the column names to be used for red and green foreground and background or, in the case of Imagene data, a list with fields \code{f} and \code{b}.  This argument is optional if \code{source} is specified, otherwise it is required.}
   \item{other.columns}{character vector of names of other columns to be read containing spot-specific information}
   \item{annotation}{character vector of names of columns containing annotation information about the probes}

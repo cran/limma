@@ -4,7 +4,7 @@ assign("[.RGList",
 function(object, i, j, ...) {
 #  Subsetting for RGList objects
 #  Gordon Smyth
-#  29 June 2003.  Last modified 6 November 2005.
+#  29 June 2003.  Last modified 22 December 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	oc <- names(object$other)
@@ -20,7 +20,11 @@ function(object, i, j, ...) {
 			object$targets <- object$targets[j,,drop=FALSE]
 			for(k in oc) object$other[[k]] <- object$other[[k]][,j,drop=FALSE]
 		}
-	else
+	else {
+		if(is.character(i)) {
+			i <- match(i,rownames(object))
+			i <- i[!is.na(i)]
+		}
 		if(missing(j)) {
 			object$R <- object$R[i,,drop=FALSE]
 			object$G <- object$G[i,,drop=FALSE]
@@ -39,6 +43,7 @@ function(object, i, j, ...) {
 			object$targets <- object$targets[j,,drop=FALSE]
 			for(k in oc) object$other[[k]] <- object$other[[k]][i,j,drop=FALSE]
 		}
+	}
 	object
 })
 
@@ -46,7 +51,7 @@ assign("[.MAList",
 function(object, i, j, ...) {
 #  Subsetting for MAList objects
 #  Gordon Smyth
-#  29 June 2003.  Last modified 6 Nov 2005.
+#  29 June 2003.  Last modified 22 Dec 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	other <- names(object$other)
@@ -64,7 +69,11 @@ function(object, i, j, ...) {
 			}
 			for(a in other) object$other[[a]] <- object$other[[a]][,j,drop=FALSE]
 		}
-	else
+	else {
+		if(is.character(i)) {
+			i <- match(i,rownames(object))
+			i <- i[!is.na(i)]
+		}
 		if(missing(j)) {
 			object$M <- object$M[i,,drop=FALSE]
 			object$A <- object$A[i,,drop=FALSE]
@@ -83,6 +92,7 @@ function(object, i, j, ...) {
 			}
 			for(a in other) object$other[[a]] <- object$other[[a]][i,j,drop=FALSE]
 		}
+	}
 	object
 })
 
@@ -90,7 +100,7 @@ assign("[.MArrayLM",
 function(object, i, j, ...) {
 #  Subsetting for MArrayLM objects
 #  Gordon Smyth
-#  26 April 2005.
+#  26 April 2005. Last modified 22 Dec 2005.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	if(!is.null(object$coefficients)) object$coefficients <- as.matrix(object$coefficients)
@@ -121,6 +131,10 @@ function(object, i, j, ...) {
 			object$var.prior <- object$var.prior[j]
 		}
 	} else {
+		if(is.character(i)) {
+			i <- match(i,rownames(object))
+			i <- i[!is.na(i)]
+		}
 		if(missing(j)) {
 			object$coefficients <- object$coefficients[i,,drop=FALSE]
 			object$stdev.unscaled <- object$stdev.unscaled[i,,drop=FALSE]

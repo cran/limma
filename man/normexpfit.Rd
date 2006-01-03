@@ -7,37 +7,35 @@ The normal part represents the background and the exponential represents the sig
 This function is called by \code{backgroundCorrect} and is not normally called directly by the user.
 }
 \usage{
-normexp.fit(foreground,background,trace=0)
+normexp.fit(x, trace=FALSE)
 }
 \arguments{
-  \item{foreground}{numeric vector of foreground intensities}
-  \item{background}{vector of background intensity values}
-  \item{trace}{integer value passed to \code{optim}. If positive then tracing information on the progress of the optimization is given.  Higher values give more information.}
+  \item{x}{numeric vector of (background corrected) intensities}
+  \item{trace}{logical, if \code{TRUE}, tracing information on the progress of the optimization is given.}
 }
 \details{
-These functions use maximum likelihood estimation to fit a model to the foreground and background intensities.
-The model is a $normal(\mu,\sigma^2)+exponential(\alpha)$ convolution model for the foreground intensities in which $\mu$ is a linear function of the background.
-\code{normexp.fit} uses a BFGS modified Newton-Raphson iteration maxmize the likelihood.
-\code{normexp.fit} assumes that $\mu$ is a constant plus the observed background.
+This function uses maximum likelihood estimation to fit a model to the foreground and background intensities.
+The model is a $normal(\mu,\sigma^2)+exponential(\alpha)$ convolution model for the background corrected intensities.
 
 This is essentially the same model which is used by \code{bg.correct.rma} in the affy package.
 The difference is that the parameters are estimated by maximum likelihood and that the estimated background is subtracted before applying the model-based background.
 }
 \value{
 A list containing the components
-  \item{beta}{numeric vector of estimated regression coefficients}
-  \item{sigma}{numeric scalar giving estimated value of $\sigma$}
-  \item{alpha}{numeric scalar giving estimated value of $\alpha$}
+  \item{par}{numeric vector giving estimated values of $\mu$, $\log(\sigma)$ and $\log\alpha$}
   \item{m2loglik}{numeric scalar giving minus twice the log-likelihood}
   \item{convergence}{integer code indicating successful convergence or otherwise of the optimization. See \code{optim}.}
 }
 \author{Jeremy Silver and Gordon Smyth}
 \seealso{
+\code{\link{normexp.signal}}
+
 An overview of background correction functions is given in \code{\link{04.Background}}.
 }
 \examples{
 f <- c(2,3,1,10,3,20,5,6)
 b <- c(2,2,2,2,2,2,2,2)
-out <- normexp.fit(f,b)
+out <- normexp.fit(f-b)
+normexp.signal(out$par, x=f-b)
 }
 \keyword{models}

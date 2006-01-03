@@ -1,12 +1,14 @@
 \name{arrayWeights}
 \alias{arrayWeights}
+\alias{arrayWeightsSimple}
 \title{Array Quality Weights}
 \description{
   Estimates relative quality weights for each array in a multi-array
   experiment with replication.
 }
 \usage{
-arrayWeights(object, design = NULL, weights = NULL, method = "genebygene", maxiter = 50, tol = 1e-15, trace=FALSE)
+arrayWeights(object, design = NULL, weights = NULL, method = "genebygene", maxiter = 50, tol = 1e-10, trace=FALSE)
+arrayWeightsSimple(object, design = NULL, maxiter = 100, tol = 1e-10, trace=FALSE)
 }
 \arguments{
  \item{object}{object of class \code{numeric}, \code{matrix}, \code{MAList}, \code{marrayNorm},
@@ -45,9 +47,11 @@ arrayWeights(object, design = NULL, weights = NULL, method = "genebygene", maxit
      \code{se.chip.coefs}. If \code{object} is an \code{exprSet}, then expression
      values will be taken from the \code{exprs} slot, but weights will not
      be computed.
+
+\code{arrayWeightsSimple} is a fast version of \code{arrayWeights} with \code{method="reml"}, no prior weights and no missing values.
 }
 \value{
-	A matrix of array weights, suitable for use in the \code{weights} argument of \code{lmFit}.
+	A vector of array weights.
  }
 \seealso{
 An overview of linear model functions in limma is given by \link{06.LinearModels}.
@@ -55,7 +59,10 @@ An overview of linear model functions in limma is given by \link{06.LinearModels
 \examples{
 \dontrun{
 array.wts <- arrayWeights(MA, design)
-fit.wts <- lmFit(MA, design, weights=array.wts)}
+w <- MA$weights
+if(is.null(w)) w <- array(1,dim(MA))
+w <- matvec(w,array.wts)
+fit.wts <- lmFit(MA, design, weights=w)}
 }
 
 \author{Matthew Ritchie}

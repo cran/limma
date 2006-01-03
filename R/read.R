@@ -132,16 +132,15 @@ getLayout2 <- function(galfile)
 readTargets <- function(file="Targets.txt",path=NULL,sep="\t",row.names=NULL,quote="\"",...)
 #	Read data frame of target information
 #	Gordon Smyth
-#	19 Oct 2003.  Last modified 19 Jan 2005.
+#	19 Oct 2003.  Last modified 17 Dec 2005.
 {
 	if(!is.null(path)) file <- file.path(path,file)
 	tab <- read.table(file,header=TRUE,as.is=TRUE,sep=sep,quote=quote,fill=TRUE,...)
 #	if(!all(c("Cy3","Cy5") %in% names(tab))) warning("File should contain columns: Cy3 and Cy5")
 	if(is.null(row.names)) {
-		if("Label" %in% names(tab)) {
-			row.names(tab) <- tab[,"Label"]
-		} else {
-			if("FileName" %in% names(tab)) row.names(tab) <- removeExt(tab[,"FileName"])
+		rn <- try(row.names(tab) <- tab$Label, silent=TRUE)
+		if(inherits(rn,"try-error")) {
+			rn <- try(row.names(tab) <- removeExt(tab$FileName), silent=TRUE)
 		}
 	} else {
 		if(row.names %in% names(tab)) row.names(tab) <- tab[,row.names]

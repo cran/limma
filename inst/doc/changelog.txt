@@ -1,3 +1,28 @@
+3 January 2006: limma 2.4.7
+
+- wtVariables() didn't work correctly when the variable names
+  contained meta characters, now fixed.
+
+2 January 2006: limma 2.4.5
+
+- All functions normexp.*() now use simpler arguments:
+  'x' instead of 'foreground' and 'background' and
+  a vector argument 'par' instead of arguments for each parameter.
+- normexp.fit() now uses a saddlepoint approximation to the normexp
+  density and reverts to the Nelder-Mead optimisation method.
+  This gives gives numerically reliable computations.
+- new functions dnormexp() and dnormexp.saddle()
+- arrayWeights() now returns a vector instead of a matrix
+- bug fixes to arrayWeights(), now faster and returns more
+  accurate weights
+- new function arrayWeightsSimple()
+- subsetting of RGList, MAList and MArrayLM objects by rownames
+  now works correctly even if not all components have rownames
+- S3 methods for dimnames<- now defined for RGList and MAList objects
+- readTargets() now checks that Labels are unique before making row.names
+- files argument of read.maimages() can now be a data.frame, assumed
+  to be the targets frame.
+
 29 November 2005: limma 2.4.4
 
 - bug fix for decideTests() which still didn't work with
