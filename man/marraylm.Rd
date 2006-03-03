@@ -18,7 +18,8 @@ Objects are normally created by \code{\link{lmFit}}.
   }
   Objects may also contain the following optional components:
   \describe{
-    \item{\code{Amean}:}{\code{numeric} vector containing the average log-intensity for each probe over all arrays}
+    \item{\code{Amean}:}{\code{numeric} vector containing the average log-intensity for each probe over all the arrays in the original linear model fit.
+    Note this vector does not change when a contrast is applied to the fit using \code{contrasts.fit}.}
     \item{\code{genes}:}{\code{data.frame} containing gene names and annotation}
     \item{\code{design}:}{design \code{matrix} of full column rank}
     \item{\code{contrasts}:}{\code{matrix} defining contrasts of coefficients for which results are desired}

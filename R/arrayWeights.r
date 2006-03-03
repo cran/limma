@@ -46,7 +46,7 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 
 	method <- match.arg(method,c("genebygene","reml"))
 	switch(method, genebygene = {  # Estimate array variances via gene-by-gene update algorithm
-		Zinfo <- 10*(1-1/narrays)*crossprod(Z, Z)
+		Zinfo <- 10*(narrays-params)/narrays*crossprod(Z, Z)
 		for(i in 1:ngenes) {
 		 	vary <- exp(Z%*%arraygammas)
 

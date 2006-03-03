@@ -26,23 +26,3 @@ write.fit <- function(fit, results=NULL, file, digits=2, adjust="none", sep="\t"
 	write.table(tab,file=file,quote=FALSE,row.names=FALSE,sep=sep)
 }
 
-as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
-#	Convert MAList object to data.frame
-#	Gordon Smyth
-#	6 April 2005.  Last modified 24 August 2005.
-{
-	x <- unclass(x)
-	if(is.null(x$coefficients)) {
-		warning("NULL coefficients, returning empty data.frame")
-		return(data.frame())
-	}
-	cn <- names(x)
-	nprobes <- NROW(x$coefficients)
-	include.comp <- cn[unlist(lapply(x,NROW))==nprobes]
-	other.comp <- setdiff(names(x),include.comp)
-	if(length(other.comp)) for (a in other.comp) x[[a]] <- NULL
-#	coef.comp <- c("coefficients","stdev.unscaled","t","p.value","lods")
-#	for (a in coef.comp) if(!is.null(x[[a]]) && NCOL(x[[a]])==1) colnames(x[[a]]) <- paste(a,colnames(x[[a]]),sep=".")
-	x <- lapply(x,drop)
-	as.data.frame(x,row.names=row.names,optional=optional)
-}

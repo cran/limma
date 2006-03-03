@@ -1,3 +1,36 @@
+3 March 2006: limma 2.4.10
+
+- limma now passes R CMD check in R 2.3.0dev
+- usage of La.chol() in replaced by chol() in lm.R
+- bug fix to topTable: separate raw and adjusted p-values (introduced 2.4.8)
+  was failing when some p-values were missing.
+- bug fix: in read.maimages(source="imagene") was confusing
+  a data.frame of file names with a targets file
+- editing and expansion of normalizeWithinArrays.Rd
+- support for ScanArray Express added to read.maimages()
+
+22 January 2006: limma 2.4.9
+
+- New example using the sma mouse.data for arrayWeights()
+- All the linear model functions now use asMatrixWeights(), so that
+  they will accept vectors of probe or array weights in place of the
+  full matrix of weights.
+- new function asMatrixWeights() which will convert vectors of probe
+  weights or array weights to a full matrix of weights.
+- new argument 'maxratio' for arrayWeightsSimple().  This causes the
+  iteration to stop when the ratio of largest to smallest weights
+  becomes large.  The default tol also changed for arrayWeightsSimple().
+
+20 January 2006: limma 2.4.8
+
+- Use of parent=NULL in new.env() removed from makeContrasts(), because
+  this use is deprecated in R 2.3.0.
+- topTable now includes separate columns for raw and adjusted p-values
+- when an MArrayLM object is subsetted, the targets frame no longer
+  subsets and the design matrix subsets only on columns. Previously
+  the design matrix was incorrectly using j to subset rows.
+- bug fix to as.data.frame.MArrayLM when row subset is of length 1
+
 3 January 2006: limma 2.4.7
 
 - wtVariables() didn't work correctly when the variable names

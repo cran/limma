@@ -27,7 +27,7 @@ The function has not been heavily used and is somewhat experimental.
   An object of class \code{anova} containing rows for between genes, between arrays, gene x array interaction, and between duplicate with array sums of squares.
   Variance components are estimated for each source of variation.
 }
-\warning{
+\note{
 This function does not give valid results in the presence of missing M-values.
 }
 \seealso{

@@ -24,5 +24,5 @@ Numeric vector containing adjusted intensities.
 
 An overview of background correction functions is given in \code{\link{04.Background}}.
 }
-\example{# See normexp.fit}
+\examples{# See normexp.fit}
 \keyword{models}

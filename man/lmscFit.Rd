@@ -41,7 +41,7 @@ library(sma)
 # Subset of data from ApoAI case study in Limma User's Guide
 data(MouseArray)
 # Avoid non-positive intensities
-RG <- backgroundCorrect(mouse.data,method="half")
+RG <- backgroundCorrect(mouse.data,method="normexp")
 MA <- normalizeWithinArrays(RG,mouse.setup)
 MA <- normalizeBetweenArrays(MA,method="Aq")
 # Randomly choose 500 genes for this example

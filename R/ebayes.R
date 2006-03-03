@@ -255,7 +255,7 @@ topTable <- function(fit,coef=1,number=10,genelist=NULL,adjust.method="BH",sort.
 toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="BH",sort.by="B",resort.by=NULL,...)
 #	Summary table of top genes
 #	Gordon Smyth
-#	21 Nov 2002. Last revised 30 Sep 2005.
+#	21 Nov 2002. Last revised 13 Jan 2006.
 {
 	if(is.null(eb)) {
 		fit$coefficients <- as.matrix(fit$coefficients)[,coef]
@@ -285,11 +285,7 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 		B=order(B,decreasing=TRUE)
 	)
 	top <- ord[1:number]
-	i <- is.na(P.Value)
-	if(any(i))
-		P.Value[!i] <- p.adjust(P.Value[!i],method=adjust.method)
-	else
-		P.Value <- p.adjust(P.Value,method=adjust.method)
+	adj.P.Value <- p.adjust(P.Value,method=adjust.method)
 	if(is.null(genelist))
 		tab <- data.frame(M=M[top])
 	else {
@@ -299,7 +295,7 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 			tab <- data.frame(genelist[top,,drop=FALSE],M=M[top])
 	}
 	if(!is.null(A)) tab <- data.frame(tab,A=A[top])
-	tab <- data.frame(tab,t=tstat[top],P.Value=P.Value[top],B=B[top])
+	tab <- data.frame(tab,t=tstat[top],P.Value=P.Value[top],adj.P.Val=adj.P.Value[top],B=B[top])
 	rownames(tab) <- as.character(1:length(M))[top]
 	if(!is.null(resort.by)) {
 		resort.by <- match.arg(resort.by,c("M","A","P","p","T","t","B"))
@@ -314,6 +310,8 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 		)
 		tab <- tab[ord,]
 	}
+#	attr(tab,"coef") <- coef
+#	attr(tab,"adjust.method") <- adjust.method
 	tab
 }
 

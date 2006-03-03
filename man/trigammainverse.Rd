@@ -20,7 +20,7 @@ Numeric vector or array \code{y} satisfying \code{trigamma(y)==x}.
 \seealso{
    \code{\link[base:Special]{trigamma}}
 }
-\warning{
+\note{
 This function does not accept a data.frame as argument although the internal function \code{trigamma} does.
 }
 \examples{

@@ -30,7 +30,7 @@ values given by \code{x} and probabilities given by \code{w/sum(w)}.
 \code{\link{median}}, \code{\link{weighted.mean}}
 }
 
-\example{
+\examples{
 ## GPA from Siegel 1994
 wt <- c(5,  5,  4,  1)/15
 x <- c(3.7,3.3,3.5,2.8)

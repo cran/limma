@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 17 Dec 2005.
+#	1 Nov 2002.  Last revised 3 Feb 2006.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -27,6 +27,13 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 			files <- sub(extregex,"",files)
 		}
 	}
+
+	source <- match.arg(source,c("generic","agilent","arrayvision","bluefuse","genepix","genepix.median","genepix.custom","imagene","quantarray","scanarrayexpress","smd.old","smd","spot","spot.close.open"))
+#	source2 is the source type with qualifications removed
+	source2 <- strsplit(source,split=".",fixed=TRUE)[[1]][1]
+	if(is.null(quote)) if(source=="agilent") quote <- "" else quote <- "\""
+	if(source2=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
+
 	if(is.data.frame(files)) {
 		targets <- files
 		files <- files$FileName
@@ -35,11 +42,6 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 	} else {
 		targets <- NULL
 	}
-
-	source <- match.arg(source,c("generic","agilent","arrayvision","bluefuse","genepix","genepix.median","genepix.custom","imagene","quantarray","smd.old","smd","spot","spot.close.open"))
-	source2 <- strsplit(source,split=".",fixed=TRUE)[[1]][1]
-	if(is.null(quote)) if(source=="agilent") quote <- "" else quote <- "\""
-	if(source2=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
 
 	slides <- as.vector(as.character(files))
 	if(!is.null(ext)) slides <- paste(slides,ext,sep=".")
@@ -56,6 +58,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 			genepix.median = list(R="F635 Median",G="F532 Median",Rb="B635 Median",Gb="B532 Median"),
 			genepix.custom = list(R="F635 Mean",G="F532 Mean",Rb="B635",Gb="B532"),
 			quantarray = list(R="ch2 Intensity",G="ch1 Intensity",Rb="ch2 Background",Gb="ch1 Background"),
+			scanarrayexpress = list(G="Ch1 Mean",Gb="Ch1 B Median",R="Ch2 Mean",Rb="Ch2 B Median"),
 			smd.old = list(G="CH1I_MEAN",Gb="CH1B_MEDIAN",R="CH2I_MEAN",Rb="CH2B_MEDIAN"),
 			smd = list(G="Ch1 Intensity (Mean)",Gb="Ch1 Background (Median)",R="Ch2 Intensity (Mean)",Rb="Ch2 Background (Median)"),
 			spot = list(R="Rmean",G="Gmean",Rb="morphR",Gb="morphG"),
@@ -73,8 +76,10 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 	
 	if(is.null(annotation)) annotation <- switch(source,
 		agilent = c("Row","Col","Start","Sequence","SwissProt","GenBank","Primate","GenPept","ProbeUID","ControlType","ProbeName","GeneName","SystematicName","Description"),
+		arrayvision = "Spot labels",
 		bluefuse = c("ROW","COL","SUBGRIDROW","SUBGRIDCOL","BLOCK","NAME","ID"),   
 		genepix=,genepix.median=,genepix.custom = c("Block","Row","Column","ID","Name"),
+		scanarrayexpress = c("Array Row","Array Column","Spot Row","Spot Column"), 	
 		smd = c("Spot","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","Locuslink ID","Name","Sequence Type","X Grid Coordinate (within sector)","Y Grid Coordinate (within sector)","Sector","Failed","Plate Number","Plate Row","Plate Column","Clone Source","Is Verified","Is Contaminated","Luid"),
 		smd.old = c("SPOT","NAME","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","SUID"),
 		NULL
@@ -100,8 +105,8 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)
 		fg <- grep(" Dens - ",cn)
 		if(length(fg) != 2) stop(paste("Cannot find foreground columns in",fullname))
-		bg <- grep("Bkgd",cn)
-		if(length(fg) != 2) stop(paste("Cannot find background columns in",fullname))
+		bg <- grep("^Bkgd$",cn)
+		if(length(bg) != 2) stop(paste("Cannot find background columns in",fullname))
 		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)

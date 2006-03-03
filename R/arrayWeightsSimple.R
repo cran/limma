@@ -1,9 +1,9 @@
-arrayWeightsSimple <- function(object,design=NULL,maxiter=100,tol=1e-10,trace=FALSE)
+arrayWeightsSimple <- function(object,design=NULL,maxiter=100,tol=1e-6,maxratio=100,trace=FALSE)
 #	Array weights by REML
 #	Assumes no spot weights
 #	Any probes with missing values are removed
 #	Gordon Smyth, 13 Dec 2005
-#	Last revised 17 Dec 2005.
+#	Last revised 22 Jan 2006.
 {
 	M <- as.matrix(object)
 	allfin <- apply(is.finite(M),1,all)
@@ -53,6 +53,7 @@ arrayWeightsSimple <- function(object,design=NULL,maxiter=100,tol=1e-10,trace=FA
 		convcrit <- ngenes/narrays*crossprod(dl1,gamstep)
 		if(trace) cat(iter,convcrit,w,"\n")
 		if(convcrit < tol) break
+		if(max(w)/min(w) > maxratio) break
 		if(iter==maxiter) {
 			warning("iteration limit reached")
 			break

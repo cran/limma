@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...) {
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 7 Nov 2005.
+#	30 June 2003.  Last modified 26 Feb 2006.
 
 	M <- NULL
 #	Method intended for MAList objects but allow unclassed lists as well
@@ -37,8 +37,10 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,we
 
 	if(is.null(design)) design <- matrix(1,ncol(M),1)
 	design <- as.matrix(design)
+	if(mode(design) != "numeric") stop("design must be a numeric matrix")
 	ne <- nonEstimable(design)
 	if(!is.null(ne)) cat("Coefficients not estimable:",paste(ne,collapse=" "),"\n")
+
 	method <- match.arg(method,c("ls","robust"))
 	if(method=="robust")
 		fit <- mrlm(M,design=design,ndups=ndups,spacing=spacing,weights=weights,...)
@@ -49,6 +51,7 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,we
 			if(missing(correlation)) stop("the correlation must be set, see duplicateCorrelation")
 			fit <- gls.series(M,design=design,ndups=ndups,spacing=spacing,block=block,correlation=correlation,weights=weights,...)
 		}
+
 	fit$method <- method
 	fit$design <- design
 	if(is(object,"MAList")) {
@@ -106,7 +109,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	18 Apr 2002. Revised 13 January 2005.
+#	18 Apr 2002. Revised 22 January 2006.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -114,8 +117,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 	design <- as.matrix(design)
 	nbeta <- ncol(design)
 	if(!is.null(weights)) {
-		weights <- as.matrix(weights)
-		if(any(dim(weights) != dim(M))) weights <- array(weights,dim(M))
+		weights <- asMatrixWeights(weights,dim(M))
 		weights[weights <= 0] <- NA
 		M[!is.finite(weights)] <- NA
 	}
@@ -198,8 +200,7 @@ mrlm <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
 	design <- as.matrix(design)
 	nbeta <- ncol(design)
 	if(!is.null(weights)) {
-		weights <- as.matrix(weights)
-		if(any(dim(weights) != dim(M))) weights <- array(weights,dim(M))
+		weights <- asMatrixWeights(weights,dim(M))
 		weights[weights <= 0] <- NA
 		M[!is.finite(weights)] <- NA
 	}
@@ -239,7 +240,7 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 #	Fit linear model for each gene to a series of microarrays.
 #	Fit is by generalized least squares allowing for correlation between duplicate spots.
 #	Gordon Smyth
-#	11 May 2002.  Last revised 21 April 2005.
+#	11 May 2002.  Last revised 22 January 2006.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -270,8 +271,7 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 	}
 	diag(cormatrix) <- 1
 	if(!is.null(weights)) {
-		weights <- as.matrix(weights)
-		if(any(dim(weights) != dim(M))) weights <- array(weights,dim(M))
+		weights <- asMatrixWeights(weights,dim(M))
 		M[weights < 1e-15 ] <- NA
 		weights[weights < 1e-15] <- NA
 	}
@@ -319,6 +319,31 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,ndups=ndups,spacing=spacing,block=block,correlation=correlation,cov.coefficients=cov.coef,pivot=QR$pivot)
 }
 
+asMatrixWeights <- function(weights,dim=NULL)
+#	Convert probe-weights or array-weights to weight matrix
+#	Gordon Smyth
+#	22 Jan 2006.
+{
+	weights <- as.matrix(weights)
+	if(is.null(dim)) return(weights)
+	if(length(dim)<2) stop("dim must be numeric vector of length 2")
+	dim <- round(dim[1:2])
+	if(any(dim<1)) stop("zero or negative dimensions not allowed")
+	dw <- dim(weights)
+#	Full matrix already
+	if(all(dw==dim)) return(weights)
+	if(min(dw)!=1) stop("weights is of unexpected shape")
+#	Row matrix of array weights
+	if(dw[2]>1 && dw[2]==dim[2]) return(matrix(weights,dim[1],dim[2],byrow=TRUE))
+	lw <- prod(dw)
+#	Probe weights
+	if(lw==1 || lw==dim[1]) return(matrix(weights,dim[1],dim[2]))
+#	Array weights
+	if(lw==dim[2]) return(matrix(weights,dim[1],dim[2],byrow=TRUE))
+#	All other cases
+	stop("weights is of unexpected size")
+}
+
 contrasts.fit <- function(fit,contrasts) {
 #	Convert coefficients and std deviations in fit object to reflect contrasts of interest
 #	Gordon Smyth
@@ -354,14 +379,14 @@ contrasts.fit <- function(fit,contrasts) {
 	}
 
 #	Contrast correlation matrix
-	R <- La.chol(fit$cov.coefficients)
+	R <- chol(fit$cov.coefficients)
 	fit$cov.coefficients <- crossprod(R %*% contrasts)
 	fit$pivot <- NULL
 
 	if(orthog)
 		fit$stdev.unscaled <- sqrt(fit$stdev.unscaled^2 %*% contrasts^2)
 	else {
-		R <- La.chol(cormatrix)
+		R <- chol(cormatrix)
 		ngenes <- NROW(fit$stdev.unscaled)
 		ncont <- NCOL(contrasts)
 		U <- matrix(1,ngenes,ncont,dimnames=list(rownames(fit$stdev.unscaled),colnames(contrasts)))
@@ -391,9 +416,9 @@ contrasts.fit <- function(fit,contrasts) {
 #	if(is.null(design) || ncoef==1 || orthog)
 #		fit$stdev.unscaled <- sqrt(fit$stdev.unscaled^2 %*% contrasts^2)
 #	else {
-#		A <- La.chol2inv(La.chol(crossprod(design)))
+#		A <- chol2inv(chol(crossprod(design)))
 #		s <- sqrt(diag(A))
-#		R <- La.chol(t(A/s)/s)
+#		R <- chol(t(A/s)/s)
 #		ngenes <- NROW(fit$stdev.unscaled)
 #		ncont <- NCOL(contrasts)
 #		U <- matrix(1,ngenes,ncont,dimnames=list(rownames(fit$stdev.unscaled),colnames(contrasts)))

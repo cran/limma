@@ -168,8 +168,30 @@ as.MAList <- function(object) {
 
 #  Gordon Smyth, 28 Oct 2004
 as.matrix.RGList <- function(x) normalizeWithinArrays(x,method="none")$M
-as.matrix.MAList <- function(x) x$M
+as.matrix.MAList <- function(x) as.matrix(x$M)
 as.matrix.MArrayLM <- function(x) x$coefficients
 as.matrix.marrayNorm <- function(x) x@maM
 as.matrix.exprSet <- function(x) x@exprs
+
+as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
+#	Convert MAList object to data.frame
+#	Gordon Smyth
+#	6 April 2005.  Last modified 13 Jan 2006.
+{
+	x <- unclass(x)
+	if(is.null(x$coefficients)) {
+		warning("NULL coefficients, returning empty data.frame")
+		return(data.frame())
+	}
+	cn <- names(x)
+	nprobes <- NROW(x$coefficients)
+	ncoef <- NCOL(x$coefficients)
+	include.comp <- cn[unlist(lapply(x,NROW))==nprobes]
+	other.comp <- setdiff(names(x),include.comp)
+	if(length(other.comp)) for (a in other.comp) x[[a]] <- NULL
+#	coef.comp <- c("coefficients","stdev.unscaled","t","p.value","lods")
+#	for (a in coef.comp) if(!is.null(x[[a]]) && NCOL(x[[a]])==1) colnames(x[[a]]) <- paste(a,colnames(x[[a]]),sep=".")
+	if(ncoef==1) x <- lapply(x,drop)
+	as.data.frame(x,row.names=row.names,optional=optional)
+}
 

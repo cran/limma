@@ -65,7 +65,7 @@ function(object, i, j, ...) {
 			object$targets <- object$targets[j,,drop=FALSE]
 			if(!is.null(object$design)) {
 				object$design <- as.matrix(object$design)[j,,drop=FALSE]
-				if(!is.fullrank(object$design)) warning("design matrix is singular",call.=FALSE)
+				if(!is.fullrank(object$design)) warning("subsetted design matrix is singular",call.=FALSE)
 			}
 			for(a in other) object$other[[a]] <- object$other[[a]][,j,drop=FALSE]
 		}
@@ -88,7 +88,7 @@ function(object, i, j, ...) {
 			object$targets <- object$targets[j,,drop=FALSE]
 			if(!is.null(object$design)) {
 				object$design <- as.matrix(object$design)[j,,drop=FALSE]
-				if(!is.fullrank(object$design)) warning("design matrix is singular",call.=FALSE)
+				if(!is.fullrank(object$design)) warning("subsetted design matrix is singular",call.=FALSE)
 			}
 			for(a in other) object$other[[a]] <- object$other[[a]][i,j,drop=FALSE]
 		}
@@ -100,7 +100,9 @@ assign("[.MArrayLM",
 function(object, i, j, ...) {
 #  Subsetting for MArrayLM objects
 #  Gordon Smyth
-#  26 April 2005. Last modified 22 Dec 2005.
+#  26 April 2005. Last modified 13 Jan 2006.
+
+#  Should the design matrix be subsetted if found in the object?  At the moment it is.
 
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	if(!is.null(object$coefficients)) object$coefficients <- as.matrix(object$coefficients)
@@ -122,12 +124,8 @@ function(object, i, j, ...) {
 			object$weights <- object$weights[,j,drop=FALSE]
 			object$p.value <- object$p.value[,j,drop=FALSE]
 			object$lods <- object$lods[,j,drop=FALSE]
-			object$targets <- object$targets[j,,drop=FALSE]
 			object$cov.coefficients <- object$cov.coefficients[j,j,drop=FALSE]
-			if(!is.null(object$design)) {
-				object$design <- as.matrix(object$design)[j,,drop=FALSE]
-				if(!is.fullrank(object$design)) warning("design matrix is singular",call.=FALSE)
-			}
+			object$design <- object$design[,j,drop=FALSE]
 			object$var.prior <- object$var.prior[j]
 		}
 	} else {
@@ -151,12 +149,8 @@ function(object, i, j, ...) {
 			object$p.value <- object$p.value[i,j,drop=FALSE]
 			object$lods <- object$lods[i,j,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
-			object$targets <- object$targets[j,,drop=FALSE]
 			object$cov.coefficients <- object$cov.coefficients[j,j,drop=FALSE]
-			if(!is.null(object$design)) {
-				object$design <- as.matrix(object$design)[j,,drop=FALSE]
-				if(!is.fullrank(object$design)) warning("design matrix is singular",call.=FALSE)
-			}
+			object$design <- object$design[,j,drop=FALSE]
 			object$var.prior <- object$var.prior[j]
 		}
 		object$df.residual <- object$df.residual[i]

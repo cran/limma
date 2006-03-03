@@ -32,14 +32,18 @@ Normalization is intended to remove from the expression measures any systematic 
 
 This function normalizes M-values (log-ratios) for dye-bias within each array.
 Apart from \code{method="none"} and \code{method="median"}, all the normalization methods make use of the relationship between dye-bias and intensity.
-The loess normalization methods were proposed by Yang et al (2001, 2002).
-Smyth and Speed (2003) give a detailed statement of the methods.
+Method \code{"none"} computes M-values and A-values but does no normalization.
+Method \code{"median"} subtracts the weighted median from the M-values for each array.
+
+The loess normalization methods (\code{"loess"}, \code{"printtiploess"} and \code{"composite"}) were proposed by Yang et al (2001, 2002).
+Smyth and Speed (2003) review these methods and describe how the methods are implemented in the limma package, including choices of tuning parameters.
+More information on the loess control parameters \code{span} and \code{iterations} can be found under \code{\link{loessFit}}.
+The default values used here are equivalent to those for the older function \code{stat.ma} in the sma package.
+
 The \code{"control"} method fits a global loess curve through a set of control spots, such as a whole-library titration series, and applies that curve to all the other spots.
 
-More information on the loess control parameters \code{span} and \code{iterations} can be found under \code{\link{loessFit}}.
-The default values given here are equivalent to those for the older function \code{stat.ma} in the SMA package.
-
 The \code{"robustspline"} method calls \code{\link{normalizeRobustSpline}}.
+See that function for more documentation.
 
 \code{MA.RG} converts an unlogged \code{RGList} object into an \code{MAList} object.
 \code{MA.RG(object)} is equivalent to \code{normalizeWithinArrays(object,method="none")}.
@@ -58,13 +62,19 @@ Yang, Y. H., Dudoit, S., Luu, P., and Speed, T. P. (2001). Normalization for cDN
 
 Yang, Y. H., Dudoit, S., Luu, P., Lin, D. M., Peng, V., Ngai, J., and Speed, T. P. (2002). Normalization for cDNA microarray data: a robust composite method addressing single and multiple slide systematic variation. \emph{Nucleic Acids Research} \bold{30}(4):e15.
 
-Smyth, G. K., and Speed, T. P. (2003). Normalization of cDNA microarray data. In: \emph{METHODS: Selecting Candidate Genes from DNA Array Screens: Application to Neuroscience}, D. Carter (ed.). Methods Volume 31, Issue 4, December 2003, pages 265-273.
+Smyth, G. K., and Speed, T. P. (2003). Normalization of cDNA microarray data. \emph{Methods} \bold{31}, 265-273.
 }
 
 \seealso{
-An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
+An overview of limma functions for normalization is given in \link{05.Normalization}.
+In particular, see \code{\link{normalizeBetweenArrays}} for between-array normalization.
 
-See also \code{\link{normalizeBetweenArrays}} and \code{\link[marrayNorm]{maNorm}} in the marrayNorm package.
+The original loess normalization function was the \code{\link[sma]{statma}} funtion in the sma package.
+\code{normalizeWithinArrays} is a direct generalization of that function, with more options and with support for quantitative spot quality weights.
+
+A different implementation of loess normalization methods is provided by the \code{\link[marray]{maNorm}} in the marray package.
+
+An alternative wrapper for loess normalization, using different data classes but calling the limma functions, is provided by the \code{\link[arrayMagic]{normalise}} function in the arrayMagic package.
 }
 
 \examples{
