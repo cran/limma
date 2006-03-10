@@ -114,7 +114,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="", colClasses=colClasses, ...)
 		nspots <- nrow(obj)
 	}, bluefuse = {
-		skip <- readBlueFuseHeader(fullname)$NHeaderRecords
+		skip <- readGenericHeader(fullname,columns=c(columns$G,columns$R))$NHeaderRecords
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)

@@ -1,3 +1,6 @@
+- because of a change in the format of BlueFuse image analysis output files,
+  readBlueFuseHeader() is removed and replaced by readGenericHeader().
+
 3 March 2006: limma 2.4.10
 
 - limma now passes R CMD check in R 2.3.0dev
