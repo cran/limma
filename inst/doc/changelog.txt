@@ -1,5 +1,16 @@
-- because of a change in the format of BlueFuse image analysis output files,
-  readBlueFuseHeader() is removed and replaced by readGenericHeader().
+5 April 2006: limma 2.4.12
+
+- Non-user-visible change to the way that dimnames<-.RGList and
+  dimnames<-.MAList are assigned, so as to pass RCMD check in R2.3.
+- new function plotFB()
+- read.maimages() no longer tries to guess ndups for GenePix data
+  (was found to be unreliable for small boutique arrays).
+
+10 March 2006: limma 2.4.11
+
+- Now reads BlueFuse v3.2 image analysis output files correctly.
+  The old function readBlueFuseHeader() is removed and replaced by
+  readGenericHeader().
 
 3 March 2006: limma 2.4.10
 
@@ -130,7 +141,7 @@
 - read.maimages(souce="genepix.custom",verbose=TRUE) outputs background
   correction method again.
 - calls to statmod:randomizedBlockFit changed to statmod:mixedModel2Fit
-- deprectated function dupcor.series() removed
+- deprecated function dupcor.series() removed
 
 19 October 2005: limma 2.3.2
 

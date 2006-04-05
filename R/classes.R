@@ -133,8 +133,10 @@ dimnames.MArrayLM <- function(x) dimnames(x$coefficients)
 	if(!is.null(x$design)) rownames(x$design) <- value[[2]]
 	x
 }
-assign("dimnames<-.RGList",.setdimnames)
-assign("dimnames<-.MAList",.setdimnames)
+#assign("dimnames<-.RGList",.setdimnames)
+#assign("dimnames<-.MAList",.setdimnames)
+"dimnames<-.RGList" <- .setdimnames
+"dimnames<-.MAList" <- .setdimnames
 
 summary.MArrayLM <- summary.MAList <- summary.RGList <- function(object,...) summary(unclass(object))
 

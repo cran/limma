@@ -3,7 +3,7 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 #	Imagene requires special treatment because red and green channel
 #	intensities are in different files.
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 18 September 2005.
+#	14 Aug 2003.  Last modified 30 March 2006.
 
 	if(is.null(dim(files))) {
 		if(length(files)%%2==0)
@@ -18,7 +18,7 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 	narrays <- nrow(files)
 	if(is.null(columns)) columns <- list(f="Signal Mean",b="Background Median")
 	if(is.null(columns$f) || is.null(columns$b)) stop("'columns' should have components 'f' and 'b'")
-	if(is.null(names)) names <- removeExt(files[,1])
+	if(is.null(names)) names <- paste(removeExt(files[,1]),removeExt(files[,2]),sep=".")
 
 #	Read header information from first file to get nspots
 	fullname <- files[1,1]
