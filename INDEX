@@ -18,7 +18,9 @@ as.data.frame.MArrayLM
                         Dataframe
 as.MAList               Convert marrayNorm Object to an MAList Object
 as.matrix.RGList        Turn a Microarray Data Object into a Matrix
+asMatrixWeights         asMatrixWeights
 auROC                   Area Under Receiver Operating Curve
+avedups                 Average Over Duplicate Spots
 backgroundCorrect       Correct Intensities for Background
 blockDiag               Block Diagonal Matrix
 bwss                    Between and within sums of squares
@@ -99,6 +101,7 @@ normexp.m2loglik        Normal + Exponential Log-Likelihood
 normexp.signal          Expected Signal Given Observed Foreground Under
                         Normal+Exp Model
 plotDensities           Individual-channel Densities Plot
+plotFB                  FB-Plot
 plotMA                  MA-Plot
 plotMA3by2              Write MA-Plots to Files
 plotPrintTipLoess       MA Plots by Print-Tip Group
@@ -112,9 +115,9 @@ QualityWeights          Spot Quality Weights
 read.maimages           Read RGList from Image Analysis Output Files
 read.matrix             Read Matrix with Headers from File
 read.series             Read series of image files
-readBlueFuseHeader      Read Header Information from Image Analysis Raw
-                        Data File
 readGAL                 Read a GAL file
+readGenericHeader       Read Header Information from Image Analysis Raw
+                        Data File
 readImaGeneHeader       Read ImaGene Header Information
 readSpotTypes           Read Spot Types File
 readTargets             Read Targets File

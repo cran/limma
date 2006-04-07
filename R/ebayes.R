@@ -127,7 +127,7 @@ fitFDist <- function(x,df1) {
 #	Moment estimation of the parameters of a scaled F-distribution
 #	The first degrees of freedom is given
 #	Gordon Smyth
-#	8 Sept 2002.  Last revised 10 October 2005.
+#	8 Sept 2002.  Last revised 6 April 2006.
 
 #	Remove missing or infinite values and zero degrees of freedom
 	o <- is.finite(x) & is.finite(df1) & (x >= 0) & (df1 > 0)
@@ -146,7 +146,7 @@ fitFDist <- function(x,df1) {
 	} else {
 		if(any(x==0)) warning("Zero sample variances detected, have been offset",call.=FALSE)
 	}
-	x <- x + 1e-3 * median(x)
+	x <- pmax(x, 1e-5 * median(x))
 
 #	Better to work on with log(F)
 	z <- log(x)

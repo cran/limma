@@ -17,7 +17,7 @@ Retrieve the dimension names of a microarray data object.
   \item{value}{a possible value for \code{dimnames(x)}: see \code{\link{dimnames}}}
 }
 \details{
-The dimensionnames of an microarray object are the same as those of the most important matrix component of that object.
+The dimension names of a microarray object are the same as those of the most important matrix component of that object.
 
 A consequence is that \code{rownames} and \code{colnames} will work as expected.
 }

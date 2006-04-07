@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 30 Mar 2006.
+#	1 Nov 2002.  Last revised 5 April 2006.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -137,12 +137,9 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
 		nspots <- nrow(obj)
 	}, {
-		skip <- grep(protectMetachar(columns$R),readLines(fullname,n=80)) - 1
-		if(length(skip)==0)
-			stop("Cannot find column heading in image output file")
-		else
-			skip <- skip[1]
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
+		hout <- readGenericHeader(fullname,columns=columns)
+		skip <- hout$NHeaderRecords
+		allcnames <- hout$ColumnNames
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
@@ -229,7 +226,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
                }, smd = {
                    skip <- readSMDHeader(fullname)$NHeaderRecords
                }, {
-                   skip <- grep(protectMetachar(columns$R), readLines(fullname, n = 80)) -1
+                   skip <- readGenericHeader(fullname,columns=columns)$NHeaderRecords
                })
 			if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
 			allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)

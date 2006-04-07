@@ -1,3 +1,16 @@
+7 April 2006: limma 2.4.13
+
+- changes to the argument list and defaults for geneSetTest()
+  to make it more intuitive.
+- in fitFDist(), the bounding of standard deviations away from
+  zero now uses a smaller bound.
+- new generic function avedups(), with methods for default
+  and MAList object.
+- read.maimages() now uses readGenericHeader() to get skip and
+  column names for generic source files.
+- readGenericHeader() now uses protectMetachar() so that special
+  characters can be used in column headings.
+
 5 April 2006: limma 2.4.12
 
 - Non-user-visible change to the way that dimnames<-.RGList and

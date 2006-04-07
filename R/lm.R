@@ -76,35 +76,6 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,we
 	new("MArrayLM",fit)
 }
 
-unwrapdups <- function(M,ndups=2,spacing=1) {
-#	Unwrap M matrix for a series of experiments so that all spots for a given gene are in one row
-#	Gordon Smyth
-#	18 Jan 2002. Last revised 2 Nov 2002.
-
-	if(ndups==1) return(M)
-	M <- as.matrix(M)
-	nspots <- dim(M)[1]
-	nslides <- dim(M)[2]
-	ngroups <- nspots / ndups / spacing
-	dim(M) <- c(spacing,ndups,ngroups,nslides)
-	M <- aperm(M,perm=c(1,3,2,4))
-	dim(M) <- c(spacing*ngroups,ndups*nslides)
-	M
-}
-
-uniquegenelist <- function(genelist,ndups=2,spacing=1) {
-#	Eliminate entries in genelist for duplicate spots
-#	Gordon Smyth
-#	2 Nov 2002.  Last revised 10 Jan 2005
-
-	if(ndups <= 1) return(genelist)
-	i <- drop(unwrapdups(1:NROW(genelist),ndups=ndups,spacing=spacing)[,1])
-	if(is.null(dim(genelist)))
-		return(genelist[i])
-	else
-		return(genelist[i,,drop=FALSE])
-}
-
 lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays

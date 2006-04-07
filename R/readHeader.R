@@ -6,9 +6,10 @@ readGenericHeader <- function(file,columns,sep="\t")
 #	Find line on which numeric data starts in microarray data file
 #	using only names of data columns
 #	Gordon Smyth
-#	10 March 2006.
+#	10 March 2006. Last modified 5 April 2006.
 {
-	columns <- as.character(columns)
+	if(missing(columns) || !length(columns)) stop("must specify column headings to find")
+	columns <- protectMetachar(as.character(columns))
 	if(!length(columns)) stop("column headings must be specified")
 	con <- file(file, "r")	
  	on.exit(close(con))

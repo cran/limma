@@ -1,13 +1,36 @@
 ##  GENESET.R
 
-geneSetTest <- function(selected,statistics,alternative="two.sided",nsim=10000,ranks.only=FALSE)
-#	Gene set test
+geneSetTest <- function(selected,statistics,alternative="mixed",type="auto",ranks.only=TRUE,nsim=10000)
+#	Gene set test using either Wilcox test or simulation.
 #	Gordon Smyth
-#	3 September 2004
-#	Last modified 18 Sep 2004.
+#	3 September 2004. Last modified 7 Apr 2006.
 {
-	alternative <- match.arg(alternative,c("two.sided","less","greater"))
+	alternative <- match.arg(alternative,c("mixed","either","down","up"))
+	type <- match.arg(tolower(type),c("auto","t","f"))
+	allsamesign <- all(statistics >= 0) || all(statistics <= 0)
+	if(type=="auto") {
+		if(allsamesign)
+			type <- "f"
+		else
+			type <- "t"
+	} else {
+		if(type=="t" && allsamesign) warning("statistics are all same sign, i.e., look F-like rather than t-like")
+	}
+	if(type=="f") {
+		if(alternative != "mixed") stop("Only alternative=\"mixed\" is possible with F-like statistics.")
+	}
+	if(alternative=="mixed") statistics <- abs(statistics)
+	if(alternative=="down") {
+		statistics <- -statistics
+		alternative <- "up"
+	}
 	if(ranks.only) {
+#		The test statistic is the mean rank of the selected statistics
+#		and the p-value is obtained explicitly from the Wilcox test
+		if(alternative=="either")
+			wilc.alt <- "two.sided"
+		else
+			wilc.alt <- "greater"
 		x <- y <- NULL
 		if(is.logical(selected)) {
 			x <- statistics[selected]
@@ -24,19 +47,20 @@ geneSetTest <- function(selected,statistics,alternative="two.sided",nsim=10000,r
 			x <- statistics[selected]
 			y <- statistics[!selected]
 		}
-		return(wilcox.test(x,y,alternative=alternative,conf.int=FALSE)$p.value)
+		return(wilcox.test(x,y,alternative=wilc.alt,conf.int=FALSE)$p.value)
 	} else {
+#		The test statistic is the mean of the selected statistics
+#		and the p-value is obtained by random permutation
 		ssel <- statistics[selected]
 		ssel <- ssel[!is.na(ssel)]
 		nsel <- length(ssel)
 		if(nsel==0) return(1)
 		stat <- statistics[!is.na(statistics)]
-		msel <- mean(statistics[selected],na.rm=TRUE)
-		posstat <- switch(alternative,
-			"two.sided"=abs,
-			"less"=function(x) -x,
-			"greater"=function(x) x
-		)
+		msel <- mean(ssel)
+		if(alternative=="either")
+			posstat <- abs
+		else
+			posstat <- function(x) x
 		msel <- posstat(msel)
 		ntail <- 0
 		for (i in 1:nsim) if(posstat(mean(sample(stat,nsel))) >= msel) ntail <- ntail+1
