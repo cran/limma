@@ -27,11 +27,11 @@ Numeric value in the interval [0,1] representing he estimated proportion of true
 }
 }
 \references{
-Egil Ferkingstad, Mette Langaas and Bo
-  Lindqvist (2003). Estimating the proportion of true null hypotheses, with application
-  to DNA microarray data. Preprint Statistics No. 4/2003, Department of Mathematical Sciences, Norwegian University
-  of Science and Technology.
-  \url{http://www.math.ntnu.no/~mettela/SFG/research.imf}
+Ferkingstad, E., Langaas, M., and Lindqvist, B. (2005).
+Estimating the proportion of true null hypotheses, with application
+to DNA microarray data.
+\emph{Journal of the Royal Statistical Society Series} B, 67, 555-572.
+Preprint at \url{http://www.math.ntnu.no/~mettela/SFG/research.imf}
 }
 \author{Egil Ferkingstad and Mette Langaas}
 \seealso{

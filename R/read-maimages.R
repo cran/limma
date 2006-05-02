@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 5 April 2006.
+#	1 Nov 2002.  Last revised 13 April 2006.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -187,7 +187,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 					RG$printer$ngrid.c <- nblocks/ngrid.r
 				} else {
 					warning("Can't determine number of grid rows")
-					RG$printer$ngrid.r <- RG$ngrid.c <- NA
+					RG$printer$ngrid.r <- RG$printer$ngrid.c <- NA
 				}
 			}
 		}

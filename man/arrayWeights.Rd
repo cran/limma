@@ -50,7 +50,7 @@ the slots or components in the data \code{object}.
 	A vector of array weights.
  }
 \references{
-Ritchie, M. E., Diyagama, D., Neilson, van Laar, R., J., Dobrovic, A., Holloway, A., and Smyth, G. K. (2006). Empirical array quality weights for microarray data.
+Ritchie, M. E., Diyagama, D., Neilson, van Laar, R., J., Dobrovic, A., Holloway, A., and Smyth, G. K. (2006). Empirical array quality weights for microarray data. BMC Bioinformatics. (Accepted 11 April 2006)
 }
 \seealso{
 An overview of linear model functions in limma is given by \link{06.LinearModels}.

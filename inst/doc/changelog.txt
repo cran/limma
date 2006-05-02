@@ -1,3 +1,26 @@
+3 May 2006: limma 2.7.1
+
+- bug fix to read.imagene(), which was trying to read too many
+  data rows when there were multiple ImaGene fields.
+  read.imagene() now attempts to sent printer layout for
+  ImaGene files created using GAL layout files.
+
+27 April 2006: limma 2.7.0 Bioconductor developmental version
+27 April 2006: limma 2.6.0 Bioconductor release 1.8
+
+20 April 2006: limma 2.4.15
+
+- correction in User's Guide: definition of interaction in
+  Weaver case study was incorrect.
+
+13 April 2006: limma 2.4.14
+
+- improved topTable.Rd to better explain differences between
+  toptable() and topTable().
+- read.maimages() was setting RG$ngrid.c incorrectly when source
+  ="genepix" and the meta-grid layout could not be determined.
+  Now fixed.
+
 7 April 2006: limma 2.4.13
 
 - changes to the argument list and defaults for geneSetTest()
@@ -883,7 +906,7 @@ Nov 05 2003: limma 1.3.1
 
 6 September 2003: limma 1.1.17
 
-- new backgroundCorrect options
+- new backgroundCorrect options "half", "minimum" and "movingmin"
 
 4 September 2003: limma 1.1.16
 

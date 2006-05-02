@@ -20,6 +20,9 @@ This is a quick and dirty version of \code{\link{arrayWeights}}.
 \value{
 Numeric vector of weights of length \code{ncol(fit)}.
 }
+\references{
+Ritchie, M. E., Diyagama, D., Neilson, van Laar, R., J., Dobrovic, A., Holloway, A., and Smyth, G. K. (2006). Empirical array quality weights for microarray data. BMC Bioinformatics. (Accepted 11 April 2006)
+}
 \author{Gordon Smyth}
 \seealso{
 See \link{arrayWeights}.

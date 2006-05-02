@@ -3,7 +3,7 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 #	Imagene requires special treatment because red and green channel
 #	intensities are in different files.
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 30 March 2006.
+#	14 Aug 2003.  Last modified 2 May 2006.
 
 	if(is.null(dim(files))) {
 		if(length(files)%%2==0)
@@ -27,15 +27,21 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 	if(verbose) cat("Read header information\n")
 	skip <- headers$NHeaderRecords
 	FD <- headers[["Field Dimensions"]]
-	nspots <- prod(FD)
+	nspots <- sum(apply(FD,1,prod))
 
 #	Now read data
 	Y <- matrix(0,nspots,narrays)
 	colnames(Y) <- names
 	RG <- list(R=Y,G=Y,Rb=Y,Gb=Y,Image.Program="ImaGene",Field.Dimensions=FD)
 	if(!is.null(wt.fun)) RG$weights <- Y
+	printer <- list(ngrid.r=FD[1,"Metarows"],ngrid.c=FD[1,"Metacols"],nspot.r=FD[1,"Rows"],nspot.c=FD[1,"Cols"])
 	if(nrow(FD)==1) {
-		RG$printer <- list(ngrid.r=FD[1,"Metarows"],ngrid.c=FD[1,"Metacols"],nspot.r=FD[1,"Rows"],nspot.c=FD[1,"Cols"])
+		RG$printer <- printer
+	} else {
+		printer$ngrid.r <- sum(FD[,"Metarows"])
+		if(	all(printer$ngrid.c==FD[,"Metacols"]) &&
+			all(printer$nspot.r==FD[,"Rows"]) &&
+			all(printer$nspot.c==FD[,"Cols"]) ) RG$printer <- printer
 	}
 	for (i in 1:narrays) {
 		fullname <- files[i,1]
