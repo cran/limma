@@ -1,4 +1,9 @@
-3 May 2006: limma 2.7.1
+5 May 2006: limma 2.7.2 (and 2.6.2)
+
+- fix to plotMA3by2() which was not passing on the setting of
+  the zero.weights arguments to plotMA().
+
+3 May 2006: limma 2.7.1 (and 2.6.1)
 
 - bug fix to read.imagene(), which was trying to read too many
   data rows when there were multiple ImaGene fields.
