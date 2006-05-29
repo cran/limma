@@ -30,7 +30,7 @@ kooperberg <- function (RG, a = TRUE, layout=RG$printer, verbose=TRUE)
 
 .bayesianAdjustedFG <- function (RG, k, a = TRUE)
 #	Matt Ritchie
-#	18 June 2003. Last modified 18 October 2005.
+#	18 June 2003. Last modified 22 May 2006.
 {
     ngenes <- dim(RG)[1] # get number of probes
     Y <- rep(0, ngenes)
@@ -47,14 +47,14 @@ kooperberg <- function (RG, a = TRUE, layout=RG$printer, verbose=TRUE)
     Gsfg = aparams[1] * RG$other$"F532 SD"[,k]/sqrt(RG$other$"F Pixels"[,k])
     Gsbg = aparams[1] * RG$other$"B532 SD"[,k]/sqrt(RG$other$"B Pixels"[,k])
     for (i in 1:ngenes) {
-        if (RG$R[i,k] > 0) {
+        if (RG$R[i,k] > 0 & Rsbg[i] > 0) {
             RGmodel$R[i] <- .expectedBayesianAdjustedFG(fg = RG$R[i,k],
                 bg = RG$Rb[i,k], sfg = Rsfg[i], sbg = Rsbg[i])
         }
         else {
             RGmodel$R[i] <- RG$R[i,k]
         }
-        if (RG$G[i,k] > 0) {
+        if (RG$G[i,k] > 0 & Gsbg[i] > 0) {
             RGmodel$G[i] <- .expectedBayesianAdjustedFG(fg = RG$G[i,k],
                 bg = RG$Gb[i,k], sfg = Gsfg[i], sbg = Gsbg[i])
         }

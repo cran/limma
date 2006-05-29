@@ -107,6 +107,49 @@ readImaGeneHeader <- function(file)
  	out
 }
 
+# readQuantArrayHeader <- function(file)
+# #	Extracts header information from a QuantArray output file
+# #	Gordon Smyth
+# #	20 May 2006.
+# {
+# 	con <- file(file, "r")	
+#  	on.exit(close(con))
+#  	out <- list(Header=list())
+#  	iline <- 0
+#  	CompName <- character(0)
+#  	repeat {
+#  		txt <- readLines(con,n=1)
+#  		if(!length(txt)) break
+# 		iline <- iline+1
+# 		if (length(grep("^Begin",txt))) {
+# 			CompName <- c(CompName,sub("^Begin ","",txt))
+# 			out[[CompName]] <- list()
+# 		} else {
+# 			if (length(grep("^End",txt))) {
+# 				CompName <- CompName[-length(CompName)]
+# 	 			if(txt=="End Header") {
+# 	 				out <- out$Header
+# 	 				out$NHeaderRecords <- iline+1
+# 					return(out)
+# 	 			}
+# 			} else {
+# 				split <- "\t"
+# 				if(!length(grep(split,txt))) split <- ": "
+#  				txtsplit <- strsplit(txt,split=split)[[1]]
+#  				n <- length(txtsplit)
+#  				if(n>0) {
+#  					FieldName <- txtsplit[1]
+#  					if(n>1) FieldValue <- txtsplit[-1] else FieldValue <- ""
+# 					a <- c(CompName,FieldName)					
+# 					out[[a]] <- FieldValue
+# 				}
+# 			}
+# 		}
+#  	}
+#  	warning("End of file encountered before End Header")
+#  	out
+# }
+
 readSMDHeader <- function(file)
 #	Read header information from a Stanford Microarray Database (SMD) raw data file
 #	Gordon Smyth

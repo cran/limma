@@ -3,8 +3,8 @@
 \alias{arrayWeightsSimple}
 \title{Array Quality Weights}
 \description{
-  Estimates relative quality weights for each array in a multi-array
-  experiment with replication.
+Estimates relative quality weights for each array in a multi-array
+experiment.
 }
 \usage{
 arrayWeights(object, design = NULL, weights = NULL, method = "genebygene", maxiter = 50, tol = 1e-10, trace=FALSE)
@@ -31,6 +31,7 @@ arrayWeightsSimple(object, design = NULL, maxiter = 100, tol = 1e-6, maxratio = 
 The relative reliability of each array is estimated by measuring how
 well the expression values for that array follow the linear model.
 
+The method is described in Ritchie et al (2006).
 A heteroscedastic model is fitted to the expression values for 
 each gene by calling the function \code{lm.wfit}.  The dispersion model 
 is fitted to the squared residuals from the mean fit, and is set up to 
@@ -50,7 +51,7 @@ the slots or components in the data \code{object}.
 	A vector of array weights.
  }
 \references{
-Ritchie, M. E., Diyagama, D., Neilson, van Laar, R., J., Dobrovic, A., Holloway, A., and Smyth, G. K. (2006). Empirical array quality weights for microarray data. BMC Bioinformatics. (Accepted 11 April 2006)
+Ritchie, M. E., Diyagama, D., Neilson, van Laar, R., J., Dobrovic, A., Holloway, A., and Smyth, G. K. (2006). Empirical array quality weights for microarray data. BMC Bioinformatics 7, 261. \url{http://www.biomedcentral.com/1471-2105/7/261/abstract}
 }
 \seealso{
 An overview of linear model functions in limma is given by \link{06.LinearModels}.

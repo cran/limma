@@ -53,7 +53,6 @@ Improved background correction for spotted DNA microarrays.
 \dontrun{
 genepixFiles <- dir(pattern="*\\\\.gpr$") # get the names of the GenePix image analysis output files in the current directory
 RG <- read.maimages(genepixFiles, source="genepix", other.columns=c("F635 SD","B635 SD","F532 SD","B532 SD","B532 Mean","B635 Mean","F Pixels","B Pixels"))
-RG$printer <- getLayout(RG$genes)
 RGmodel <- kooperberg(RG)
 MA <- normalizeWithinArrays(RGmodel)
 }
