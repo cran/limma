@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 7 May 2006.
+#	1 Nov 2002.  Last revised 22 June 2006.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -219,8 +219,6 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
                    skip <- grep("Begin Data", firstfield)
                },  arrayvision = {
                    skip <- 1
-               }, bluefuse = {
-                   skip <- readBlueFuseHeader(fullname)$NHeaderRecords
                }, genepix = {
 				   skip <- readGPRHeader(fullname)$NHeaderRecords
                }, smd = {

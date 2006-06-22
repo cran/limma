@@ -1,3 +1,16 @@
+22 June 2006: limma 2.7.5
+
+- bug fix to read.maimages: remove mention of readBlueFuseHeader(),
+  which is no longer a function.
+- editing of RGList.Rd and MAList.Rd to improve clarity
+- improvement to normalizeQuantiles() to reduce memory requirements
+
+1 June 2006: limma 2.7.4
+
+- decideTests() now preserves probe row names
+- as.data.frame.MArrayLM now has ... argument conditionally in
+  R 2.4.0 higher to fit in with change in R base.
+
 29 May 2006: limma 2.7.3
 
 - minor bug fix to kooperberg()

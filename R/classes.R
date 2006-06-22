@@ -175,6 +175,32 @@ as.matrix.MArrayLM <- function(x) x$coefficients
 as.matrix.marrayNorm <- function(x) x@maM
 as.matrix.exprSet <- function(x) x@exprs
 
+if(getRversion() > 2.3) {
+
+as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE, ...)
+#	Convert MAList object to data.frame
+#	Gordon Smyth
+#	6 April 2005.  Last modified 13 Jan 2006.
+{
+	x <- unclass(x)
+	if(is.null(x$coefficients)) {
+		warning("NULL coefficients, returning empty data.frame")
+		return(data.frame())
+	}
+	cn <- names(x)
+	nprobes <- NROW(x$coefficients)
+	ncoef <- NCOL(x$coefficients)
+	include.comp <- cn[unlist(lapply(x,NROW))==nprobes]
+	other.comp <- setdiff(names(x),include.comp)
+	if(length(other.comp)) for (a in other.comp) x[[a]] <- NULL
+#	coef.comp <- c("coefficients","stdev.unscaled","t","p.value","lods")
+#	for (a in coef.comp) if(!is.null(x[[a]]) && NCOL(x[[a]])==1) colnames(x[[a]]) <- paste(a,colnames(x[[a]]),sep=".")
+	if(ncoef==1) x <- lapply(x,drop)
+	as.data.frame(x,row.names=row.names,optional=optional)
+}
+
+} else {
+
 as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
 #	Convert MAList object to data.frame
 #	Gordon Smyth
@@ -195,5 +221,7 @@ as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
 #	for (a in coef.comp) if(!is.null(x[[a]]) && NCOL(x[[a]])==1) colnames(x[[a]]) <- paste(a,colnames(x[[a]]),sep=".")
 	if(ncoef==1) x <- lapply(x,drop)
 	as.data.frame(x,row.names=row.names,optional=optional)
+}
+
 }
 

@@ -534,18 +534,16 @@ normalizeBetweenArrays <- function(object, method="Aquantile", targets=NULL, ...
 normalizeQuantiles <- function(A, ties=TRUE) {
 #	Normalize columns of a matrix to have the same quantiles, allowing for missing values.
 #	Gordon Smyth
-#	25 June 2002.  Last revised 5 June 2003.
+#	25 June 2002.  Last revised 8 June 2006.
 
 	n <- dim(A)
 	if(is.null(n)) return(A)
 	if(n[2]==1) return(A)
 	O <- S <- array(,n)
-	if(ties) R <- O
 	nobs <- rep(n[1],n[2])
 	i <- (0:(n[1]-1))/(n[1]-1)
 	for (j in 1:n[2]) {
 		Si <- sort(A[,j], method="quick", index.return=TRUE)
-		if(ties) R[,j] <- rank(A[,j])
 		nobsj <- length(Si$x)
 		if(nobsj < n[1]) {
 			nobs[j] <- nobsj
@@ -559,15 +557,16 @@ normalizeQuantiles <- function(A, ties=TRUE) {
 	}
 	m <- rowMeans(S)
 	for (j in 1:n[2]) {
+		if(ties) r <- rank(A[,j])
 		if(nobs[j] < n[1]) {
 			isna <- is.na(A[,j])
 			if(ties)
-				A[!isna,j] <- approx(i, m, (R[!isna,j]-1)/(nobs[j]-1), ties="ordered")$y
+				A[!isna,j] <- approx(i, m, (r[!isna]-1)/(nobs[j]-1), ties="ordered")$y
 			else
 				A[O[!isna,j],j] <- approx(i, m, (0:(nobs[j]-1))/(nobs[j]-1), ties="ordered")$y
 		} else {
 			if(ties)
-				A[,j] <- approx(i, m, (R[,j]-1)/(n[1]-1), ties="ordered")$y
+				A[,j] <- approx(i, m, (r-1)/(n[1]-1), ties="ordered")$y
 			else
 				A[O[,j],j] <- m
 		}

@@ -14,20 +14,19 @@ A simple list-based class for storing red and green channel foreground and backg
 Objects of this class contains no slots (other than \code{.Data}), but objects should contain the following list components:
 \tabular{ll}{
   \code{R}:\tab numeric matrix containing the red (cy5) foreground intensities.  Rows correspond to spots and columns to arrays.\cr
-  \code{G}:\tab numeric matrix containing the green (cy3) foreground intensities\cr
-  \code{Rb}:\tab numeric matrix containing the red (cy5) background intensities\cr
-  \code{Gb}:\tab numeric matrix containing the green (cy3) background intensities
+  \code{G}:\tab numeric matrix containing the green (cy3) foreground intensities. Rows correspond to spots and columns to arrays.
 }
 Optional components include
 \tabular{ll}{
-  \code{weights}:\tab numeric matric containing relative spot quality weights.  Should be non-negative.\cr
-  \code{printer}:\tab list containing information on the process used to print the spots on the arrays.  See \link[limma:PrintLayout]{PrintLayout}.\cr
-  \code{genes}:\tab data.frame containing information on the genes spotted on the arrays.  Should include a character column \code{Name} containing names for the genes or controls.\cr
-  \code{targets}:\tab data.frame containing information on the target RNA samples.  Should include factor or character columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.\cr
-  \code{other}:\tab list containing numeric matrices of other spot-specific information
+  \code{Rb}:\tab numeric matrix containing the red (cy5) background intensities\cr
+  \code{Gb}:\tab numeric matrix containing the green (cy3) background intensities\cr
+  \code{weights}:\tab numeric matric of same dimension as \code{R} containing relative spot quality weights.  Elements should be non-negative.\cr
+  \code{other}:\tab list containing numeric matrices of other spot-specific information.\cr
+  \code{genes}:\tab data.frame containing probe information. Should have one row for each spot. May have any number of columns.\cr
+  \code{targets}:\tab data.frame containing information on the target RNA samples.  Rows correspond to arrays.  May have any number of columns. Usually includes columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.\cr
+  \code{printer}:\tab list containing information on the process used to print the spots on the arrays.  See \link[limma:PrintLayout]{PrintLayout}.
 }
-All of the matrices should have the same dimensions.
-The row dimension of \code{targets} should match the column dimension of the matrices.
+Valid \code{RGList} objects may contain other optional components, but all probe or array information should be contained in the above components.
 }
 
 \section{Methods}{

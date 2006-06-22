@@ -23,7 +23,7 @@ setMethod("show","TestResults",function(object) {
 decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05)
 #	Accept or reject hypothesis tests across genes and contrasts
 #	Gordon Smyth
-#	17 Aug 2004. Last modified 23 November 2005.
+#	17 Aug 2004. Last modified 1 June 2006.
 {
 	if(!is(object,"MArrayLM")) stop("Need MArrayLM object")
 	if(is.null(object$t)) object <- eBayes(object)
@@ -57,7 +57,7 @@ decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05
 			BY=i/n/sum(1/(1:n))
 		)
 		results <- new("TestResults",array(0,dim(object$t)))
-		colnames(results) <- colnames(object$t)
+		dimnames(results) <- dimnames(object$coefficients)
 		if(any(sel)) results[sel,] <- classifyTestsP(object[sel,],p.value=p.value*a)
 	},nestedF={
 		if(any(is.na(object$F.p.value))) stop("nestedF method can't handle NA p-values",call.=FALSE)
@@ -72,7 +72,7 @@ decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05
 			BY=i/n/sum(1/(1:n))
 		)
 		results <- new("TestResults",array(0,dim(object$t)))
-		colnames(results) <- colnames(object$t)
+		dimnames(results) <- dimnames(object$coefficients)
 		if(any(sel)) results[sel,] <- classifyTestsF(object[sel,],p.value=p.value*a)
 	})
 	results

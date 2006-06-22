@@ -10,19 +10,20 @@ A simple list-based class for storing M-values and A-values for a batch of spott
 
 \section{Slots/List Components}{
 \code{MAList} objects can be created by \code{new("MAList",MA)} where \code{MA} is a list.
-This class contains no slots (other than \code{.Data}), but objects should contain the following list components:
+This class contains no slots (other than \code{.Data}), but objects should contain the following components:
 \tabular{ll}{
-  \code{M}:\tab numeric matrix containing the M-values or log-2 expression ratios.  Rows correspond to spots and columns to arrays.\cr
-  \code{A}:\tab numeric matrix containing the A-values or average log-2 expression values
+  \code{M}:\tab numeric matrix containing the M-values (log-2 expression ratios).  Rows correspond to spots and columns to arrays.\cr
+  \code{A}:\tab numeric matrix containing the A-values (average log-2 expression values).
 }
+Optional components include:
 \tabular{ll}{
-  \code{weights}:\tab numeric matric containing relative spot quality weights.  Should be non-negative.\cr
-  \code{printer}:\tab list containing information on the process used to print the spots on the arrays.  See \link[limma:PrintLayout]{PrintLayout}.\cr
-  \code{genes}:\tab data.frame containing information on the genes spotted on the arrays.  Should include a character column \code{Name} containing names for the genes or controls.\cr
-  \code{targets}:\tab data.frame containing information on the target RNA samples.  Should include factor or character columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.
+  \code{weights}:\tab numeric matrix of same dimensions as \code{M} containing relative spot quality weights.  Elements should be non-negative.\cr
+  \code{other}:\tab list containing numeric matrices of other spot-specific information. All matrices must have the same dimensions as \code{M}.\cr
+  \code{genes}:\tab data.frame containing probe information. Should have one row for each spot. May have any number of columns.\cr
+  \code{targets}:\tab data.frame containing information on the target RNA samples.  Rows correspond to arrays.  May have any number of columns. Usually includes columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.\cr
+  \code{printer}:\tab list containing information on the process used to print the spots on the arrays.  See \link[limma:PrintLayout]{PrintLayout}.
 }
-All of the matrices should have the same dimensions.
-The row dimension of \code{targets} should match the column dimension of the matrices.
+Valid \code{MAList} objects may contain other optional components, but all probe or array information should be contained in the above components.
 }
 
 \section{Methods}{
