@@ -60,9 +60,11 @@ backgroundCorrect <- function(RG, method="subtract", offset=0, printer=RG$printe
 	for (j in 1:ncol(RG$R)) {
 		x <- RG$G[,j]-RG$Gb[,j]
 		out <- normexp.fit(x)
+#		if(verbose) cat("G: bg.bias=",out$par[1]," bg.sd=",exp(out$par[2])," fg.mean=",exp(out$par[3]),"\n",sep="")
 		RG$G[,j] <- normexp.signal(out$par,x)
 		x <- RG$R[,j]-RG$Rb[,j]
 		out <- normexp.fit(x)
+#		if(verbose) cat("R: bg.bias=",out$par[1]," bg.log2sd=",out$par[2]," fg.mean=",exp(out$par[3]),"\n",sep="")
 		RG$R[,j] <- normexp.signal(out$par,x)
 		if(verbose) cat("Corrected array",j,"\n")
 	}},

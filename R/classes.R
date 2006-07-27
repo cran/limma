@@ -174,8 +174,10 @@ as.matrix.MAList <- function(x) as.matrix(x$M)
 as.matrix.MArrayLM <- function(x) x$coefficients
 as.matrix.marrayNorm <- function(x) x@maM
 as.matrix.exprSet <- function(x) x@exprs
+#  13 July 2006
+as.matrix.PLMset <- function(x) x@chip.coefs
 
-if(getRversion() > 2.3) {
+if(getRversion() >= "2.4.0") {
 
 as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE, ...)
 #	Convert MAList object to data.frame
@@ -224,4 +226,3 @@ as.data.frame.MArrayLM <- function(x, row.names = NULL, optional = FALSE)
 }
 
 }
-

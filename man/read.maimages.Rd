@@ -45,10 +45,10 @@ If the GPR files have been written using a custom background, you may read it us
 In the case of SPOT, two possible background estimators are supported:
 if \code{source="spot.close.open"} then background intensities are estimated from \code{morph.close.open} rather than \code{morph}.
 
-Spot quality weights may be extracted from the image analysis files using a ready-made or a user-supplied weight function \code{\link[limma:QualityWeights]{wt.fun}}.
+Spot quality weights may be extracted from the image analysis files using a weight function wt.fun.
 \code{wt.fun} may be any user-supplied function which accepts a data.frame argument and returns a vector of non-negative weights.
 The columns of the data.frame are as in the image analysis output files.
-See \code{\link{QualityWeights}} for provided weight functions.
+See \code{\link{QualityWeights}} for suggested weight functions.
 
 For Imagene image data the argument \code{files} should be a matrix with two columns.
 The first column should contain the names of the files containing green channel (cy3) data and the second column should contain names of files containing red channel (cy5) data.

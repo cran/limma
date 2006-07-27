@@ -1,3 +1,14 @@
+27 July 2006: limma 2.7.6
+
+- readImaGene() updated to allow for extraneous trailing white space
+  in the lines of the data files.
+- In geneSetTest() values "two.sided", "less" or "greater" are now
+  permitted as synonyms for "either", "down" or "up".
+- geneSetTest() now longer issues warning with type="t" and
+  all positive values for statistic.
+- new function as.matrix.PLMset. This allows lmFit() to work correctly on PLMset objects.
+- Bob case study updated in Limma User's Guide.
+
 22 June 2006: limma 2.7.5
 
 - bug fix to read.maimages: remove mention of readBlueFuseHeader(),

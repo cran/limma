@@ -3,9 +3,12 @@
 geneSetTest <- function(selected,statistics,alternative="mixed",type="auto",ranks.only=TRUE,nsim=10000)
 #	Gene set test using either Wilcox test or simulation.
 #	Gordon Smyth
-#	3 September 2004. Last modified 7 Apr 2006.
+#	3 September 2004. Last modified 21 July 2006.
 {
-	alternative <- match.arg(alternative,c("mixed","either","down","up"))
+	alternative <- match.arg(alternative,c("mixed","either","down","up","less","greater"))
+	if(alternative=="two.sided") alternative <- "either"
+	if(alternative=="less") alternative <- "down"
+	if(alternative=="greater") alternative <- "up"
 	type <- match.arg(tolower(type),c("auto","t","f"))
 	allsamesign <- all(statistics >= 0) || all(statistics <= 0)
 	if(type=="auto") {
@@ -13,12 +16,8 @@ geneSetTest <- function(selected,statistics,alternative="mixed",type="auto",rank
 			type <- "f"
 		else
 			type <- "t"
-	} else {
-		if(type=="t" && allsamesign) warning("statistics are all same sign, i.e., look F-like rather than t-like")
 	}
-	if(type=="f") {
-		if(alternative != "mixed") stop("Only alternative=\"mixed\" is possible with F-like statistics.")
-	}
+	if(type=="f" & alternative!="mixed") stop("Only alternative=\"mixed\" is possible with F-like statistics.")
 	if(alternative=="mixed") statistics <- abs(statistics)
 	if(alternative=="down") {
 		statistics <- -statistics

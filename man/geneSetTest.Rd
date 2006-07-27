@@ -10,7 +10,7 @@ geneSetTest(selected,statistics,alternative="mixed",type="auto",ranks.only=TRUE,
 \arguments{
   \item{selected}{vector specifying the elements of \code{statistic} in the test group.  This can be a vector of indices, or a logical vector of the same length as \code{statistics}, or any vector such as \code{statistic[selected]} contains the statistic values for the selected group.}
   \item{statistics}{numeric vector giving the values of the test statistic for every gene or probe in the reference set, usually every probe on the microarray.}
-  \item{alternative}{character string specifying the alternative hypothesis, must be one of \code{"mixed"} (default), \code{"either"}, \code{"up"} or \code{"down"}.}
+  \item{alternative}{character string specifying the alternative hypothesis, must be one of \code{"mixed"} (default), \code{"either"}, \code{"up"} or \code{"down"}. \code{two.sided}, \code{"greater"} and \code{"less"} are also permitted as synonyms for \code{"either"}, \code{"up"} and \code{"down"} respectively.}
   \item{type}{character string specifying whether the statistics are t-like (\code{"t"}), F-like \code{"f"} or whether the function should make an educated guess (\code{"auto"})}
   \item{ranks.only}{logical, if \code{TRUE} only the ranks of the \code{statistics} are used.} 
   \item{nsim}{number of random samples to take in computing the p-value.

@@ -20,7 +20,7 @@ Optional components include
 \tabular{ll}{
   \code{Rb}:\tab numeric matrix containing the red (cy5) background intensities\cr
   \code{Gb}:\tab numeric matrix containing the green (cy3) background intensities\cr
-  \code{weights}:\tab numeric matric of same dimension as \code{R} containing relative spot quality weights.  Elements should be non-negative.\cr
+  \code{weights}:\tab numeric matrix of same dimension as \code{R} containing relative spot quality weights.  Elements should be non-negative.\cr
   \code{other}:\tab list containing numeric matrices of other spot-specific information.\cr
   \code{genes}:\tab data.frame containing probe information. Should have one row for each spot. May have any number of columns.\cr
   \code{targets}:\tab data.frame containing information on the target RNA samples.  Rows correspond to arrays.  May have any number of columns. Usually includes columns \code{Cy3} and \code{Cy5} specifying which RNA was hybridized to each array.\cr

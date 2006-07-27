@@ -52,7 +52,7 @@ readGPRHeader <- function(file) {
 readImaGeneHeader <- function(file)
 #	Extracts header information from an Imagene analysis output file
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 18 September 2005.
+#	14 Aug 2003.  Last modified 27 July 2006.
 {
 	con <- file(file, "r")	
  	on.exit(close(con))
@@ -60,7 +60,7 @@ readImaGeneHeader <- function(file)
  	iline <- 0
  	CompName <- character(0)
  	repeat {
- 		txt <- sub("^\t+","",readLines(con,n=1))
+ 		txt <- trimWhiteSpace(readLines(con,n=1))
  		if(!length(txt)) break
 		iline <- iline+1
 		if (length(grep("^Begin",txt))) {
