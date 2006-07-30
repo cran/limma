@@ -48,6 +48,7 @@ if \code{source="spot.close.open"} then background intensities are estimated fro
 Spot quality weights may be extracted from the image analysis files using a weight function wt.fun.
 \code{wt.fun} may be any user-supplied function which accepts a data.frame argument and returns a vector of non-negative weights.
 The columns of the data.frame are as in the image analysis output files.
+There is one restriction, which is that the column names should be refered to in full form in the weight function, i.e., do not rely on name expansion for partial matches when refering to the names of the columns.
 See \code{\link{QualityWeights}} for suggested weight functions.
 
 For Imagene image data the argument \code{files} should be a matrix with two columns.

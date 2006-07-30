@@ -12,14 +12,14 @@ function(spot) {
 	approx(x,y,xout=spot[,"area"],ties="ordered")$y
 }
 
-wtflags <- function(w=0.1)
+wtflags <- function(weight=0,cutoff=0)
 #	Quality weights based on Flags from GenePix output
 #	Gordon Smyth
-#	9 March 2003.  Last revised 11 June 2003.
+#	9 March 2003.  Last revised 29 July 2006.
 
 function(gpr) {
-	flagged <- (gpr[,"Flags"] < 0)
-	w*flagged + !flagged
+	flagged <- (gpr[,"Flags"] < cutoff)
+	weight*flagged + !flagged
 }
 
 wtIgnore.Filter <- function(qta) {

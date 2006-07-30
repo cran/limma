@@ -1,6 +1,14 @@
+30 July 2006: limma 2.7.7
+
+- wtflags() has new argument cutoff.  Argument w renamed to weight.
+- new section Fitted Model Objects in User's Guide
+- table of image analysis programs added to Section 4.4 of User's Guide
+- read.imagene() now uses mean background instead of median if the auto
+  segmentation method has been set.
+
 27 July 2006: limma 2.7.6
 
-- readImaGene() updated to allow for extraneous trailing white space
+- readImaGeneHeader() updated to allow for extraneous trailing white space
   in the lines of the data files.
 - In geneSetTest() values "two.sided", "less" or "greater" are now
   permitted as synonyms for "either", "down" or "up".

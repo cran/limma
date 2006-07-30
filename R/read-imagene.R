@@ -3,7 +3,7 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 #	Imagene requires special treatment because red and green channel
 #	intensities are in different files.
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 2 May 2006.
+#	14 Aug 2003.  Last modified 29 July 2006.
 
 	if(is.null(dim(files))) {
 		if(length(files)%%2==0)
@@ -16,8 +16,6 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 	}
 	if(!is.null(ext)) files <- array(paste(files,ext,sep="."),dim(files))
 	narrays <- nrow(files)
-	if(is.null(columns)) columns <- list(f="Signal Mean",b="Background Median")
-	if(is.null(columns$f) || is.null(columns$b)) stop("'columns' should have components 'f' and 'b'")
 	if(is.null(names)) names <- paste(removeExt(files[,1]),removeExt(files[,2]),sep=".")
 
 #	Read header information from first file to get nspots
@@ -26,8 +24,20 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 	headers <- readImaGeneHeader(fullname)
 	if(verbose) cat("Read header information\n")
 	skip <- headers$NHeaderRecords
-	FD <- headers[["Field Dimensions"]]
+	FD <- headers$"Field Dimensions"
+	if(is.null(FD)) stop("Can't find Field Dimensions in ImaGene header")
 	nspots <- sum(apply(FD,1,prod))
+
+#	Set signal and background estimation method
+	if(is.null(columns)) {
+		SM <- headers$"Measurement parameters"$"Segmentation Method"
+		if(is.null(SM)) SM <- "none"
+		if(SM=="auto")
+			columns <- list(f="Signal Mean",b="Background Mean")
+		else
+			columns <- list(f="Signal Mean",b="Background Median")
+	}
+	if(is.null(columns$f) || is.null(columns$b)) stop("'columns' should have components 'f' and 'b'")
 
 #	Now read data
 	Y <- matrix(0,nspots,narrays)
