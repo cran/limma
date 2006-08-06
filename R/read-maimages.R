@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 22 June 2006.
+#	1 Nov 2002.  Last revised 3 August 2006.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -99,7 +99,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",nrows=nspots, colClasses=colClasses, ...)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,fill=TRUE,comment.char="",nrows=nspots, colClasses=colClasses,flush=TRUE,...)
 	}, arrayvision = {
 		skip <- 1
 		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)
@@ -111,14 +111,14 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="", colClasses=colClasses, ...)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,fill=TRUE,comment.char="",colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, bluefuse = {
 		skip <- readGenericHeader(fullname,columns=c(columns$G,columns$R))$NHeaderRecords
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, genepix = {
 		h <- readGPRHeader(fullname)
@@ -127,14 +127,14 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun, "X")
         debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, smd = {
 		skip <- readSMDHeader(fullname)$NHeaderRecords
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, {
 		hout <- readGenericHeader(fullname,columns=columns,sep=sep)
@@ -142,7 +142,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
         colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
         debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses, ...)
+		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	})
 
@@ -213,9 +213,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 			if(!is.null(path)) fullname <- file.path(path,fullname)
 			switch(source2,
 			   quantarray = {
-                   firstfield <- scan(fullname, what = "", sep = "\t", flush = TRUE, 
-                                      quiet = TRUE, blank.lines.skip = FALSE, multi.line = FALSE, 
-                                      allowEscapes = FALSE, nlines=100)
+                   firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE,nlines=100)
                    skip <- grep("Begin Data", firstfield)
                },  arrayvision = {
                    skip <- 1
@@ -230,7 +228,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 			allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
 			colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
 			debugVars(DEBUG)
-			obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots, colClasses=colClasses, ...)
+			obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots,colClasses=colClasses,flush=TRUE,...)
 		}
 		for (a in cnames) RG[[a]][,i] <- obj[,columns[[a]]]
 		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)

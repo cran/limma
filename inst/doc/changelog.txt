@@ -1,3 +1,16 @@
+6 August 2006: limma 2.7.9
+
+- new argument 'contrasts' for makeContrasts() which will accept a
+  character vector of contrasts.
+- the matrix produced by makeContrasts() now has named dimensions.
+
+3 August 2006: limma 2.7.8
+
+- CARMAweb reference added to User's Guide
+- In read.maimages(), flush=TRUE added to all instances of read.table().
+  This makes read.maimages() tolerant to spurious columns added to the
+  end of data lines.
+
 30 July 2006: limma 2.7.7
 
 - wtflags() has new argument cutoff.  Argument w renamed to weight.
