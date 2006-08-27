@@ -5,11 +5,12 @@
 Given a linear model fit to microarray data, compute estimated coefficients and standard errors for a given set of contrasts.
 }
 \usage{
-contrasts.fit(fit, contrasts)
+contrasts.fit(fit, contrasts=NULL, coefficients=NULL)
 }
 \arguments{
   \item{fit}{an \code{MArrayLM} object or a list object produced by the function \code{lm.series} or equivalent. Must contain components \code{coefficients} and \code{stdev.unscaled}.}
-  \item{contrasts}{numeric matrix with columns containing contrasts. May be a vector if there is only one contrast.}
+  \item{contrasts}{numeric matrix with row corresponding to coefficients in \code{fit} and columns containing contrasts. May be a vector if there is only one contrast.}
+  \item{coefficients}{vector indicating which coefficients are to be kept in the revised fit object. An alternative way to specify the \code{contrasts}.}
 }
 \value{
   An list object of the same class as \code{fit}. This is a list with components components
@@ -26,6 +27,8 @@ The coefficients, unscaled standard deviations and correlation matrix are re-cal
 The idea of this function is to fit a full-rank model using \code{lmFit} or equivalent, then use \code{contrasts.fit} to obtain coefficients and standard errors for any number of contrasts of the coefficients of the original model.
 Unlike the design matrix input to \code{lmFit}, which normally has one column for each treatment in the experiment, the matrix \code{contrasts} may have any number of columns and these are not required to be linearly independent.
 Methods of assessing differential expression, such as \code{eBayes} or \code{classifyTestsF}, can then be applied to fitted model object.
+
+The \code{coefficients} argument provides a simpler way to specify the \code{contrasts} matrix when the desired contrasts are just a subset of the original coefficients.
 
 Warning. For efficiency reasons, this function does not re-factorize the design matrix for each probe.
 A consequence is that, if the design matrix is non-orthogonal and the original fit included quality weights or missing values, then the unscaled standard deviations produced by this function are approximate rather than exact.

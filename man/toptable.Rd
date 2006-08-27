@@ -1,6 +1,7 @@
 \name{toptable}
 \alias{toptable}
 \alias{topTable}
+\alias{topTableF}
 \title{Table of Top Genes from Linear Model Fit}
 \description{
 Extract a table of the top-ranked genes from a linear model fit.
@@ -8,6 +9,7 @@ Extract a table of the top-ranked genes from a linear model fit.
 \usage{
 topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="BH",sort.by="B",resort.by=NULL)
 toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="BH",sort.by="B",resort.by=NULL,...)
+topTableF(fit,number=10,genelist=fit$genes,adjust.method="BH")
 }
 \arguments{
   \item{fit}{list containing a linear model fit produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{mrlm}.
@@ -56,6 +58,8 @@ Normally the genes appear in order of selection in the output table.
 If one wants the table to be in a different order, the \code{resort.by} argument may be used.
 For example, \code{topTable(fit, sort.by="B", resort.by="M")} selects the top genes according to log-odds of differential expression and then orders the resulting genes by log-ratio in decreasing order.
 Or \code{topTable(fit, sort.by="M", resort.by="M")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
+
+\code{topTableF} ranks genes on the basis of the moderated F-statistic rather than t-statistics.
 }
 \note{
 This is not the right function to use to create summary statistics for all the probes on an array.

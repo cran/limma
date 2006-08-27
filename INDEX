@@ -102,6 +102,7 @@ normexp.signal          Expected Signal Given Observed Foreground Under
                         Normal+Exp Model
 plotDensities           Individual-channel Densities Plot
 plotFB                  FB-Plot
+plotlines               plotlines
 plotMA                  MA-Plot
 plotMA3by2              Write MA-Plots to Files
 plotPrintTipLoess       MA Plots by Print-Tip Group

@@ -1,3 +1,15 @@
+27 August 2006: limma 2.7.10
+
+- new argument 'coefficients' for contrasts.fit(). This provides a
+  simple way to specify the contrast matrix when the contrasts are just
+  a subset of the original coefficients.
+- new function topTableF() to rank genes on the basis of F-statistics
+- normalizeWithinArrays() was incorrect with method="composite"
+  and weights=NULL, now fixed.
+- makeContrasts() now gives informative error message if
+  parameter names are not syntactically valid.
+- edit eBayes.Rd to make meaning of F-statistic clearer
+
 6 August 2006: limma 2.7.9
 
 - new argument 'contrasts' for makeContrasts() which will accept a
@@ -8,7 +20,7 @@
 
 - CARMAweb reference added to User's Guide
 - In read.maimages(), flush=TRUE added to all instances of read.table().
-  This makes read.maimages() tolerant to spurious columns added to the
+  This makes read.maimages() tolerant of spurious columns added to the
   end of data lines.
 
 30 July 2006: limma 2.7.7
@@ -589,7 +601,7 @@ Same as limma 1.9.6. Version number bumped for Bioconductor devel repository.
 
 2 September 2004: limma 1.7.5
 
-This version was first posted to CRAN as well as to Bioconductor
+This version was the first posted to CRAN as well as to Bioconductor
 
 - Now passes R CMD check under R 2.0
 - example into User's Guide of wt.fun arg of read.maimages() using multiple columns
@@ -1106,7 +1118,7 @@ Apr 26 2003: limma 1.0
 
 Apr 25 2003: limma 0.9.7
 
-The smawehi package was renamed to limma, with the tile "Linear Models
+The smawehi package was renamed to limma, with the title "Linear Models
 for Microarray Data" and became part of the Bioconductor project.
 
 11 November 2002: smawehi 0.1

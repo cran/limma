@@ -180,16 +180,27 @@ RG.MA <- function(object) {
 normalizeWithinArrays <- function(object,layout=object$printer,method="printtiploess",weights=object$weights,span=0.3,iterations=4,controlspots=NULL,df=5,robust="M",bc.method="subtract",offset=0)
 #	Within array normalization
 #	Gordon Smyth
-#	2 March 2003.  Last revised 30 September 2005.
+#	2 March 2003.  Last revised 27 August 2006.
 {
+#	Check input arguments
+#	and get non-intensity dependent methods out of the way
 	if(!is(object,"MAList")) object <- MA.RG(object,bc.method=bc.method,offset=offset)
 	choices <- c("none","median","loess","printtiploess","composite","control","robustspline")
 	method <- match.arg(method,choices)
 	if(method=="none") return(object)
 	if(is.vector(object$M)) object$M <- as.matrix(object$M)
-	if(is.vector(object$A)) object$A <- as.matrix(object$A)
-	if(is.vector(weights)) weights <- as.matrix(weights)
+	nprobes <- nrow(object$M)
 	narrays <- ncol(object$M)
+	if(!is.null(weights)) {
+		if(is.vector(weights)) weights <- as.matrix(weights)
+		if(nrow(weights) != nprobes) stop("row dimension of weights doesn't match M")
+		if(ncol(weights) != narrays) {
+			if(ncol(weights) == 1)
+				weights <- matrix(weights,narrays,nprobes)
+			else	
+				stop("col dimension of weights doesn't match M")
+		}
+	}
 	if(method=="median") {
 		if(is.null(weights))
 			for (j in 1:narrays) object$M[,j] <- object$M[,j] - median(object$M[,j],na.rm=TRUE)
@@ -197,7 +208,11 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 			for (j in 1:narrays) object$M[,j] <- object$M[,j] - weighted.median(object$M[,j],weights[,j],na.rm=TRUE)
 		return(object)
 	}
+
 #	All remaining methods use regression of M-values on A-values
+	if(is.vector(object$A)) object$A <- as.matrix(object$A)
+	if(nrow(object$A) != nprobes) stop("row dimension of A doesn't match M")
+	if(ncol(object$A) != narrays) stop("col dimension of A doesn't match M")
 	switch(method,
 		loess = {
 			for (j in 1:narrays) {
@@ -212,9 +227,8 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 			ngr <- layout$ngrid.r
 			ngc <- layout$ngrid.c
 			nspots <- layout$nspot.r * layout$nspot.c
-			nprobes <- ngr*ngc*nspots
-			if(nprobes != NROW(object$M)) stop("printer layout information does not match M row dimension")
-			if(nprobes != NROW(object$A)) stop("printer layout information does not match A row dimension")
+			nprobes2 <- ngr*ngc*nspots
+			if(nprobes2 != nprobes) stop("printer layout information does not match M row dimension")
 			for (j in 1:narrays) {
 				spots <- 1:nspots
 				for (gridr in 1:ngr)
@@ -236,7 +250,8 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 				y <- object$M[,j]
 				x <- object$A[,j]
 				w <- weights[,j]
-				f <- is.finite(y) & is.finite(x) & is.finite(w)
+				f <- is.finite(y) & is.finite(x)
+				if(!is.null(w)) f <- f & is.finite(w)
 				y[!f] <- NA
 				fit <- loess(y~x,weights=w,span=span,subset=controlspots,na.action=na.exclude,degree=0,surface="direct",family="symmetric",trace.hat="approximate",iterations=iterations)
 				alpha <- global <- y
@@ -261,11 +276,9 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 			for (j in 1:narrays) {
 				y <- object$M[,j]
 				x <- object$A[,j]
+				w <- weights[,j]
 				f <- is.finite(y) & is.finite(x)
-				if(!is.null(weights)) {
-					w <- weights[,j]
-					f <- f & is.finite(w)
-				}
+				if(!is.null(w)) f <- f & is.finite(w)
 				y[!f] <- NA
 				fit <- loess(y~x,weights=w,span=span,subset=controlspots,na.action=na.exclude,degree=1,surface="direct",family="symmetric",trace.hat="approximate",iterations=iterations)
 				y[f] <- y[f]-predict(fit,newdata=x[f])

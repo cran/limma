@@ -23,6 +23,9 @@ The parameters are usually the coefficients from a linear model fit, so the matr
 The output from this function is usually used as input to \code{\link{contrasts.fit}}.
 The contrasts can be specified either as expressions using \code{\dots} or as a character vector through \code{contrasts}.
 (Trying to specify contrasts both ways will cause an error.)
+
+The parameter names must be syntactically valid variable names in R and so, for example, must begin with a letter rather than a numeral.
+See \code{\link{make.names}} for a complete specification of what is a valid name.
 }
 
 \seealso{

@@ -12,19 +12,19 @@ MA.RG(object, bc.method="subtract", offset=0)
 RG.MA(object)
 }
 \arguments{
-  \item{object}{object of class \code{list}, \code{RGList} or \code{MAList} containing two-color microarray data}
+  \item{object}{object of class \code{list}, \code{RGList} or \code{MAList} containing red and green intensities constituting two-color microarray data.}
   \item{layout}{list specifying the dimensions of the spot matrix and the grid matrix. For details see \code{\link[limma:PrintLayout]{PrintLayout-class}}.}
   \item{method}{character string specifying the normalization method.
   Choices are \code{"none"}, \code{"median"}, \code{"loess"}, \code{"printtiploess"}, \code{"composite"}, \code{"control"} and \code{"robustspline"}.
   A partial string sufficient to uniquely identify the choice is permitted.}
-  \item{weights}{numeric matrix or vector of the same size and shape as the components of \code{object}. Will use by default weights found in \code{object} if they exist.}
+  \item{weights}{numeric matrix or vector of the same size and shape as the components of \code{object} containing spot quality weights.}
   \item{span}{numeric scalar giving the smoothing parameter for the \code{loess} fit}
   \item{iterations}{number of iterations used in loess fitting.  More iterations give a more robust fit.}
-  \item{controlspots}{numeric or logical vector specifying the subset of spots which are non-differentially expressed control spots, for use with \code{method="composite"}}
-  \item{df}{degrees of freedom for spline if \code{method="robustspline"}}
+  \item{controlspots}{numeric or logical vector specifying the subset of spots which are non-differentially-expressed control spots, for use with \code{method="composite"} or \code{method="control"}.}
+  \item{df}{degrees of freedom for spline if \code{method="robustspline"}.}
   \item{robust}{robust regression method if \code{method="robustspline"}.  Choices are \code{"M"} or \code{"MM"}.}
-  \item{bc.method}{character string specifying background correct method, see \code{\link{backgroundCorrect}} for options}
-  \item{offset}{numeric value, intensity offset used when computing log-ratios, see \code{\link{backgroundCorrect}}}
+  \item{bc.method}{character string specifying background correct method, see \code{\link{backgroundCorrect}} for options.}
+  \item{offset}{numeric value, intensity offset used when computing log-ratios, see \code{\link{backgroundCorrect}}.}
 }
 
 \details{
@@ -49,6 +49,9 @@ See that function for more documentation.
 \code{MA.RG(object)} is equivalent to \code{normalizeWithinArrays(object,method="none")}.
 
 \code{RG.MA(object)} converts back from an \code{MAList} object to a \code{RGList} object with unlogged intensities.
+
+\code{weights} is normally a matrix giving a quality weight for every spot on every array.
+If \code{weights} is instead a vector or a matrix with only one column, then the weights will be assumed to be the same for every array, i.e., the weights will be probe-specific rather than spot-specific.
 }
 \value{
 An object of class \code{\link[limma:malist]{MAList}}.
