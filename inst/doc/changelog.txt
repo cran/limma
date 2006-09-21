@@ -1,3 +1,48 @@
+21 September 2006: limma 2.7.17
+
+- new arguments for vennDiagram() to allow colors and printing of
+  multiple tests of counts on the same diagram.
+- warning about lmscFit being "experimental" removed from lmscFit.Rd
+
+14 September 2006: limma 2.7.16
+
+- improvements to lm.series, gls.series and rlm.series to better preserve
+  column names.
+- topTable() with coef=NULL now ranks genes by F-statistic for all the
+  contrasts.
+
+11 September 2006: limma 2.7.15
+
+- topTable() now accepts vector argument coef.  If length(coef)>1,
+  topTableF() is called to produce a ranking by F-statistic.
+- new arguments col and lwd for plotlines()
+
+2 September 2006: limma 2.7.14
+
+- normalizeWithinArrays() now uses asMatrixWeights() to process weights
+  arguments.  This allows to the weights to be a vector of probe weights,
+  or a vector of array weights, or a matrix of spot weights.
+- weights argument of modifyWeights() now has a default value
+
+2 September 2006: limma 2.7.13
+
+- new argument lfc for decideTests() to require a minimum fold-change
+
+30 August 2006: limma 2.7.12
+
+- subsetting for MArrayLM revised so that contrast matrix is subsetted
+  rather than design matrix.
+- revision to writefit.Rd to clarify that p-value adjustment is by
+  columns
+- bug fix to plotlines()
+
+30 August 2006: limma 2.7.11
+
+- new argument ... added to write.fit()
+- new function exprs.MA() to extract log-expression matrix from MAList
+- array2channel() previously deprecated now removed
+- new function plotlines()
+
 27 August 2006: limma 2.7.10
 
 - new argument 'coefficients' for contrasts.fit(). This provides a
@@ -744,7 +789,7 @@ This version was the first posted to CRAN as well as to Bioconductor
 19 April 2004: limma 1.6.2
 
 - new documentation entry on single channel analysis
-= new function intraspotCorrelation()
+- new function intraspotCorrelation()
 - lmsc.series() renamed to lmscFit(), now produces an MArrayLM object
 
 7 April 2004: limma 1.6.1

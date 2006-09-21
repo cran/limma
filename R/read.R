@@ -227,25 +227,6 @@ controlStatus <- function(types, genes, spottypecol="SpotType", regexpcol, verbo
 	status
 }
 
-modifyWeights <- function(weights, status, values, multipliers)
-#	Modify weights for given status values
-#	Gordon Smyth  29 Dec 2003
-{
-	weights <- as.matrix(weights)
-	status <- as.character(status)
-	values <- as.character(values)
-	multipliers <- as.numeric(multipliers)
-	if(length(status)!=nrow(weights)) stop("nrows of weights must equal length of status")
-	nvalues <- length(values)
-	if(length(multipliers)==1) multipliers <- rep(multipliers,nvalues)
-	if(nvalues!=length(multipliers)) stop("no. values doesn't match no. multipliers")
-	for (i in 1:nvalues) {
-		g <- status==values[i]
-		weights[g,] <- multipliers[i]*weights[g,]
-	}
-	weights
-}
-
 read.matrix <- function(file,nrows=0,skip=0,...) {
 #	Read numeric matrix with headers from file
 #	Gordon Smyth

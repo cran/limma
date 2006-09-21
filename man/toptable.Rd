@@ -7,14 +7,14 @@
 Extract a table of the top-ranked genes from a linear model fit.
 }
 \usage{
-topTable(fit,coef=1,number=10,genelist=NULL,adjust.method="BH",sort.by="B",resort.by=NULL)
+topTable(fit,coef=NULL,number=10,genelist=fit$genes,adjust.method="BH",sort.by="B",resort.by=NULL)
 toptable(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="BH",sort.by="B",resort.by=NULL,...)
 topTableF(fit,number=10,genelist=fit$genes,adjust.method="BH")
 }
 \arguments{
   \item{fit}{list containing a linear model fit produced by \code{lmFit}, \code{lm.series}, \code{gls.series} or \code{mrlm}.
   For \code{topTable}, \code{fit} should be an object of class \code{MArrayLM} as produced by \code{lmFit} and \code{eBayes}.}
-  \item{coef}{column number or column name specifying which coefficient or contrast of the linear model is of interest}
+  \item{coef}{column number or column name specifying which coefficient or contrast of the linear model is of interest. Can also be a vector of column subscripts, in which case the gene ranking is by F-statistic for that set of contrasts.}
   \item{number}{how many genes to pick out}
   \item{genelist}{data frame or character vector containing gene information.
   For \code{topTable} only, this defaults to \code{fit$genes}.}
@@ -60,6 +60,8 @@ For example, \code{topTable(fit, sort.by="B", resort.by="M")} selects the top ge
 Or \code{topTable(fit, sort.by="M", resort.by="M")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
 
 \code{topTableF} ranks genes on the basis of the moderated F-statistic rather than t-statistics.
+If \code{topTable} is called with \code{coef} has length greater than 1, then the specified columns will be extracted from \code{fit} and \code{topTableF} called on the result.
+\code{topTable} with \code{coef=NULL} is the same as \code{topTableF}, unless the fitted model \code{fit} has only one column.
 }
 \note{
 This is not the right function to use to create summary statistics for all the probes on an array.

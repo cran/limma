@@ -3,7 +3,6 @@
 %\VignetteKeywords{microarray linear model}
 %\VignettePackage{limma}
 \documentclass[12pt]{article}
-\usepackage{Sweave}
 
 \textwidth=6.2in
 \textheight=8.5in

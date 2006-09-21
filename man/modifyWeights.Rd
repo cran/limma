@@ -5,7 +5,7 @@
 Modify weights matrix for given gene status values.
 }
 \usage{
-modifyWeights(weights, status, values, multipliers)
+modifyWeights(weights=rep(1,length(status)), status, values, multipliers)
 }
 \arguments{
   \item{weights}{numeric matrix of relative weights, rows corresponding to genes and columns to arrays}

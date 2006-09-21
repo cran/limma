@@ -180,7 +180,7 @@ RG.MA <- function(object) {
 normalizeWithinArrays <- function(object,layout=object$printer,method="printtiploess",weights=object$weights,span=0.3,iterations=4,controlspots=NULL,df=5,robust="M",bc.method="subtract",offset=0)
 #	Within array normalization
 #	Gordon Smyth
-#	2 March 2003.  Last revised 27 August 2006.
+#	2 March 2003.  Last revised 2 September 2006.
 {
 #	Check input arguments
 #	and get non-intensity dependent methods out of the way
@@ -191,16 +191,7 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 	if(is.vector(object$M)) object$M <- as.matrix(object$M)
 	nprobes <- nrow(object$M)
 	narrays <- ncol(object$M)
-	if(!is.null(weights)) {
-		if(is.vector(weights)) weights <- as.matrix(weights)
-		if(nrow(weights) != nprobes) stop("row dimension of weights doesn't match M")
-		if(ncol(weights) != narrays) {
-			if(ncol(weights) == 1)
-				weights <- matrix(weights,narrays,nprobes)
-			else	
-				stop("col dimension of weights doesn't match M")
-		}
-	}
+	if(!is.null(weights)) weights <- asMatrixWeights(weights,dim=c(nprobes,narrays))
 	if(method=="median") {
 		if(is.null(weights))
 			for (j in 1:narrays) object$M[,j] <- object$M[,j] - median(object$M[,j],na.rm=TRUE)

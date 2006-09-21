@@ -1,9 +1,9 @@
 #  OUTPUT
 
-write.fit <- function(fit, results=NULL, file, digits=2, adjust="none", sep="\t") {
+write.fit <- function(fit, results=NULL, file, digits=2, adjust="none", sep="\t", ...) {
 #	Write an MArrayLM fit to a file
 #	Gordon Smyth
-#	14 Nov 2003.  Last modified 24 August 2005.
+#	14 Nov 2003.  Last modified 30 August 2006.
 
 	if(!is(fit, "MArrayLM")) stop("fit should be an MArrayLM object")
 	if(!is.null(results) && !is(results,"TestResults")) stop("results should be a TestResults object")
@@ -23,6 +23,6 @@ write.fit <- function(fit, results=NULL, file, digits=2, adjust="none", sep="\t"
 	tab$Res <- unclass(results)
 	tab$Genes <- fit$genes
 	tab <- data.frame(tab,check.names=FALSE)
-	write.table(tab,file=file,quote=FALSE,row.names=FALSE,sep=sep)
+	write.table(tab,file=file,quote=FALSE,row.names=FALSE,sep=sep,...)
 }
 

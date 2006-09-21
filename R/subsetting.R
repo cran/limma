@@ -97,13 +97,11 @@ function(object, i, j, ...) {
 })
 
 assign("[.MArrayLM",
-function(object, i, j, ...) {
+function(object, i, j, ...)
 #  Subsetting for MArrayLM objects
 #  Gordon Smyth
-#  26 April 2005. Last modified 13 Jan 2006.
-
-#  Should the design matrix be subsetted if found in the object?  At the moment it is.
-
+#  26 April 2005. Last modified 30 August 2006.
+{
 	if(nargs() != 3) stop("Two subscripts required",call.=FALSE)
 	if(!is.null(object$coefficients)) object$coefficients <- as.matrix(object$coefficients)
 	if(!is.null(object$stdev.unscaled)) object$stdev.unscaled <- as.matrix(object$stdev.unscaled)
@@ -112,7 +110,11 @@ function(object, i, j, ...) {
 	if(!is.null(object$lods)) object$lods <- as.matrix(object$lods)
 	if(!is.null(object$targets)) object$targets <- as.data.frame(object$targets)
 	if(!is.null(object$cov.coefficients)) object$cov.coefficients <- as.matrix(object$cov.coefficients)
-	if(!is.null(object$design)) object$design <- as.matrix(object$design)
+	if(!is.null(object$contrasts)) object$contrasts <- as.matrix(object$contrasts)
+	if(is.null(object$contrasts) && !is.null(object$coefficients)) {
+		object$contrasts <- diag(ncol(object$coefficients))
+		rownames(object$contrasts) <- colnames(object$contrasts) <- colnames(object$coefficients)
+	}
 	if(!is.null(object$genes)) object$genes <- as.data.frame(object$genes)
 	if(missing(i)) {
 		if(missing(j))
@@ -125,7 +127,7 @@ function(object, i, j, ...) {
 			object$p.value <- object$p.value[,j,drop=FALSE]
 			object$lods <- object$lods[,j,drop=FALSE]
 			object$cov.coefficients <- object$cov.coefficients[j,j,drop=FALSE]
-			object$design <- object$design[,j,drop=FALSE]
+			object$contrasts <- object$contrasts[,j,drop=FALSE]
 			object$var.prior <- object$var.prior[j]
 		}
 	} else {
@@ -150,7 +152,7 @@ function(object, i, j, ...) {
 			object$lods <- object$lods[i,j,drop=FALSE]
 			object$genes <- object$genes[i,,drop=FALSE]
 			object$cov.coefficients <- object$cov.coefficients[j,j,drop=FALSE]
-			object$design <- object$design[,j,drop=FALSE]
+			object$contrasts <- object$contrasts[,j,drop=FALSE]
 			object$var.prior <- object$var.prior[j]
 		}
 		object$df.residual <- object$df.residual[i]

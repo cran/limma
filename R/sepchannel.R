@@ -139,18 +139,6 @@ targetsA2C <- function(targets,channel.codes=c(1,2),channel.columns=list(Target=
 	out[o,]
 }
 
-array2channel <- function(targets,channel.codes=c(1,2),channel.columns=list(Target=c("Cy3","Cy5")),grep=FALSE)
-#	Convert data.frame with one row for each two-color array
-#	into data.frame with one row for each channel
-#	Gordon Smyth
-#	16 March 2004.  Last modified 25 May 2004.
-{
-	.Deprecated("targetsA2C")
-	m <- match.call()
-	m[[1]] <- as.name("targetsA2C")
-	eval(m)
-}
-
 designI2M <- function(design)
 #  Convert individual channel design matrix to design matrix for log-ratios
 #  Gordon Smyth
@@ -171,3 +159,11 @@ designI2A <- function(design)
 	(diag(narrays) %x% matrix(c(0.5,0.5),1,2)) %*% design
 }
 
+exprs.MA <- function(MA)
+#	Extract matrix of log-expression data from MAList object
+#	Gordon Smyth, 29 August 2006
+{
+	y <- rbind(as.matrix(MA$A-MA$M/2),as.matrix(MA$A+MA$M/2))
+	dim(y) <- c(nrow(y)/2,ncol(y)*2)
+	y
+}

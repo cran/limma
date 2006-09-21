@@ -24,9 +24,6 @@ The input correlation is usually estimated using \code{\link{intraspotCorrelatio
 
 Missing values in \code{M} or \code{A} are not allowed.
 }
-\section{Warning}{
-The single channel functions are still somewhat experimental.
-}
 \author{Gordon Smyth}
 \seealso{
 \code{\link[stats:lmfit]{lm.fit}}.

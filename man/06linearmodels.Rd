@@ -71,8 +71,14 @@ After the above steps the results may be displayed or further processed using:
 \item{ \code{\link{toptable}} or \code{\link{topTable}} }{
 	Presents a list of the genes most likely to be differentially expressed for a given contrast.}
 
+\item{ \code{\link{topTableF}} }{
+	Presents a list of the genes most likely to be differentially expressed for a given set of contrasts.}
+
 \item{ \code{\link{volcanoplot}}}{
 	Volcano plot of fold change versus the B-statistic for any fitted coefficient.}
+
+\item{ \code{\link{plotlines}}}{
+	Plots fitted coefficients or log-intensity values for time-course data.}
 
 \item{ \code{\link{write.fit}} }{
 	Writes an \code{MarrayLM} object to a file.

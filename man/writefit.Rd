@@ -8,7 +8,7 @@ Write a microarray linear model fit a file.
 }
 
 \usage{
-write.fit(fit, results=NULL, file, digits=2, adjust="none", sep="\t")
+write.fit(fit, results=NULL, file, digits=2, adjust="none", sep="\t", ...)
 }
 
 \arguments{
@@ -18,10 +18,14 @@ write.fit(fit, results=NULL, file, digits=2, adjust="none", sep="\t")
 \item{digits}{integer indicating precision to be used}
 \item{adjust}{character string specifying method to use to adjust the P-values for multiple testing, e.g., "holm" or "fdr". See \code{\link[ctest]{p.adjust}} for the available options. If \code{NULL} or \code{"none"} then the P-values are not adjusted.}
 \item{sep}{the field separator string. Values in the output file will be separated by this string.}
+\item{\dots}{other arguments are passed to \code{write.table}}
 }
 
 \value{
 No value is produced but a file is written to the current working directory.
+
+The p-value adjustment is done separately for each column.
+This is equivalent to \code{decideTests} with \code{method="separate"}.
 }
 
 \details{

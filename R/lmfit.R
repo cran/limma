@@ -80,13 +80,14 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	18 Apr 2002. Revised 22 January 2006.
+#	18 Apr 2002. Revised 14 September 2006.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
 	if(is.null(design)) design <- matrix(1,narrays,1)
 	design <- as.matrix(design)
 	nbeta <- ncol(design)
+	coef.names <- colnames(design)
 	if(!is.null(weights)) {
 		weights <- asMatrixWeights(weights,dim(M))
 		weights[weights <= 0] <- NA
@@ -98,7 +99,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 		if(!is.null(weights)) weights <- unwrapdups(weights,ndups=ndups,spacing=spacing)
 	}
 	ngenes <- nrow(M)
-	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta,dimnames=list(rownames(M),colnames(design)))
+	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta,dimnames=list(rownames(M),coef.names))
 	sigma <- rep(NA,ngenes)
 	df.residual <- rep(0,ngenes)
 	NoWts <- !any(is.na(M)) && is.null(weights)
@@ -111,6 +112,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 		fit$fitted.values <- fit$residuals <- fit$effects <- NULL
 		fit$coefficients <- t(fit$coefficients)
 		fit$cov.coefficients <- chol2inv(fit$qr$qr,size=fit$qr$rank)
+		dimnames(fit$cov.coefficients) <- list(coef.names,coef.names)
 		est <- fit$qr$pivot[1:fit$qr$rank]
 		stdev.unscaled[,est] <- matrix(sqrt(diag(fit$cov.coefficients)),ngenes,fit$qr$rank,byrow = TRUE)
 		fit$stdev.unscaled <- stdev.unscaled
@@ -144,6 +146,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 	}
 	QR <- qr(design)
 	cov.coef <- chol2inv(QR$qr,size=QR$rank)
+	dimnames(cov.coef) <- list(coef.names,coef.names)
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,cov.coefficients=cov.coef,pivot=QR$pivot)
 }
 
@@ -159,16 +162,16 @@ rlm.series <- function(x,...)
 }
 
 mrlm <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
-{
 #	Robustly fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	20 Mar 2002.  Last revised 19 Sept 2003.
-
+#	20 Mar 2002.  Last revised 14 Sept 2006.
+{
 	require(MASS) # need rlm.default
 	M <- as.matrix(M)
 	narrays <- ncol(M)
 	if(is.null(design)) design <- matrix(1,narrays,1)
 	design <- as.matrix(design)
+	coef.names <- colnames(design)
 	nbeta <- ncol(design)
 	if(!is.null(weights)) {
 		weights <- asMatrixWeights(weights,dim(M))
@@ -181,7 +184,7 @@ mrlm <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
 		if(!is.null(weights)) weights <- unwrapdups(weights,ndups=ndups,spacing=spacing)
 	}
 	ngenes <- nrow(M)
-	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta)
+	stdev.unscaled <- beta <- matrix(NA,ngenes,nbeta,dimnames=list(rownames(M),coef.names))
 	sigma <- rep(NA,ngenes)
 	df.residual <- rep(0,ngenes)
 	for (i in 1:ngenes) {
@@ -203,16 +206,16 @@ mrlm <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
 	}
 	QR <- qr(design)
 	cov.coef <- chol2inv(QR$qr,size=QR$rank)
+	dimnames(cov.coef) <- list(coef.names,coef.names)
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,cov.coefficients=cov.coef,pivot=QR$pivot)
 }
 
 gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NULL,weights=NULL,...)
-{
 #	Fit linear model for each gene to a series of microarrays.
 #	Fit is by generalized least squares allowing for correlation between duplicate spots.
 #	Gordon Smyth
-#	11 May 2002.  Last revised 22 January 2006.
-
+#	11 May 2002.  Last revised 14 September 2006.
+{
 	M <- as.matrix(M)
 	narrays <- ncol(M)
 	if(is.null(design)) design <- matrix(1,narrays,1)
@@ -287,32 +290,8 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 	cholV <- chol(cormatrix)
 	QR <- qr(backsolve(cholV,design,transpose=TRUE))
 	cov.coef <- chol2inv(QR$qr,size=QR$rank)
+	dimnames(cov.coef) <- list(coef.names,coef.names)
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,ndups=ndups,spacing=spacing,block=block,correlation=correlation,cov.coefficients=cov.coef,pivot=QR$pivot)
-}
-
-asMatrixWeights <- function(weights,dim=NULL)
-#	Convert probe-weights or array-weights to weight matrix
-#	Gordon Smyth
-#	22 Jan 2006.
-{
-	weights <- as.matrix(weights)
-	if(is.null(dim)) return(weights)
-	if(length(dim)<2) stop("dim must be numeric vector of length 2")
-	dim <- round(dim[1:2])
-	if(any(dim<1)) stop("zero or negative dimensions not allowed")
-	dw <- dim(weights)
-#	Full matrix already
-	if(all(dw==dim)) return(weights)
-	if(min(dw)!=1) stop("weights is of unexpected shape")
-#	Row matrix of array weights
-	if(dw[2]>1 && dw[2]==dim[2]) return(matrix(weights,dim[1],dim[2],byrow=TRUE))
-	lw <- prod(dw)
-#	Probe weights
-	if(lw==1 || lw==dim[1]) return(matrix(weights,dim[1],dim[2]))
-#	Array weights
-	if(lw==dim[2]) return(matrix(weights,dim[1],dim[2],byrow=TRUE))
-#	All other cases
-	stop("weights is of unexpected size")
 }
 
 is.fullrank <- function(x)

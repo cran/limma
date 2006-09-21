@@ -1,16 +1,22 @@
 #  TOPTABLE.R
 
-topTable <- function(fit,coef=1,number=10,genelist=NULL,adjust.method="BH",sort.by="B",resort.by=NULL)
+topTable <- function(fit,coef=NULL,number=10,genelist=fit$genes,adjust.method="BH",sort.by="B",resort.by=NULL)
 #	Summary table of top genes, object-orientated version
 #	Gordon Smyth
-#	4 August 2003.  Last modified 30 Sep 2005.
+#	4 August 2003.  Last modified 14 Sep 2006.
 {
+	if(is.null(coef)) {
+		if(ncol(fit)>1)
+			return(topTableF(fit,number=number,genelist=genelist,adjust.method=adjust.method))
+		else
+			coef=1
+	}
+	if(length(coef)>1) return(topTableF(eBayes(fit[,coef]),number=number,genelist=genelist,adjust.method=adjust.method))
 	fit <- unclass(fit)
-	if(!missing(genelist)) fit$genes <- genelist
 	toptable(fit=fit[c("coefficients","stdev.unscaled")],
 		coef=coef,
 		number=number,
-		genelist=fit$genes,
+		genelist=genelist,
 		A=fit$Amean,
 		eb=fit[c("t","p.value","lods")],
 		adjust.method=adjust.method,

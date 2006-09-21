@@ -5,7 +5,7 @@
 Turn a \code{MArrayLM} object into a \code{data.frame}.
 }
 \usage{
-\method{as.data.frame}{MArrayLM}(x, row.names = NULL, optional = FALSE)
+\method{as.data.frame}{MArrayLM}(x, row.names = NULL, optional = FALSE, ...)
 }
 \arguments{
   \item{x}{an object of class \code{MArrayLM}}
@@ -13,6 +13,7 @@ Turn a \code{MArrayLM} object into a \code{data.frame}.
           data frame.  Missing values are not allowed.}
   \item{optional}{logical. If \code{TRUE}, setting row names and converting column
           names (to syntactic names) is optional.}
+  \item{\dots}{additional arguments to be passed to or from methods.}
 }
 \details{
 This method combines all the components of \code{x} which have a row for each probe on the array into a \code{data.frame}.

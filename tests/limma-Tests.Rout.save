@@ -1,6 +1,6 @@
 
-R : Copyright 2005, The R Foundation for Statistical Computing
-Version 2.2.1  (2005-12-20 r36812)
+R version 2.4.0 alpha (2006-09-05 r39134)
+Copyright (C) 2006 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
 R is free software and comes with ABSOLUTELY NO WARRANTY.
@@ -561,6 +561,9 @@ $G
 > 
 > library(sma)
 > data(MouseArray)
+Warning message:
+file 'MouseArray.RData' has magic number 'RDX1'
+   Use of save versions prior to 2 is deprecated 
 > MA <- normalizeWithinArrays(mouse.data, mouse.setup, method="robustspline")
 Loading required package: MASS
 Loading required package: splines
@@ -758,7 +761,7 @@ Attaching package: 'statmod'
 > 
 > fit <- mrlm(M,design)
 > fit$coef
-              [,1]        [,2]
+      First3Arrays Last3Arrays
  [1,]  2.064402265  0.23453509
  [2,] -0.013040982 -0.15267834
  [3,] -0.030835828  0.01645232
@@ -770,17 +773,17 @@ Attaching package: 'statmod'
  [9,] -0.288755599  0.09843418
 [10,] -0.263591244  0.33215155
 > fit$stdev.unscaled
-           [,1]      [,2]
- [1,] 0.5773503 0.7315593
- [2,] 0.5773503 0.6511403
- [3,] 0.6269590 0.5773503
- [4,] 0.5773503 0.5773503
- [5,] 0.5773503 0.5773503
- [6,] 0.5773503 0.5773503
- [7,] 0.5773503 0.5773503
- [8,] 0.5773503 0.6527609
- [9,] 0.5773503 0.5773503
-[10,] 0.5773503 0.5773503
+      First3Arrays Last3Arrays
+ [1,]    0.5773503   0.7315593
+ [2,]    0.5773503   0.6511403
+ [3,]    0.6269590   0.5773503
+ [4,]    0.5773503   0.5773503
+ [5,]    0.5773503   0.5773503
+ [6,]    0.5773503   0.5773503
+ [7,]    0.5773503   0.5773503
+ [8,]    0.5773503   0.6527609
+ [9,]    0.5773503   0.5773503
+[10,]    0.5773503   0.5773503
 > fit$sigma
  [1] 0.0755165 0.1410025 0.3087025 0.1390960 0.3289335 0.1719261 0.4295126
  [8] 0.1197697 0.3906706 0.2267115

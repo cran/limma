@@ -7,7 +7,6 @@ Convert a two-color targets dataframe with one row per array to one with one row
 }
 \usage{
 targetsA2C(targets, channel.codes=c(1,2), channel.columns=list(Target=c("Cy3","Cy5")), grep=FALSE)
-array2channel(targets, channel.codes=c(1,2), channel.columns=list(Target=c("Cy3","Cy5")), grep=FALSE)
 }
 \arguments{
   \item{targets}{data.frame with one row per array giving information about target samples associated covariates.}
@@ -24,9 +23,6 @@ This function is used to convert the dataframe from an array-orientated format w
 In statistical terms, the first format treats the arrays as cases and treats the channels as repeated measurements.
 The second format treats the individual channel observations as cases.
 The second format may be more appropriate if the data is to be analyzed in terms of individual log-intensities.
-
-\code{array2channel} is the same as \code{targetsA2C} but is deprecated.
-It will be removed in the next major revision of the package.
 }
 \value{
 data.frame with twice as many rows as \code{targets}.
