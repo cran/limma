@@ -3,7 +3,7 @@
 read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 3 August 2006.
+#	1 Nov 2002.  Last revised 4 October 2006.
 #	Use of colClasses added by Marcus Davy, 14 October 2005.
 {
 #	For checking colClasses setup
@@ -79,6 +79,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		arrayvision = "Spot labels",
 		bluefuse = c("ROW","COL","SUBGRIDROW","SUBGRIDCOL","BLOCK","NAME","ID"),   
 		genepix=,genepix.median=,genepix.custom = c("Block","Row","Column","ID","Name"),
+		quantarray= c("Array Row","Array Column","Row","Column","Name"),
 		scanarrayexpress = c("Array Row","Array Column","Spot Row","Spot Column"), 	
 		smd = c("Spot","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","Locuslink ID","Name","Sequence Type","X Grid Coordinate (within sector)","Y Grid Coordinate (within sector)","Sector","Failed","Plate Number","Plate Row","Plate Column","Clone Source","Is Verified","Is Contaminated","Luid"),
 		smd.old = c("SPOT","NAME","Clone ID","Gene Symbol","Gene Name","Cluster ID","Accession","Preferred name","SUID"),
@@ -213,17 +214,17 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 			if(!is.null(path)) fullname <- file.path(path,fullname)
 			switch(source2,
 			   quantarray = {
-                   firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE,nlines=100)
-                   skip <- grep("Begin Data", firstfield)
-               },  arrayvision = {
-                   skip <- 1
-               }, genepix = {
-				   skip <- readGPRHeader(fullname)$NHeaderRecords
-               }, smd = {
-                   skip <- readSMDHeader(fullname)$NHeaderRecords
-               }, {
-                   skip <- readGenericHeader(fullname,columns=columns)$NHeaderRecords
-               })
+					firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE)
+					skip <- grep("Begin Data", firstfield)
+				},  arrayvision = {
+					skip <- 1
+				}, genepix = {
+					skip <- readGPRHeader(fullname)$NHeaderRecords
+				}, smd = {
+					skip <- readSMDHeader(fullname)$NHeaderRecords
+				}, {
+					skip <- readGenericHeader(fullname,columns=columns)$NHeaderRecords
+				})
 			if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
 			allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
 			colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)

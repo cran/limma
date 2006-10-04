@@ -31,7 +31,7 @@ read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbos
 \details{
 This is the main data input function for the LIMMA package.
 It extracts the foreground and background intensities from a series of files, produced by an image analysis program, and assembles them into the components of one list.
-The image analysis programs Agilent Feature Extraction, ArrayVision, BlueFuse, GenePix, ImaGene, QuantArray, Stanford Microarray Database (SMD) and SPOT are supported explicitly.
+The image analysis programs Agilent Feature Extraction, ArrayVision, BlueFuse, GenePix, ImaGene, QuantArray (Version 3 or later), Stanford Microarray Database (SMD) and SPOT are supported explicitly.
 Data from some other image analysis programs can be read if the appropriate column names containing the foreground and background intensities are specified using the \code{columns} argument.
 (This will work if the column names are unique and if there are no rows in the file after the last line of data.
 Header lines are ok.)

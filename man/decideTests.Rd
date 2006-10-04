@@ -13,14 +13,14 @@ decideTests(object,method="separate",adjust.method="BH",p.value=0.05,lfc=0)
   \item{method}{character string specify how probes and contrasts are to be combined in the multiple testing strategy.  Choices are \code{"separate"}, \code{"global"}, \code{"heirarchical"}, \code{"nestedF"} or any partial string.}
   \item{adjust.method}{character string specifying p-value adjustment method.  Possible values are \code{"none"}, \code{"BH"}, \code{"fdr"} (equivalent to \code{"BH"}), \code{"BY"} and \code{"holm"}. See \code{\link[stats]{p.adjust}} for details.}
   \item{p.value}{numeric value between 0 and 1 giving the desired size of the test}
-  \item{lfc}{minimum log-fold-change required}
+  \item{lfc}{minimum log2-fold-change required}
 }
 \value{
 An object of class \code{\link[limma:TestResults-class]{TestResults}}.
 This is essentially a numeric matrix with elements \code{-1}, \code{0} or \code{1} depending on whether each t-statistic is classified as significantly negative, not significant or significantly positive respectively.
 
 If \code{lfc>0} then contrasts are judged significant only when the log2-fold change is at least this large in absolute value.
-For example, one might choose \code{lfc=log2(1.5)} to restrict to 50% changes or \code{lfc=1} for 2-fold changes.
+For example, one might choose \code{lfc=log2(1.5)} to restrict to 50\% changes or \code{lfc=1} for 2-fold changes.
 In this case, contrasts must satisfy both the p-value and the fold-change cutoff to be judged significant.
 }
 \details{

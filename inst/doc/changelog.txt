@@ -1,3 +1,12 @@
+ 4 October 2006: limma 2.9.1
+
+- read.maimages() with source="quantarray" now sets annotation columns.
+- bug fix to read.maimages() with source="quantarray". Searching for
+  "Begin Data" in 2nd and following files read too few lines.
+- fix to unprotected "%" character in decideTests.Rd.
+
+ 4 October 2006: limma 2.9.0 (Bioconductor Developmental version)
+ 4 October 2006: limma 2.8.0 (Bioconductor Release 1.9)
 21 September 2006: limma 2.7.17
 
 - new arguments for vennDiagram() to allow colors and printing of
