@@ -59,7 +59,7 @@ anova.MAList <- function(object,design=NULL,ndups=2,...) {
 	if(!is.null(design)) {
 		d <- dim(design)
 		if(!is.null(d)) if(d[2]>1) stop("Design matrix should have only one column")
-		M <- matvec(M,design)
+		M <- .matvec(M,design)
 	}
 	bwss.array <- bwss.matrix(M)
 	nspots <- dim(M)[1]

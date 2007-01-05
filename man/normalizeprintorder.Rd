@@ -16,7 +16,7 @@ plotPrintorder(object, layout, start="topleft", slide = 1, method = "loess", sep
   \item{object}{an \code{RGList} or \code{list} object containing components \code{R} and \code{G} which are matrices containing the red and green channel intensities for a series of arrays}
   \item{R}{numeric vector containing red channel intensities for a single microarray}
   \item{G}{numeric vector containing the green channel intensities for a single microarray}
-  \item{layout}{list specifying the printer layout}
+  \item{layout}{list specifying the printer layout, see \code{\link{PrintLayout-class}}}
   \item{start}{character string specifying where printing starts in each pin group.  Choices are \code{"topleft"} or \code{"topright"}.}
   \item{printorder}{numeric vector specifying order in which spots are printed.
   Can be computed from \code{printorder(layout,start=start)}.}
@@ -37,7 +37,8 @@ This function is intended to pre-process the intensities before other normalizat
 Printorder means the order in which spots are printed on a microarray.
 Spotted arrays are printed using a print head with an array of print-tips.
 Spots in the various tip-groups are printed in parallel.
-Printing is assumed to start in the top right hand corner of each tip-group and to proceed left and down by rows.
+Printing is assumed to start in the top left hand corner of each tip-groups and to proceed right and down by rows, or else to start in the top right hand and to proceed left and down by rows.
+See \code{\link{printorder}} for more details.
 (WARNING: this is not always the case.)
 This is true for microarrays printed at the Australian Genome Research Facility but might not be true for arrays from other sources.
 
@@ -47,7 +48,9 @@ If \code{object} is an \code{RGList} then printorder is performed for each inten
 }
 \value{
 \code{normalizeForPrintorder} produces an \code{RGList} containing normalized intensities.
+
 The function \code{plotPrintorder} or \code{normalizeForPrintorder.rg} with \code{plot=TRUE} returns no value but produces a plot as a side-effect.
+
 \code{normalizeForPrintorder.rg} with \code{plot=FALSE} returns a list with the following components: 
   \item{R}{numeric vector containing the normalized red channel intensities}
   \item{G}{numeric vector containing the normalized red channel intensites}

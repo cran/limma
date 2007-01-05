@@ -373,7 +373,7 @@ normalizeForPrintorder <- function(object,layout,start="topleft",method="loess",
 normalizeForPrintorder.rg <- function(R,G,printorder,method="loess",separate.channels=FALSE,span=0.1,plate.size=32,plot=FALSE) {
 #	Pre-normalize the foreground intensities for print order, given R and G for a single array.
 #	Gordon Smyth
-#	8 Mar 2002.  Last revised 18 June 2003.
+#	8 Mar 2002.  Last revised 3 January 2007.
 
 	if(plot) ord <- order(printorder)
 	Rf <- log(R,2)
@@ -400,6 +400,7 @@ normalizeForPrintorder.rg <- function(R,G,printorder,method="loess",separate.cha
 				points(printorder,Gf,pch=".",col="green")
 				lines(printorder[ord],mR[ord],col="red")
 				lines(printorder[ord],mG[ord],col="green")
+				return(invisible())
 			}
 			mR <- mR - mean(mR,na.rm=TRUE)
 			mG <- mG - mean(mG,na.rm=TRUE)
@@ -424,6 +425,7 @@ normalizeForPrintorder.rg <- function(R,G,printorder,method="loess",separate.cha
 				points(printorder,Gf,pch=".",col="green")
 				lines(printorder[ord],mR[ord],col="red")
 				lines(printorder[ord],mG[ord],col="green")
+				return(invisible())
 			}
 			mR <- mR - mean(mR,na.rm=TRUE)
 			mG <- mG - mean(mG,na.rm=TRUE)

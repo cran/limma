@@ -4,7 +4,7 @@
 \title{Write MArrayLM Object to a File}
 
 \description{
-Write a microarray linear model fit a file.
+Write a microarray linear model fit to a file.
 }
 
 \usage{
@@ -16,7 +16,7 @@ write.fit(fit, results=NULL, file, digits=2, adjust="none", sep="\t", ...)
 \item{results}{object of class \code{TestResults}}
 \item{file}{character string giving name of file}
 \item{digits}{integer indicating precision to be used}
-\item{adjust}{character string specifying method to use to adjust the P-values for multiple testing, e.g., "holm" or "fdr". See \code{\link[ctest]{p.adjust}} for the available options. If \code{NULL} or \code{"none"} then the P-values are not adjusted.}
+\item{adjust}{character string specifying method to use to adjust the P-values for multiple testing, e.g., "holm" or "fdr". See \code{\link[stats]{p.adjust}} for the available options. If \code{NULL} or \code{"none"} then the P-values are not adjusted.}
 \item{sep}{the field separator string. Values in the output file will be separated by this string.}
 \item{\dots}{other arguments are passed to \code{write.table}}
 }

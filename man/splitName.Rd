@@ -3,7 +3,8 @@
 
 \title{Split Composite Gene Names}
 \description{
-Split composite gene names into short names and gene annotation strings.}
+Split composite gene names into short names and gene annotation strings.
+NOTE: this function is now deprecated in favor of \code{strsplit2}.}
 
 \usage{
 splitName(x, split=";", extended=TRUE)
@@ -29,13 +30,6 @@ Gene names are assumed to comprise a short name or identifier followed by more d
 \code{\link[base]{strsplit}}.
 
 An overview of LIMMA functions for reading data is given in \link{03.ReadingData}.
-}
-
-\examples{
-x <- c("AA196000;actinin, alpha 3",
-"AA464163;acyl-Coenzyme A dehydrogenase, very long chain",
-"3E7;W15277;No Annotation")
-splitName(x)
 }
 
 \author{Gordon Smyth}

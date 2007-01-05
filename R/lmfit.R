@@ -1,41 +1,69 @@
 #  LINEAR MODELS
 
-lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...) {
+lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...)
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 26 Feb 2006.
-
-	M <- NULL
-#	Method intended for MAList objects but allow unclassed lists as well
-	if(is(object,"MAList") || is(object,"list")) {
-		M <- object$M
+#	30 June 2003.  Last modified 27 October 2006.
+{
+	y <- NULL
+	Amean <- NULL
+	ProbeAnn <- NULL
+	if(is(object,"list")) {
+#		Method intended for MAList objects but allow unclassed lists as well
+		y <- object$M
 		if(missing(design) && !is.null(object$design)) design <- object$design
 		if(missing(ndups) && !is.null(object$printer$ndups)) ndups <- object$printer$ndups
 		if(missing(spacing) && !is.null(object$printer$spacing)) spacing <- object$printer$spacing
 		if(missing(correlation) && !is.null(object$correlation)) correlation <- object$correlation
 		if(missing(weights) && !is.null(object$weights)) weights <- object$weights
+		ProbeAnn <- object$genes
+		if(!is.null(object$A)) Amean <- rowMeans(unwrapdups(as.matrix(object$A),ndups=ndups,spacing=spacing),na.rm=TRUE)
 	} else {
 	if(is(object,"marrayNorm")) {
 #		don't use accessor function so don't have to require marrayClasses
-		M <- object@maM
+		y <- object@maM
 		if(missing(weights) && length(object@maW)) weights <- object@maW
+		if(length(object@maGnames@maInfo)) {
+			ProbeAnn <- object@maGnames@maInfo
+#			if(length(object@maLayout@maControls)>1) ProbeAnn$Status <- normdata@maLayout@maControls
+			attr(ProbeAnn, "Notes") <- object@maGnames@maNotes
+		}
+		if(length(object@maA)) fit$Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
 	} else {
 	if(is(object,"PLMset")) {
 #		don't use accessor function so don't have to require affyPLM
-		M <- object@chip.coefs
-		if(length(M)==0) stop("chip.coefs has length zero")
+		y <- object@chip.coefs
+		if(length(y)==0) stop("chip.coefs has length zero")
+		if(!is.null(rownames(y))) ProbeAnn <- data.frame(ID=I(rownames(y)))
 		if(missing(weights) && length(object@se.chip.coefs)) weights <- 1/pmax(object@se.chip.coefs,1e-5)^2
+		Amean <- rowMeans(unwrapdups(y,ndups=ndups,spacing=spacing),na.rm=TRUE)
 	} else {
 	if(is(object,"exprSet")) {
 #		don't use accessor function so don't have to require Biobase
-		M <- object@exprs
+		y <- object@exprs
+		if(!is.null(rownames(y))) ProbeAnn <- data.frame(ID=I(rownames(y)))
 #		don't use weights until this is more thoroughly tested
 #		if(missing(weights) && length(object@se.exprs)) weights <- 1/pmax(object@se.exprs,1e-5)^2
-	}}}}
+		Amean <- rowMeans(unwrapdups(y,ndups=ndups,spacing=spacing),na.rm=TRUE)
+	} else {
+	if(is(object,"ExpressionSet")) {
+		y <- get("exprs",env=object@assayData)
+		if(length(object@featureData@data)) ProbeAnn <- object@featureData@data
+		if(!is.null(rownames(y))) {
+			if(is.null(ProbeAnn))
+				ProbeAnn <- data.frame(ID=I(rownames(y)))
+			else
+				ProbeAnn$ID <- rownames(y)
+		}
+		Amean <- rowMeans(unwrapdups(y,ndups=ndups,spacing=spacing),na.rm=TRUE)
+	}}}}}
 #	Default method
-	if(is.null(M)) M <- as.matrix(object)
+	if(is.null(y)) {
+		y <- as.matrix(object)
+		if(!is.null(rownames(y))) ProbeAnn <- data.frame(ID=I(rownames(y)))
+	}
 
-	if(is.null(design)) design <- matrix(1,ncol(M),1)
+	if(is.null(design)) design <- matrix(1,ncol(y),1)
 	design <- as.matrix(design)
 	if(mode(design) != "numeric") stop("design must be a numeric matrix")
 	ne <- nonEstimable(design)
@@ -43,36 +71,19 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,we
 
 	method <- match.arg(method,c("ls","robust"))
 	if(method=="robust")
-		fit <- mrlm(M,design=design,ndups=ndups,spacing=spacing,weights=weights,...)
+		fit <- mrlm(y,design=design,ndups=ndups,spacing=spacing,weights=weights,...)
 	else
 		if(ndups < 2 && is.null(block))
-			fit <- lm.series(M,design=design,ndups=ndups,spacing=spacing,weights=weights)
+			fit <- lm.series(y,design=design,ndups=ndups,spacing=spacing,weights=weights)
 		else {
 			if(missing(correlation)) stop("the correlation must be set, see duplicateCorrelation")
-			fit <- gls.series(M,design=design,ndups=ndups,spacing=spacing,block=block,correlation=correlation,weights=weights,...)
+			fit <- gls.series(y,design=design,ndups=ndups,spacing=spacing,block=block,correlation=correlation,weights=weights,...)
 		}
 
+	if(!is.null(ProbeAnn)) fit$genes <- uniquegenelist(ProbeAnn,ndups=ndups,spacing=spacing)
+	fit$Amean <- Amean
 	fit$method <- method
 	fit$design <- design
-	if(is(object,"MAList")) {
-		if(!is.null(object$genes)) fit$genes <- uniquegenelist(object$genes,ndups=ndups,spacing=spacing) 
-		if(!is.null(object$A)) fit$Amean <- rowMeans(unwrapdups(as.matrix(object$A),ndups=ndups,spacing=spacing),na.rm=TRUE)
-	}
-	if(is(object,"marrayNorm")) {
-		if(length(object@maGnames@maInfo)) {
-			fit$genes <- object@maGnames@maInfo
-#			if(length(object@maLayout@maControls)>1) fit$genes$Status <- normdata@maLayout@maControls
-			fit$genes <- uniquegenelist(fit$genes,ndups=ndups,spacing=spacing)
-			attr(fit$genes, "Notes") <- object@maGnames@maNotes
-		}
-		if(length(object@maA)) fit$Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
-	}
-	if(is(object,"exprSet") || is(object,"matrix")) {
-		ProbeID <- rownames(M)
-		if(!is.null(ProbeID)) fit$genes <- uniquegenelist(data.frame(ID=I(ProbeID)),ndups=ndups,spacing=spacing)
-		fit$Amean <- rowMeans(M,na.rm=TRUE)
-	}
-	if(is.null(fit$genes)) fit$genes <- rownames(M)
 	new("MArrayLM",fit)
 }
 

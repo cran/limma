@@ -1,9 +1,9 @@
-read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
+read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...) {
 #	Extracts an RG list from a series of Imagene analysis output files.
 #	Imagene requires special treatment because red and green channel
 #	intensities are in different files.
 #	Gordon Smyth
-#	14 Aug 2003.  Last modified 29 July 2006.
+#	14 Aug 2003.  Last modified 30 Dec 2006.
 
 	if(is.null(dim(files))) {
 		if(length(files)%%2==0)
@@ -39,11 +39,28 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 	}
 	if(is.null(columns$f) || is.null(columns$b)) stop("'columns' should have components 'f' and 'b'")
 
-#	Now read data
+#	Initialize data object
 	Y <- matrix(0,nspots,narrays)
 	colnames(Y) <- names
-	RG <- list(R=Y,G=Y,Rb=Y,Gb=Y,Image.Program="ImaGene",Field.Dimensions=FD)
+	RG <- list(R=Y,G=Y,Rb=Y,Gb=Y,source="imagene",Field.Dimensions=FD)
 	if(!is.null(wt.fun)) RG$weights <- Y
+
+#	Other columns
+	if(!is.null(other.columns)) {
+		other.columns <- as.character(other.columns)
+		if(length(other.columns)) {
+			RG$other <- list()
+			G.other.columns <- paste("G",other.columns)
+			colnames(Y) <- removeExt(files[,1])
+			for (a in G.other.columns) RG$other[[a]] <- Y 
+			R.other.columns <- paste("R",other.columns)
+			colnames(Y) <- removeExt(files[,2])
+			for (a in R.other.columns) RG$other[[a]] <- Y 
+		} else {
+			other.columns <- NULL
+		}
+	}
+
 	printer <- list(ngrid.r=FD[1,"Metarows"],ngrid.c=FD[1,"Metacols"],nspot.r=FD[1,"Rows"],nspot.c=FD[1,"Cols"])
 	if(nrow(FD)==1) {
 		RG$printer <- printer
@@ -53,7 +70,11 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 			all(printer$nspot.r==FD[,"Rows"]) &&
 			all(printer$nspot.c==FD[,"Cols"]) ) RG$printer <- printer
 	}
+
+#	Now read data
 	for (i in 1:narrays) {
+
+#		Green channel
 		fullname <- files[i,1]
 		if(!is.null(path)) fullname <- file.path(path,fullname)
 		if(i > 1) {
@@ -67,6 +88,11 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 		if(i==1) RG$genes <- obj[,c("Field","Meta Row","Meta Column","Row","Column","Gene ID")]
 		RG$G[,i] <- obj[,columns$f]
 		RG$Gb[,i] <- obj[,columns$b]
+		if(!is.null(other.columns)) {
+			for (j in 1:length(other.columns)) RG$other[[G.other.columns[j]]][,i] <- obj[,other.columns[j]]
+		}
+
+#		Red channel		
 		fullname <- files[i,2]
 		if(!is.null(path)) fullname <- file.path(path,fullname)
 		obj<- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots,...)
@@ -74,6 +100,9 @@ read.imagene <- function(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun
 		RG$R[,i] <- obj[,columns$f]
 		RG$Rb[,i] <- obj[,columns$b]
 		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)
+		if(!is.null(other.columns)) {
+			for (j in 1:length(other.columns)) RG$other[[R.other.columns[j]]][,i] <- obj[,other.columns[j]]
+		}
 	}
 	new("RGList",RG)
 }

@@ -176,6 +176,8 @@ as.matrix.marrayNorm <- function(x) x@maM
 as.matrix.exprSet <- function(x) x@exprs
 #  13 July 2006
 as.matrix.PLMset <- function(x) x@chip.coefs
+#  19 Dec 2006
+as.matrix.ExpressionSet <- function(x) get("exprs",env=x@assayData)
 
 if(getRversion() >= "2.4.0") {
 

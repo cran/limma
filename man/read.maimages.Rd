@@ -7,7 +7,7 @@ Reads an RGList from a series of microarray image analysis output files
 }
 \usage{
 read.maimages(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,\dots)
-read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...)
+read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...)
 }
 \arguments{
   \item{files}{character vector giving the names of the files containing image analysis output or, for Imagene data, a character matrix of names of files.
@@ -58,12 +58,14 @@ The function \code{read.imagene} is called by \code{read.maimages} when \code{so
 It does not need to be called directly by users.
 
 The argument \code{other.columns} allows arbitrary columns of the image analysis output files to be preserved in the data object.
+These become matrices in the component \code{other} component.
+For ImaGene data, the other column headings with be prefixed with \code{"R "} or \code{"G "} as appropriate.
 }
 
 \section{Warnings}{
 All image analysis files being read are assumed to contain data for the same genelist in the same order.
 No checking is done to confirm that this is true.
-Annotation information, when it is available, is set from the first file only.
+Probe annotation information is read from the first file only.
 }
 
 \value{

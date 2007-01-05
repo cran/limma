@@ -3,6 +3,8 @@
 \title{Read series of image files}
 \description{
 Read in a series of array image analysis output files as data frames.
+
+This function is deprecated in limma 2.9.7 (1 January 2007).
 }
 \usage{
 read.series(slides, path=NULL, suffix="spot", ...)

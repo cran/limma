@@ -1,5 +1,5 @@
 
-R version 2.4.0 alpha (2006-09-05 r39134)
+R version 2.4.0 (2006-10-03)
 Copyright (C) 2006 The R Foundation for Statistical Computing
 ISBN 3-900051-07-0
 
@@ -19,16 +19,15 @@ Type 'q()' to quit R.
 > 
 > set.seed(0); u <- runif(100)
 > 
-> ### splitName
+> ### strsplit2
 > 
 > x <- c("ab;cd;efg","abc;def","z","")
-> splitName(x)
-$Name
-[1] "ab;cd" "abc"   "z"     ""     
-
-$Annotation
-[1] "efg" "def" ""    ""   
-
+> strsplit2(x,split=";")
+     [,1]  [,2]  [,3] 
+[1,] "ab"  "cd"  "efg"
+[2,] "abc" "def" ""   
+[3,] "z"   ""    ""   
+[4,] ""    ""    ""   
 > 
 > ### removeext
 > 
@@ -706,7 +705,7 @@ Loading required package: splines
 > ### toptable
 > 
 > toptable(fit)
-              M           t      P.Value    adj.P.Val         B
+          logFC           t      P.Value    adj.P.Val         B
 1   2.064402265 13.01360810 1.023910e-38 1.023910e-37 76.894615
 9  -0.288755599 -1.82026162 6.871917e-02 3.219565e-01 -5.902688
 10 -0.263591244 -1.66163020 9.658694e-02 3.219565e-01 -6.178115
@@ -722,14 +721,6 @@ Loading required package: splines
 > 
 > cor.out <- duplicateCorrelation(M)
 Loading required package: statmod
-
-Attaching package: 'statmod'
-
-
-	The following object(s) are masked from package:limma :
-
-	 matvec vecmat 
-
 > cor.out$consensus.correlation
 [1] -0.1300222
 > cor.out$atanh.correlations
@@ -851,9 +842,6 @@ $design
 7  1     0    1
 8  1     0    1
 9  1     0    1
-
-$Amean
-[1]  0.2034961  0.1954604 -0.2863347  0.1188659  0.1784593
 
 $contrasts
   alpha-beta mu+alpha mu+beta

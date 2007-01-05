@@ -3,6 +3,8 @@
 \title{Extract RGList from data.frames Containing Quantarray Data}
 \description{
 Extracts an RGList from Quantarray image analysis output when the data has already been read from files into data.frames objects.
+
+This function is deprecated in limma 2.9.7 (1 January 2007).
 }
 \usage{
 rg.quantarray(slides,names.slides=names(slides),suffix="qta")

@@ -1,7 +1,7 @@
 arrayWeights <- function(object, design = NULL, weights = NULL, method="genebygene", maxiter=50, tol = 1e-10, trace = FALSE)
 #	Compute array quality weights
 #	Matt Ritchie
-#	7 Feb 2005. Last revised 18 Dec 2005.
+#	7 Feb 2005. Last revised 4 Dec 2006.
 {
 	M <- NULL
 	if (is(object, "MAList") || is(object, "list")) {
@@ -33,8 +33,14 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 	if (is.null(design))
 		design <- matrix(1, ncol(M), 1)
 	design <- as.matrix(design)
-
-	params <- ncol(design)
+	if(mode(design) != "numeric") stop("design must be a numeric matrix")
+	    ne <- nonEstimable(design)
+	if(!is.null(ne))
+            cat("Coefficients not estimable:",paste(ne,collapse=" "),"\n")
+        p <- ncol(design)
+#        cols <- seq(1:p)
+        QR <- qr(design)
+        nparams <- QR$rank # ncol(design)
 	ngenes <- dim(M)[1]
 	narrays <- dim(M)[2]
 
@@ -46,8 +52,10 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 
 	method <- match.arg(method,c("genebygene","reml"))
 	switch(method, genebygene = {  # Estimate array variances via gene-by-gene update algorithm
-		Zinfo <- 10*(narrays-params)/narrays*crossprod(Z, Z)
+		Zinfo <- 10*(narrays-nparams)/narrays*crossprod(Z, Z)
 		for(i in 1:ngenes) {
+                        if(!all(is.finite(arraygammas)))
+                                stop("convergence problem at gene ", i, ": array weights not estimable")
 		 	vary <- exp(Z%*%arraygammas)
 
 			if(!is.null(weights)) {  # combine spot weights with running weights 
@@ -74,13 +82,21 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 				d <- rep(0, narrays)
 				d[obs] <- w[obs]*out$residuals^2
 				s2 <- sum(d[obs])/out$df.residual
-				Q <- qr.Q(out$qr)
-				nparams <- dim(Q)[2]
+                                Q <- qr.Q(out$qr)
+                                if(ncol(Q)!=out$rank)
+                                         Q <- Q[,-((out$rank+1):ncol(Q)),drop=FALSE]
+#                                if(p!=out$rank) {
+#                                        Q <- qr.Q(qr(X[,-cols[out$qr$pivot[(out$qr$rank + 1):p,drop=FALSE]]]))
+#                                        Q <- qr.Q(out$qr)   
+#                                        Q <- Q[,-cols[(out$rank+1):ncol(Q)],drop=FALSE]
+#                                }
+#				else
+#                                        Q <- qr.Q(out$qr)
 				h <- rep(1, narrays)
 				h[obs] <- rowSums(Q^2)
 				Agam <- crossprod(Z, (1-h)*Z)
 				Agam.del <- crossprod(t(rep(h[narrays], narrays-1)-h[1:(length(narrays)-1)]))
-				Agene.gam <- (Agam - 1/(narrays-params)*Agam.del)
+				Agene.gam <- (Agam - 1/out$df.residual*Agam.del) # 1/(narrays-nparams)
 				if(is.finite(sum(Agene.gam)) && sum(obs) == narrays) {
 					Zinfo <- Zinfo + Agene.gam
 					R <- chol(Zinfo)
@@ -153,8 +169,13 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 					d <- rep(0, narrays)
 					d[obs] <- w*out$residuals^2
 					s2 <- sum(d[obs])/out$df.residual
-					Q <- qr.Q(out$qr)
-					nparams <- dim(Q)[2]
+                                        Q <- qr.Q(out$qr)
+                                        if(ncol(Q)!=out$rank)
+                                                Q <- Q[,-((out$rank+1):ncol(Q)),drop=FALSE]
+#                                        if(p!=out$rank)
+#                                                Q <- qr.Q(qr(X[,-cols[out$qr$pivot[(out$qr$rank + 1):p,drop=FALSE]]]))
+#    				        else
+#                                                Q <- qr.Q(out$qr)
 					h <- rowSums(Q^2)
 					zd[obs] <- zd[obs] + d[obs]/s2 - 1 + h
 					sum1minush[obs,1] <- sum1minush[obs,1] + 1-h
@@ -163,7 +184,7 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 				}
 			}
 			Zzd <- crossprod(Z, zd)
-			Zinfo <- diag(sum1minush[1:(narrays-1)]) + sum1minush[narrays] - crossprod(K[,-narrays])/(narrays-params)
+			Zinfo <- diag(sum1minush[1:(narrays-1)]) + sum1minush[narrays] - crossprod(K[,-narrays])/out$df.residual #(narrays-nparams)
 			R <- chol(Zinfo)
 			Zinfoinv <- chol2inv(R)
 			gammas.iter <- Zinfoinv%*%Zzd
@@ -172,7 +193,10 @@ arrayWeights <- function(object, design = NULL, weights = NULL, method="genebyge
 			x2 <- crossprod(Zzd, gammas.iter) / narrays
 
 			if(trace)
-			cat("Iter =", iter, " X2 =", x2, " Array gammas", arraygammas, "\n")
+              			cat("Iter =", iter, " X2 =", x2, " Array gammas", arraygammas, "\n")
+
+                        if(!all(is.finite(arraygammas)))
+                                stop("convergence problem at iteration ", iter, ": array weights not estimable")
 
 #			if (dev < devold - 1e-50)
 #				break

@@ -4,7 +4,7 @@
 \alias{avedups.MAList}
 \title{Average Over Duplicate Spots}
 \description{
-Replicate within-array replicate spots with their averages.
+Condense a microarray data object so that values for within-array replicate spots are replaced with their average.
 }
 \usage{
 \method{avedups}{default}(x, ndups=2, spacing=1, weights=NULL)

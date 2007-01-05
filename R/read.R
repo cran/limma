@@ -37,11 +37,28 @@ readGAL <- function(galfile=NULL,path=NULL,header=TRUE,sep="\t",quote="\"",skip=
 	gal
 }
 
+strsplit2 <- function(x, split, extended = TRUE, fixed = FALSE, perl = FALSE) {
+#	Split vector of composite names into matrix of simple names
+#	Gordon Smyth
+#	8 May 2003 (originally called splitName).  Last modified 18 October 2006.
+
+	x <- as.character(x)
+	n <- length(x)
+	s <- strsplit(x=x,split=split,extended=extended,fixed=fixed,perl=perl)
+	nc <- unlist(lapply(s,length))
+	out <- matrix("",n,max(nc))
+	for (i in 1:n) {
+		if(nc[i]) out[i,1:nc[i]] <- s[[i]]
+	}
+	out
+}
+
 splitName <- function(x, split=";", extended=TRUE) {
 #	Split composite gene names into short names and annotation information
 #	Gordon Smyth
 #	8 May 2003.  Last modified 29 May 2003.
 
+	.Deprecated("strsplit2")
 	s <- strsplit(x,split,extended)
 	function1 <- function(x) {
 		n <- length(x)
@@ -232,6 +249,7 @@ read.matrix <- function(file,nrows=0,skip=0,...) {
 #	Gordon Smyth
 #	9 Mar 2003.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	h <- scan(file,what="character",skip=skip,nlines=1,quote="\"",quiet=TRUE,...)
 	x <- matrix(scan(file,skip=skip+1,nlines=nrows,quiet=TRUE,...),byrow=TRUE,ncol=length(h))
 	colnames(x) <- h
@@ -243,6 +261,7 @@ rg.series.spot <- function(slides,path=NULL,names.slides=names(slides),suffix="s
 #	Gordon Smyth
 #	1 Nov 2002.  Last revised 23 Mar 2003.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	slides <- as.vector(as.character(slides))
 	if(is.null(names.slides)) names.slides <- slides
 	nslides <- length(slides)
@@ -282,6 +301,7 @@ read.series <- function(slides,path=NULL,suffix="spot",...) {
 #	Gordon Smyth
 #	11 Mar 2002.  Last revised 2 Mar 2003.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	slides <- as.vector(as.character(slides))
 	nslides <- length(slides)
 	for (i in 1:nslides) {
@@ -301,6 +321,7 @@ m.spot <- function(spot) {
 #	Gordon Smyth
 #	18 Nov 2001.  Last revised 2 Mar 2003.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	R <- spot[,"Rmean"] - spot[,"morphR"]
 	G <- spot[,"Gmean"] - spot[,"morphG"]
 	log(R,2) - log(G,2)
@@ -311,6 +332,7 @@ a.spot <- function(spot) {
 #	Gordon Smyth
 #	18 Nov 2001.  Last revised 2 Mar 2003.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	R <- spot[,"Rmean"] - spot[,"morphR"]
 	G <- spot[,"Gmean"] - spot[,"morphG"]
 	(log(R,2) + log(G,2))/2
@@ -321,6 +343,7 @@ rg.spot <- function(slides,names.slides=names(slides),suffix="spot",area=FALSE) 
 #	Gordon Smyth
 #	17 Jan 2002. Last revised 1 Nov 2002.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	slides <- as.vector(as.character(slides))
 	if(is.null(names.slides)) names.slides <- slides
 	nslides <- length(slides)
@@ -345,6 +368,7 @@ rg.quantarray <- function(slides,names.slides=names(slides),suffix="qta") {
 #	Gordon Smyth
 #	23 July 2002
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	slides <- as.vector(as.character(slides))
 	if(is.null(names.slides)) names.slides <- slides
 	nslides <- length(slides)
@@ -367,6 +391,7 @@ rg.genepix <- function(slides,names.slides=names(slides),suffix="gpr") {
 #	Gordon Smyth
 #	23 July 2002. Last revised 13 Feb 2003.
 
+	.Deprecated("read.maimages")  # 31 Dec 2006
 	slides <- as.vector(as.character(slides))
 	if(is.null(names.slides)) names.slides <- slides
 	nslides <- length(slides)
@@ -409,21 +434,21 @@ trimWhiteSpace <- function(x)
 
 protectMetachar <- function(x)
 #	Insert backslashs before an metacharacters (to allow them to be included in search strings)
-#	Note that backslashs themselves not handled
+#	Note that backslashs themselves are not handled
 #	Gordon Smyth
-#	9 June 2004
+#	9 June 2004. Last modified 5 Jan 2007.
 {
-	x <- gsub("\\.", "\\\\\.", x)
-	x <- gsub("\\|", "\\\\\|", x)
-	x <- gsub("\\(", "\\\\\(", x)
-	x <- gsub("\\)", "\\\\\)", x)
-	x <- gsub("\\[", "\\\\\[", x)
-	x <- gsub("\\{", "\\\\\{", x)
-	x <- gsub("\\^", "\\\\\^", x)
-	x <- gsub("\\$", "\\\\\$", x)
-	x <- gsub("\\*", "\\\\\*", x)
-	x <- gsub("\\+", "\\\\\+", x)
-	x <- gsub("\\?", "\\\\\?", x)
+	x <- gsub("\\.", "\\\\.", x)
+	x <- gsub("\\|", "\\\\|", x)
+	x <- gsub("\\(", "\\\\(", x)
+	x <- gsub("\\)", "\\\\)", x)
+	x <- gsub("\\[", "\\\\[", x)
+	x <- gsub("\\{", "\\\\{", x)
+	x <- gsub("\\^", "\\\\^", x)
+	x <- gsub("\\$", "\\\\$", x)
+	x <- gsub("\\*", "\\\\*", x)
+	x <- gsub("\\+", "\\\\+", x)
+	x <- gsub("\\?", "\\\\?", x)
 	x
 }
 

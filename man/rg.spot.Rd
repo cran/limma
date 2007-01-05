@@ -3,6 +3,8 @@
 \title{Extract RGList from data.frames Containing SPOT Data}
 \description{
 Extracts an RGList from Spot image analysis output when the data has already been read from files into data.frames objects.
+
+This function is deprecated in limma 2.9.7 (1 January 2007).
 }
 \usage{
 rg.spot(slides,names.slides=names(slides),suffix="spot",area=FALSE)

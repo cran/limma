@@ -1,4 +1,49 @@
+5 Jan 2007: limma 2.9.8
+
+- User's Guide sections on spot quality weights and quality assessment
+  expanded.
+- unnecessary backlashs removed from gsub() calls in protectMetachar()
+- normalizeForPrintorder(plot=TRUE) now produces no output to agree with
+  the documentation.
+
+1 Jan 2007: limma 2.9.7
+
+- old functions designed to read image data files into data.frames
+  are now deprecated. This affects functions: read.matrix, rg.series.spot,
+  read.series, m.spot, a.spot, rg.spot, rg.quantarray, rg.genepix.
+- wtVariables() renamed to namesInFun()
+- new argument other.columns for read.imagene()
+
+19 Dec 2006: limma 2.9.6
+
+- new function as.matrix.ExpressionSet
+- section on array quality weights added to User's Guide
+
+17 Nov 2006: limma 2.9.5
+
+- correction of several minor typos.
+
+5 November 2006: limma 2.9.4
+
+- function .onAttach() replaces the old .First.lib()
+
+27 October 2006: limma 2.9.3
+
+- Changes to column headings from topTable: M is now logFC,
+  A is now AveExpr
+- lmFit() now supports ExpressionSet objects
+- volcanoplot() now allows NULL value for 'names' argument
+- new function strsplit2() replaces splitName().
+- splitName() deprecated.
+
+16 October 2006: limma 2.9.2
+
+- NAMESPACE introduced to package. Funtion matvec() and vecmat() renamed
+  to .matvec and .vecmat and are not exported. All objects with names
+  not starting with "." are exported.
+
  4 October 2006: limma 2.9.1
+ 4 October 2006: limma 2.8.1
 
 - read.maimages() with source="quantarray" now sets annotation columns.
 - bug fix to read.maimages() with source="quantarray". Searching for

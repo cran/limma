@@ -120,7 +120,7 @@ classifyTestsF <- function(object,cor.matrix=NULL,df=Inf,p.value=0.01,fstat.only
 	} else {
 		E <- eigen(cor.matrix,symmetric=TRUE)
 		r <- sum(E$values/E$values[1] > 1e-8)
-		Q <- matvec( E$vectors[,1:r], 1/sqrt(E$values[1:r]))/sqrt(r)
+		Q <- .matvec( E$vectors[,1:r], 1/sqrt(E$values[1:r]))/sqrt(r)
 	}
 
 #	Return overall moderated F-statistic only

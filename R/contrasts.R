@@ -55,7 +55,7 @@ contrasts.fit <- function(fit,contrasts=NULL,coefficients=NULL) {
 		U <- matrix(1,ngenes,ncont,dimnames=list(rownames(fit$stdev.unscaled),colnames(contrasts)))
 		o <- array(1,c(1,ncoef))
 		for (i in 1:ngenes) {
-			RUC <- R %*% vecmat(fit$stdev.unscaled[i,],contrasts)
+			RUC <- R %*% .vecmat(fit$stdev.unscaled[i,],contrasts)
 			U[i,] <- sqrt(o %*% RUC^2)
 		}
 		fit$stdev.unscaled <- U
@@ -87,7 +87,7 @@ contrasts.fit <- function(fit,contrasts=NULL,coefficients=NULL) {
 #		U <- matrix(1,ngenes,ncont,dimnames=list(rownames(fit$stdev.unscaled),colnames(contrasts)))
 #		o <- array(1,c(1,ncoef))
 #		for (i in 1:ngenes) {
-#			RUC <- R %*% vecmat(fit$stdev.unscaled[i,],contrasts)
+#			RUC <- R %*% .vecmat(fit$stdev.unscaled[i,],contrasts)
 #			U[i,] <- sqrt(o %*% RUC^2)
 #		}
 #		fit$stdev.unscaled <- U

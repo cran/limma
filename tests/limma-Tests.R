@@ -2,10 +2,10 @@ library(limma)
 
 set.seed(0); u <- runif(100)
 
-### splitName
+### strsplit2
 
 x <- c("ab;cd;efg","abc;def","z","")
-splitName(x)
+strsplit2(x,split=";")
 
 ### removeext
 

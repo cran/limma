@@ -6,7 +6,7 @@
 lmFit(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...) 
 }
 \arguments{
-  \item{object}{object of class \code{numeric}, \code{matrix}, \code{MAList}, \code{marrayNorm}, \code{exprSet} or \code{PLMset} containing log-ratios or log-values of expression for a series of microarrays}
+  \item{object}{object of class \code{numeric}, \code{matrix}, \code{MAList}, \code{marrayNorm}, \code{exprSet}, \code{ExpressionSet} or \code{PLMset} containing log-ratios or log-values of expression for a series of microarrays}
   \item{design}{the design matrix of the microarray experiment, with rows corresponding to arrays and columns to coefficients to be estimated.  Defaults to the unit vector meaning that the arrays are treated as replicates.} 
   \item{ndups}{positive integer giving the number of times each gene is printed on an array}
   \item{spacing}{positive integer giving the spacing between duplicate spots, \code{spacing=1} for consecutive spots}

@@ -4,6 +4,8 @@
 \description{
 Read a numeric matrix from a file assuming column headings on the first line.
 Not normally used directly by users.
+
+This function is deprecated in limma 2.9.7 (1 January 2007).
 }
 \usage{
 read.matrix(file,nrows=0,skip=0,...)

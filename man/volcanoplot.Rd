@@ -11,7 +11,7 @@ volcanoplot(fit, coef=1, highlight=0, names=fit$genes$ID, ...)
   \item{fit}{an \code{MArrayLM} fitted linear model object}
   \item{coef}{integer giving the coefficient}
   \item{highlight}{number of top genes to be highlighted}
-  \item{names}{character vector giving text labels associated with the genes and to be used in highlighting}
+  \item{names}{character vector giving text labels for the probes to be used in highlighting}
   \item{...}{any other arguments are passed to \code{plot}}
 }
 

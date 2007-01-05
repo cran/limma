@@ -4,6 +4,8 @@
 \title{Extract M or A-values from SPOT data.frame or matrix}
 \description{
 Extract M-values or A-values from a SPOT data.frame or matrix.
+
+These functions are deprecated in limma 2.9.7, 1 January 2007.
 }
 \usage{
 m.spot(spot)

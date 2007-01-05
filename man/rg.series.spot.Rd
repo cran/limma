@@ -3,6 +3,7 @@
 \title{Read RGList from SPOT Image Analysis Output Files}
 \description{
 Extracts an RGList from a series of Spot image analysis files.
+
 This is a depreciated function.
 Use \code{\link{read.maimages}} instead.
 }

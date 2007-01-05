@@ -31,8 +31,7 @@ The function is based on unpublished work by the author.
 \examples{
 library(sma)
 data(MouseArray)
-M <- m.spot(mouse1)
-A <- a.spot(mouse1)
-M <- normalizeRobustSpline(M,A,mouse.setup)
+MA <- MA.RG(mouse.data)
+normM <- normalizeRobustSpline(MA$M[,1],MA$A[,1],mouse.setup)
 }
 \keyword{models}

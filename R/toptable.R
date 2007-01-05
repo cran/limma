@@ -3,7 +3,7 @@
 topTable <- function(fit,coef=NULL,number=10,genelist=fit$genes,adjust.method="BH",sort.by="B",resort.by=NULL)
 #	Summary table of top genes, object-orientated version
 #	Gordon Smyth
-#	4 August 2003.  Last modified 14 Sep 2006.
+#	4 August 2003.  Last modified 27 Oct 2006.
 {
 	if(is.null(coef)) {
 		if(ncol(fit)>1)
@@ -27,7 +27,7 @@ topTable <- function(fit,coef=NULL,number=10,genelist=fit$genes,adjust.method="B
 topTableF <- function(fit,number=10,genelist=fit$genes,adjust.method="BH")
 #	Summary table of top genes by F-statistic
 #	Gordon Smyth
-#	27 August 2006.
+#	27 August 2006. Last modified 27 Oct 2006.
 {
 #	Check input
 	if(!is.null(genelist) && is.null(dim(genelist))) genelist <- data.frame(ProbeID=I(genelist))
@@ -40,7 +40,7 @@ topTableF <- function(fit,number=10,genelist=fit$genes,adjust.method="BH")
 		tab <- data.frame(M[o,,drop=FALSE])
 	else
 		tab <- data.frame(genelist[o,,drop=FALSE],M[o,,drop=FALSE])
-	if(!is.null(fit$Amean)) tab <- data.frame(tab,A=fit$Amean[o])
+	if(!is.null(fit$Amean)) tab <- data.frame(tab,AveExpr=fit$Amean[o])
 	tab <- data.frame(tab,F=fit$F[o],P.Value=fit$F.p.value[o],adj.P.Val=adj.P.Value[o])
 	rownames(tab) <- as.character(1:length(M))[o]
 	tab
@@ -81,14 +81,14 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 	top <- ord[1:number]
 	adj.P.Value <- p.adjust(P.Value,method=adjust.method)
 	if(is.null(genelist))
-		tab <- data.frame(M=M[top])
+		tab <- data.frame(logFC=M[top])
 	else {
 		if(is.null(dim(genelist)))
-			tab <- data.frame(ProbeID=I(genelist[top]),M=M[top])
+			tab <- data.frame(ID=I(genelist[top]),logFC=M[top])
 		else
-			tab <- data.frame(genelist[top,,drop=FALSE],M=M[top])
+			tab <- data.frame(genelist[top,,drop=FALSE],logFC=M[top])
 	}
-	if(!is.null(A)) tab <- data.frame(tab,A=A[top])
+	if(!is.null(A)) tab <- data.frame(tab,AveExpr=A[top])
 	tab <- data.frame(tab,t=tstat[top],P.Value=P.Value[top],adj.P.Val=adj.P.Value[top],B=B[top])
 	rownames(tab) <- as.character(1:length(M))[top]
 	if(!is.null(resort.by)) {

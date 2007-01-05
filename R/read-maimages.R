@@ -32,7 +32,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 #	source2 is the source type with qualifications removed
 	source2 <- strsplit(source,split=".",fixed=TRUE)[[1]][1]
 	if(is.null(quote)) if(source=="agilent") quote <- "" else quote <- "\""
-	if(source2=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
+	if(source2=="imagene") return(read.imagene(files=files,path=path,ext=ext,names=names,columns=columns,other.columns=other.columns,wt.fun=wt.fun,verbose=verbose,sep=sep,quote=quote,...))
 
 	if(is.data.frame(files)) {
 		targets <- files
@@ -241,7 +241,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 	new("RGList",RG)
 }
 
-wtVariables <- function(x,fun)
+namesInFun <- function(x,fun)
 #	Finds variable names in user-defined functions
 #	Gordon Smyth
 #	3 Nov 2004. Last modified 2 Jan 2006.
@@ -258,7 +258,7 @@ wtVariables <- function(x,fun)
 
 getColClasses <- function(cols, ...)
 #	Construct a colClasses vector for read.table from a vector of possible columns 'cols' 
-#	Uses wtVariables and ellipsis vectors and lists of character string variable names
+#	Uses namesInFun and ellipsis vectors and lists of character string variable names
 #	to match against 'cols'
 #	Marcus Davy 
 #	16 Nov 2004. Last revised 2 Jan 2006.
@@ -269,7 +269,7 @@ getColClasses <- function(cols, ...)
 	wanted <- list(...)
 	for(i in 1:length(wanted)) {
 		if(is.null(wanted[[i]])) next
-		if(is.function(wanted[[i]])) include <- wtVariables(cols, wanted[[i]])
+		if(is.function(wanted[[i]])) include <- namesInFun(cols, wanted[[i]])
 		if(is.list(wanted[[i]])) wanted[[i]] <- unlist(wanted[[i]])
 		if(is.character(wanted[[i]])) include <- wanted[[i]]
 		ind <- match(include, cols, nomatch=0)
@@ -277,3 +277,4 @@ getColClasses <- function(cols, ...)
 	}
 	x
 }
+

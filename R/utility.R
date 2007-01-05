@@ -1,6 +1,6 @@
 #  UTILITY FUNCTIONS
 
-matvec <- function(M,v) {
+.matvec <- function(M,v) {
 #	Multiply the columns of matrix by the elements of a vector,
 #	i.e., compute M %*% diag(v)
 #	Gordon Smyth
@@ -12,7 +12,7 @@ matvec <- function(M,v) {
 	t(v * t(M))
 }
 
-vecmat <- function(v,M) {
+.vecmat <- function(v,M) {
 #	Multiply the rows of matrix by the elements of a vector,
 #	i.e., compute diag(v) %*% M
 #	Gordon Smyth

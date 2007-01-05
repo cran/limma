@@ -34,7 +34,7 @@ Many image analysis program provide gene IDs as columns in the image analysis ou
 In other cases you may have the probe ID and annotation information in a separate file.
 The function \code{\link{readGAL}} reads information from a GenePix Array List (GAL) file.
 It produces a data frame with known column names.
-If the probe IDs or names consist of multiple strings separated by a delimiter, then \code{\link{splitName}} may be used to separate the name and annotation information into separate vectors.
+If the probe IDs or names consist of multiple strings separated by a delimiter, then \code{\link{strsplit2}} may be used to separate the name and annotation information into separate vectors.
 
 The functions \code{\link{readSpotTypes}} and \code{\link{controlStatus}} assist with separating control spots from ordinary genes in the analysis and data exploration.
 

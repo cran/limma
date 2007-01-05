@@ -4,6 +4,7 @@
 \alias{as.matrix.MArrayLM}
 \alias{as.matrix.marrayNorm}
 \alias{as.matrix.exprSet}
+\alias{as.matrix.ExpressionSet}
 \alias{as.matrix.PLMset}
 \title{Turn a Microarray Data Object into a Matrix}
 \description{
@@ -13,10 +14,10 @@ Turn a microarray data object into a numeric matrix by extracting the expression
 \method{as.matrix}{MAList}(x)
 }
 \arguments{
-  \item{x}{an object of class \code{RGList}, \code{MAList}, \code{MArrayLM}, \code{marrayNorm}, \code{exprSet} or \code{PLMset}.}
+  \item{x}{an object of class \code{RGList}, \code{MAList}, \code{MArrayLM}, \code{marrayNorm}, \code{exprSet}, \code{ExpressionSet} or \code{PLMset}.}
 }
 \details{
-These methods extract the matrix of log-ratios, for \code{MAList} or \code{marrayNorm} objects, or the matrix of expression values for \code{exprSet} objects.
+These methods extract the matrix of log-ratios, for \code{MAList} or \code{marrayNorm} objects, or the matrix of expression values for \code{exprSet} or \code{ExressionSet} objects.
 For \code{MArrayLM} objects, the matrix of fitted coefficients is extracted.
 
 These methods involve loss of information, so the original data object is not recoverable.

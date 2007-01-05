@@ -3,6 +3,8 @@
 \title{Extract RGList from data.frames Containing GenePix Data}
 \description{
 Extracts an RGList from GenePix image analysis output when the data has already been read from files into data.frames objects.
+
+This function is deprecated in limma 2.9.7 (1 January 2007).
 }
 \usage{
 rg.genepix(slides,names.slides=names(slides),suffix="gpr")
