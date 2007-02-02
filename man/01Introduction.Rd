@@ -1,5 +1,6 @@
 \name{01.Introduction}
 \alias{01.Introduction}
+\alias{limma}
 \title{Introduction to the LIMMA Package}
 \description{
 LIMMA is a library for the analysis of gene expression microarray data, especially the use of linear models for analysing designed experiments and the assessment of differential expression.
@@ -18,10 +19,8 @@ The function \code{\link{changeLog}} displays the record of changes to the packa
 }
 \author{Gordon Smyth}
 \references{
-Smyth, G. K., Yang, Y.-H., Speed, T. P. (2003). Statistical issues in microarray data analysis. In: \emph{Functional Genomics: Methods and Protocols}, M. J. Brownstein and A. B. Khodursky (eds.), Methods in Molecular Biology Volume 224, Humana Press, Totowa, NJ, pages 111-136.
+Smyth, G. K., Yang, Y.-H., Speed, T. P. (2003). Statistical issues in microarray data analysis. \emph{Methods in Molecular Biology} 224, 111-136.
 
-Smyth, G. K. (2005). Limma: linear models for microarray data. In: 'Bioinformatics
-  and Computational Biology Solutions using R and Bioconductor'. R. Gentleman, V.
-  Carey, S. Dudoit, R. Irizarry, W. Huber (eds), Springer, New York, 2005. To appear October 2005.
+Smyth, G. K. (2005). Limma: linear models for microarray data. In: 'Bioinformatics and Computational Biology Solutions using R and Bioconductor'. R. Gentleman, V.   Carey, S. Dudoit, R. Irizarry, W. Huber (eds), Springer, New York, 2005.
 }
 \keyword{documentation}

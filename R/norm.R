@@ -288,12 +288,14 @@ normalizeWithinArrays <- function(object,layout=object$printer,method="printtipl
 normalizeRobustSpline <- function(M,A,layout,df=5,method="M") {
 #	Robust spline normalization
 #	Gordon Smyth
-#	27 April 2003.  Last revised 2 Feb 2005.
+#	27 April 2003.  Last revised 2 Feb 2007.
 
 	require(MASS)
 	require(splines)
-	ngrids <- layout$ngrid.r * layout$ngrid.c
-	nspots <- layout$nspot.r * layout$nspot.c
+	ngrids <- round(layout$ngrid.r * layout$ngrid.c)
+	nspots <- round(layout$nspot.r * layout$nspot.c)
+	if(ngrids < 1) stop("layout incorrectly specified")
+	if(nspots < df+1) stop("too few spots in each print-tip block")
 
 #	Global splines
 	O <- is.finite(M) & is.finite(A)
@@ -305,6 +307,13 @@ normalizeRobustSpline <- function(M,A,layout,df=5,method="M") {
 	s0 <- summary(rlm(x,y,weights=w,method=method),method="XtWX",correlation=FALSE)
 	beta0 <- s0$coefficients[,1]
 	covbeta0 <- s0$cov * s0$stddev^2
+
+#	Case with only one tip-group
+	if(ngrids <= 1) {
+		M[O] <- s0$residuals
+		M[!O] <- NA
+		return(M)
+	}
 
 #	Tip-wise splines
 	beta <- array(1,c(ngrids,1)) %*% array(beta0,c(1,df))
