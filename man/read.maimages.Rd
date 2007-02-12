@@ -6,8 +6,8 @@
 Reads an RGList from a series of microarray image analysis output files
 }
 \usage{
-read.maimages(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,\dots)
-read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",...)
+read.maimages(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,\dots)
+read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote="\"",\dots)
 }
 \arguments{
   \item{files}{character vector giving the names of the files containing image analysis output or, for Imagene data, a character matrix of names of files.
@@ -25,7 +25,6 @@ read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL
   \item{verbose}{logical, \code{TRUE} to report each time a file is read}
   \item{sep}{the field separator character}
   \item{quote}{character string of characters to be treated as quote marks}
-  \item{DEBUG}{a logical value, if TRUE, a series of echo statements will be printed for each file. Details on the file, skip, and selected columns in a colClasses format for read.table will be displayed.}
   \item{\dots}{any other arguments are passed to \code{read.table}}
 }
 \details{

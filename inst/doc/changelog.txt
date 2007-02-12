@@ -1,3 +1,12 @@
+12 Feb 2007: limma 2.9.10
+
+- functions getColClasses() and namesInFun() removed and replacad
+  with the new function read.columns().  read.columns() is a more
+  generally useful function which is similar to read.delim() but
+  reads specified columns only.
+- Argument \dots added to all as.matrix methods for compatibility
+  with R 2.5.0.
+
 2 Feb 2007: limma 2.9.9
 
 - normalizeRobustSpline() now works with only one print-tip group

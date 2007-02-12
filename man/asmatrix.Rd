@@ -11,10 +11,11 @@
 Turn a microarray data object into a numeric matrix by extracting the expression values.
 }
 \usage{
-\method{as.matrix}{MAList}(x)
+\method{as.matrix}{MAList}(x,\dots)
 }
 \arguments{
   \item{x}{an object of class \code{RGList}, \code{MAList}, \code{MArrayLM}, \code{marrayNorm}, \code{exprSet}, \code{ExpressionSet} or \code{PLMset}.}
+  \item{\dots}{additional arguments, not used for these methods.}
 }
 \details{
 These methods extract the matrix of log-ratios, for \code{MAList} or \code{marrayNorm} objects, or the matrix of expression values for \code{exprSet} or \code{ExressionSet} objects.

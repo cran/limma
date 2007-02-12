@@ -1,22 +1,11 @@
 #	READ IMAGE ANALYSIS FILES INTO RGList
 
-read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,DEBUG=FALSE,...)
+read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,...)
 #	Extracts an RG list from a series of image analysis output files
 #	Gordon Smyth. 
-#	1 Nov 2002.  Last revised 4 October 2006.
-#	Use of colClasses added by Marcus Davy, 14 October 2005.
+#	1 Nov 2002.  Last revised 3 Feb 2007.
 {
-#	For checking colClasses setup
-	debugVars <- function(DEBUG){
-		if(DEBUG) {
-            print(paste("FILE:", fullname))
-            print(paste("SKIP:", skip))
-            print("SELECTED COLUMNS")
-            print(colClasses)
-        }
-    }
-
-#	Begin check input arguments
+#	Begin checking input arguments
 
 	if(is.null(files)) {
 		if(is.null(ext))
@@ -86,21 +75,20 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		NULL
 	)
 
-#	End check input arguments
+#	End checking input arguments
 
 #	Read first file to get nspots
 	fullname <- slides[1]
 	if(!is.null(path)) fullname <- file.path(path,fullname)
+	required.col <- unique(c(annotation,unlist(columns),other.columns))
+	text.to.search <- if(is.null(wt.fun)) "" else deparse(wt.fun)
 	switch(source2,
 		quantarray = {
 		firstfield <- scan(fullname,what="",sep="\t",flush=TRUE,quiet=TRUE,blank.lines.skip=FALSE,multi.line=FALSE,allowEscapes=FALSE)
 		skip <- grep("Begin Data",firstfield)
 		if(length(skip)==0) stop("Cannot find \"Begin Data\" in image output file")
 		nspots <- grep("End Data",firstfield) - skip -2
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
-        debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,fill=TRUE,comment.char="",nrows=nspots, colClasses=colClasses,flush=TRUE,...)
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,quote=quote,as.is=TRUE,fill=TRUE,nrows=nspots,flush=TRUE,...)
 	}, arrayvision = {
 		skip <- 1
 		cn <- scan(fullname,what="",sep=sep,quote=quote,skip=1,nlines=1,quiet=TRUE,allowEscape=FALSE)
@@ -109,41 +97,25 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		bg <- grep("^Bkgd$",cn)
 		if(length(bg) != 2) stop(paste("Cannot find background columns in",fullname))
 		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
-        debugVars(DEBUG)
 		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,fill=TRUE,comment.char="",colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, bluefuse = {
 		skip <- readGenericHeader(fullname,columns=c(columns$G,columns$R))$NHeaderRecords
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
-        debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,quote=quote,as.is=TRUE,fill=TRUE,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, genepix = {
 		h <- readGPRHeader(fullname)
 		if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
 		skip <- h$NHeaderRecords
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun, "X")
-        debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,quote=quote,as.is=TRUE,fill=TRUE,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, smd = {
 		skip <- readSMDHeader(fullname)$NHeaderRecords
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
-        debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,quote=quote,as.is=TRUE,fill=TRUE,flush=TRUE,...)
 		nspots <- nrow(obj)
 	}, {
-		hout <- readGenericHeader(fullname,columns=columns,sep=sep)
-		skip <- hout$NHeaderRecords
-		allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-        colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
-        debugVars(DEBUG)
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
+		skip <- readGenericHeader(fullname,columns=columns,sep=sep)$NHeaderRecords
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
 		nspots <- nrow(obj)
 	})
 
@@ -226,10 +198,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 					skip <- readGenericHeader(fullname,columns=columns)$NHeaderRecords
 				})
 			if(verbose && source=="genepix.custom") cat("Custom background:",h$Background,"\n")
-			allcnames <- scan(fullname, what=character(1), sep=sep, quote=quote, skip=skip, nlines=1, quiet=TRUE, allowEscapes=FALSE)
-			colClasses <- getColClasses(allcnames, annotation, columns, other.columns, wt.fun)
-			debugVars(DEBUG)
-			obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,as.is=TRUE,quote=quote,check.names=FALSE,comment.char="",fill=TRUE,nrows=nspots,colClasses=colClasses,flush=TRUE,...)
+			obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,as.is=TRUE,quote=quote,fill=TRUE,nrows=nspots,flush=TRUE,...)
 		}
 		for (a in cnames) RG[[a]][,i] <- obj[,columns[[a]]]
 		if(!is.null(wt.fun)) RG$weights[,i] <- wt.fun(obj)
@@ -241,40 +210,34 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 	new("RGList",RG)
 }
 
-namesInFun <- function(x,fun)
-#	Finds variable names in user-defined functions
+read.columns <- function(file,required.col=NULL,text.to.search="",sep="\t",quote="\"",skip=0,fill=TRUE,blank.lines.skip=TRUE,comment.char="",allowEscapes=FALSE,...)
+#	Read specified columns from a delimited text file with header line
 #	Gordon Smyth
-#	3 Nov 2004. Last modified 2 Jan 2006.
+#	3 Feb 2006
 {
-	x <- as.character(x)
-	a <- deparse(fun)
-	n <- length(x)
-	ind <- logical(n)
-	for (i in 1:n) {
-		ind[i] <- as.logical(length(grep(protectMetachar(x[i]),a)))
-	}
-	x[ind]
-}
+#	Default is to read all columns
+	if(is.null(required.col)) return(read.table(file=file,header=TRUE,check.names=FALSE,sep=sep,quote=quote,skip=skip,fill=fill,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes,...))
 
-getColClasses <- function(cols, ...)
-#	Construct a colClasses vector for read.table from a vector of possible columns 'cols' 
-#	Uses namesInFun and ellipsis vectors and lists of character string variable names
-#	to match against 'cols'
-#	Marcus Davy 
-#	16 Nov 2004. Last revised 2 Jan 2006.
-{
-	cols <- as.character(cols)
-	x <- rep("NULL", length(cols))
-	names(x) <- cols
-	wanted <- list(...)
-	for(i in 1:length(wanted)) {
-		if(is.null(wanted[[i]])) next
-		if(is.function(wanted[[i]])) include <- namesInFun(cols, wanted[[i]])
-		if(is.list(wanted[[i]])) wanted[[i]] <- unlist(wanted[[i]])
-		if(is.character(wanted[[i]])) include <- wanted[[i]]
-		ind <- match(include, cols, nomatch=0)
-		x[ind] <- NA
+	text.to.search <- as.character(text.to.search)
+
+#	Read header to get column names
+    allcnames <- scan(file,what="",sep=sep,quote=quote,nlines=1,quiet=TRUE,skip=skip,strip.white=TRUE,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes)
+	ncn <- length(allcnames)
+	colClasses <- rep("NULL",ncn)
+
+#	Are required columns in the header?
+	if(is.numeric(required.col)) {
+		colClasses[required.col] <- NA
+	} else {
+		colClasses[allcnames %in% as.character(required.col)] <- NA
 	}
-	x
+
+#	Search for column names in text
+	for (i in 1:ncn) {
+		if(length(grep(protectMetachar(allcnames[i]),text.to.search))) colClasses[i] <- NA
+	}
+
+#	Read specified columns
+	read.table(file=file,header=TRUE,col.names=allcnames,check.names=FALSE,colClasses=colClasses,sep=sep,quote=quote,skip=skip,fill=fill,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes,...)
 }
 
