@@ -1,6 +1,6 @@
 Package: limma
-Version: 2.9.10
-Date: 2007/02/12
+Version: 2.9.11
+Date: 2007/02/17
 Title: Linear Models for Microarray Data
 Author: Gordon Smyth with contributions from Matthew Ritchie, Jeremy Silver, James Wettenhall, Natalie Thorne, Mette Langaas, Egil Ferkingstad, Marcus Davy, Francois Pepin and Dongseok Choi.
 Maintainer: Gordon Smyth <smyth@wehi.edu.au>
@@ -11,4 +11,4 @@ Description:  Data analysis, linear models and differential expression for micro
 License: LGPL
 URL: http://bioinf.wehi.edu.au/limma
 biocViews: Microarray, OneChannel, TwoChannel, DataImport, QualityControl, Preprocessing, Statistics, DifferentialExpression, MultipleComparisons, TimeCourse
-Packaged: Mon Feb 12 11:36:34 2007; smyth
+Packaged: Mon Feb 19 00:01:34 2007; smyth

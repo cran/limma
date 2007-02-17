@@ -1,3 +1,8 @@
+17 Feb 2007: limma 2.9.11
+
+- changes in 2.9.10 broke read.maimages() for Agilent and generic
+  source files.  Bug fixed.
+
 12 Feb 2007: limma 2.9.10
 
 - functions getColClasses() and namesInFun() removed and replacad

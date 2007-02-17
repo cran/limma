@@ -29,7 +29,7 @@ See \code{\link{make.names}} for a complete specification of what is a valid nam
 }
 
 \seealso{
-An overview of linear model functions in limma is given by \link{06.LinearModels}.
+An overview of linear model functions in limma is given by the help page \link{06.LinearModels}.
 }
 
 \author{Gordon Smyth}

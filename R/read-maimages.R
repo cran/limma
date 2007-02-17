@@ -115,7 +115,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		nspots <- nrow(obj)
 	}, {
 		skip <- readGenericHeader(fullname,columns=columns,sep=sep)$NHeaderRecords
-		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,comment.char="",fill=TRUE, colClasses=colClasses,flush=TRUE,...)
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,quote=quote,as.is=TRUE,fill=TRUE,flush=TRUE,...)
 		nspots <- nrow(obj)
 	})
 
