@@ -91,7 +91,7 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 {
 #	Fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	18 Apr 2002. Revised 14 September 2006.
+#	18 Apr 2002. Revised 22 Feb 2007.
 
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -123,8 +123,8 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 		fit$fitted.values <- fit$residuals <- fit$effects <- NULL
 		fit$coefficients <- t(fit$coefficients)
 		fit$cov.coefficients <- chol2inv(fit$qr$qr,size=fit$qr$rank)
-		dimnames(fit$cov.coefficients) <- list(coef.names,coef.names)
 		est <- fit$qr$pivot[1:fit$qr$rank]
+		dimnames(fit$cov.coefficients) <- list(coef.names[est],coef.names[est])
 		stdev.unscaled[,est] <- matrix(sqrt(diag(fit$cov.coefficients)),ngenes,fit$qr$rank,byrow = TRUE)
 		fit$stdev.unscaled <- stdev.unscaled
 		fit$df.residual <- rep.int(fit$df.residual,ngenes)
@@ -157,7 +157,8 @@ lm.series <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL)
 	}
 	QR <- qr(design)
 	cov.coef <- chol2inv(QR$qr,size=QR$rank)
-	dimnames(cov.coef) <- list(coef.names,coef.names)
+	est <- QR$pivot[1:QR$rank]
+	dimnames(cov.coef) <- list(coef.names[est],coef.names[est])
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,cov.coefficients=cov.coef,pivot=QR$pivot)
 }
 
@@ -175,7 +176,7 @@ rlm.series <- function(x,...)
 mrlm <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
 #	Robustly fit linear model for each gene to a series of arrays
 #	Gordon Smyth
-#	20 Mar 2002.  Last revised 14 Sept 2006.
+#	20 Mar 2002.  Last revised 22 Feb 2007.
 {
 	require(MASS) # need rlm.default
 	M <- as.matrix(M)
@@ -217,7 +218,8 @@ mrlm <- function(M,design=NULL,ndups=1,spacing=1,weights=NULL,...)
 	}
 	QR <- qr(design)
 	cov.coef <- chol2inv(QR$qr,size=QR$rank)
-	dimnames(cov.coef) <- list(coef.names,coef.names)
+	est <- QR$pivot[1:QR$rank]
+	dimnames(cov.coef) <- list(coef.names[est],coef.names[est])
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,cov.coefficients=cov.coef,pivot=QR$pivot)
 }
 
@@ -225,7 +227,7 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 #	Fit linear model for each gene to a series of microarrays.
 #	Fit is by generalized least squares allowing for correlation between duplicate spots.
 #	Gordon Smyth
-#	11 May 2002.  Last revised 14 September 2006.
+#	11 May 2002.  Last revised 22 Feb 2007.
 {
 	M <- as.matrix(M)
 	narrays <- ncol(M)
@@ -301,7 +303,8 @@ gls.series <- function(M,design=NULL,ndups=2,spacing=1,block=NULL,correlation=NU
 	cholV <- chol(cormatrix)
 	QR <- qr(backsolve(cholV,design,transpose=TRUE))
 	cov.coef <- chol2inv(QR$qr,size=QR$rank)
-	dimnames(cov.coef) <- list(coef.names,coef.names)
+	est <- QR$pivot[1:QR$rank]
+	dimnames(cov.coef) <- list(coef.names[est],coef.names[est])
 	list(coefficients=drop(beta),stdev.unscaled=drop(stdev.unscaled),sigma=sigma,df.residual=df.residual,ndups=ndups,spacing=spacing,block=block,correlation=correlation,cov.coefficients=cov.coef,pivot=QR$pivot)
 }
 

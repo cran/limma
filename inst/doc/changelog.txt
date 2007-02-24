@@ -1,3 +1,16 @@
+24 Feb 2007: limma 2.9.13
+
+- write.fit() was using write ambiguous column names for the coef,
+  t-statistic and p-value when the MArrayLM object had only one
+  column and these components were matrices with one named column.
+  Now fixed.
+- default changed in write.fit() to digits=3.
+
+22 Feb 2007: limma 2.9.12
+
+- lm.series() gls.series() were returning errors when the design
+  matrix was not of full rank and the columns were names.  Bug fixed.
+
 17 Feb 2007: limma 2.9.11
 
 - changes in 2.9.10 broke read.maimages() for Agilent and generic
