@@ -213,7 +213,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 read.columns <- function(file,required.col=NULL,text.to.search="",sep="\t",quote="\"",skip=0,fill=TRUE,blank.lines.skip=TRUE,comment.char="",allowEscapes=FALSE,...)
 #	Read specified columns from a delimited text file with header line
 #	Gordon Smyth
-#	3 Feb 2006
+#	3 Feb 2007. Last modified 27 Mar 2007.
 {
 #	Default is to read all columns
 	if(is.null(required.col)) return(read.table(file=file,header=TRUE,check.names=FALSE,sep=sep,quote=quote,skip=skip,fill=fill,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes,...))
@@ -236,6 +236,10 @@ read.columns <- function(file,required.col=NULL,text.to.search="",sep="\t",quote
 	for (i in 1:ncn) {
 		if(length(grep(protectMetachar(allcnames[i]),text.to.search))) colClasses[i] <- NA
 	}
+
+#	Is there a leading column of row.names without a header?
+    secondline <- scan(file,what="",sep=sep,quote=quote,nlines=1,quiet=TRUE,skip=skip+1,strip.white=TRUE,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes)
+	if(length(secondline) > ncn) colClasses <- c(NA,colClasses)
 
 #	Read specified columns
 	read.table(file=file,header=TRUE,col.names=allcnames,check.names=FALSE,colClasses=colClasses,sep=sep,quote=quote,skip=skip,fill=fill,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes,...)

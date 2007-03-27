@@ -19,6 +19,9 @@ Diagnostic plots can be produced by
 Produces a spatial picture of any spot-specific measure from an array image. If the log-ratios are plotted, then this produces an in-silico representation of the well known false-color TIFF image of an array.
 \code{\link{imageplot3by2}} will write imageplots to files, six plots to a page.}
 
+\item{ \code{\link{plotFB}} }{
+Plots foreground versus background log-intensies for an array.}
+
 \item{ \code{\link{plotMA}} }{
 MA-plots.
 One of the most useful plots of a two-color array.

@@ -3,7 +3,7 @@
 lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,weights=NULL,method="ls",...)
 #	Fit linear model
 #	Gordon Smyth
-#	30 June 2003.  Last modified 27 October 2006.
+#	30 June 2003.  Last modified 10 March 2007.
 {
 	y <- NULL
 	Amean <- NULL
@@ -28,7 +28,7 @@ lmFit <- function(object,design=NULL,ndups=1,spacing=1,block=NULL,correlation,we
 #			if(length(object@maLayout@maControls)>1) ProbeAnn$Status <- normdata@maLayout@maControls
 			attr(ProbeAnn, "Notes") <- object@maGnames@maNotes
 		}
-		if(length(object@maA)) fit$Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
+		if(length(object@maA)) Amean <- rowMeans(unwrapdups(object@maA,ndups=ndups,spacing=spacing),na.rm=TRUE)
 	} else {
 	if(is(object,"PLMset")) {
 #		don't use accessor function so don't have to require affyPLM

@@ -24,14 +24,15 @@ topTableF(fit,number=10,genelist=fit$genes,adjust.method="BH")
   If \code{NULL}, this will be automatically generated.}
   \item{adjust.method}{method used to adjust the p-values for multiple testing.  Options, in increasing conservatism, include \code{"none"}, \code{"BH"}, \code{"BY"} and \code{"holm"}.
   See \code{\link{p.adjust}} for the complete list of options. A \code{NULL} value will result in the default adjustment method, which is \code{"BH"}.}
-  \item{sort.by}{character string specifying statistic to rank genes by.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}.}
-  \item{resort.by}{character string specifying statistic to sort the selected genes by in the output data.frame.  Possibilities are \code{"M"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}.}
+  \item{sort.by}{character string specifying statistic to rank genes by.  Possibilities are \code{"logFC"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}. \code{"M"} is allowed as a synonym for \code{"logFC"} for backward compatibility.}
+  \item{resort.by}{character string specifying statistic to sort the selected genes by in the output data.frame.  Possibilities are \code{"logFC"}, \code{"A"}, \code{"T"}, \code{"t"}, \code{"P"}, \code{"p"} or \code{"B"}. \code{"M"} is allowed as a synonym for \code{"logFC"} for backward compatibility.}
   \item{...}{any other arguments are passed to \code{ebayes} if \code{eb} is \code{NULL}}
 }
 \value{
   A dataframe with a row for the \code{number} top genes and the following columns:
   \item{genelist}{if genelist was included as input}
-  \item{M}{estimate of the effect or the contrast, on the log2 scale}
+  \item{logFC}{estimate of the log2-fold-change corresponding to the effect or contrast}
+  \item{AveExpr}{average log2-expression for the probe over all arrays and channels, same as \code{Amean} in the \code{MarrayLM} object}
   \item{t}{moderated t-statistic}
   \item{P.Value}{raw p-value}
   \item{adj.P.Value}{adjusted p-value or q-value}
@@ -52,12 +53,12 @@ It is quite possible for all the adjusted p-values to be equal to one if the sma
 Note that p-values adjusted to control the false discovery rate are often called q-values.
 
 The \code{sort.by} argument specifies the criterion used to select the top genes.
-The choices are: \code{"M"} to sort by the (absolute) coefficient representing the log-fold-change; \code{"A"} to sort by average expression level (over all arrays) in descending order; \code{"T"} or \code{"t"} for absolute t-statistic; \code{"P"} or \code{"p"} for p-values; or \code{"B"} for the \code{lods} or B-statistic.
+The choices are: \code{"logFC"} to sort by the (absolute) coefficient representing the log-fold-change; \code{"A"} to sort by average expression level (over all arrays) in descending order; \code{"T"} or \code{"t"} for absolute t-statistic; \code{"P"} or \code{"p"} for p-values; or \code{"B"} for the \code{lods} or B-statistic.
 
 Normally the genes appear in order of selection in the output table.
 If one wants the table to be in a different order, the \code{resort.by} argument may be used.
-For example, \code{topTable(fit, sort.by="B", resort.by="M")} selects the top genes according to log-odds of differential expression and then orders the resulting genes by log-ratio in decreasing order.
-Or \code{topTable(fit, sort.by="M", resort.by="M")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
+For example, \code{topTable(fit, sort.by="B", resort.by="logFC")} selects the top genes according to log-odds of differential expression and then orders the resulting genes by log-ratio in decreasing order.
+Or \code{topTable(fit, sort.by="logFC", resort.by="logFC")} would select the genes by absolute log-ratio and then sort then by signed log-ratio from must positive to most negative.
 
 \code{topTableF} ranks genes on the basis of the moderated F-statistic rather than t-statistics.
 If \code{topTable} is called with \code{coef} has length greater than 1, then the specified columns will be extracted from \code{fit} and \code{topTableF} called on the result.

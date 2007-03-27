@@ -86,6 +86,27 @@ eb$var.prior
 
 toptable(fit)
 
+### topTable
+
+fit <- lmFit(M,design)
+fit2 <- eBayes(contrasts.fit(fit,contrasts=contrast.matrix))
+topTable(fit2)
+topTable(fit2,coef=3,resort.by="logFC")
+topTable(fit2,coef=3,resort.by="p")
+topTable(fit2,coef=3,sort="logFC",resort.by="t")
+topTable(fit2,coef=3,resort.by="B")
+
+### marray object
+
+suppressMessages(suppressWarnings(gotmarray <- require(marray,quietly=TRUE)))
+if(gotmarray) {
+	data(swirl)
+	snorm = maNorm(swirl)
+	fit <- lmFit(snorm, design = c(1,-1,-1,1))
+	fit <- eBayes(fit)
+	topTable(fit,resort.by="AveExpr")
+}
+
 ### duplicateCorrelation
 
 cor.out <- duplicateCorrelation(M)

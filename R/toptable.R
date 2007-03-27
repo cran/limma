@@ -49,7 +49,7 @@ topTableF <- function(fit,number=10,genelist=fit$genes,adjust.method="BH")
 toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.method="BH",sort.by="B",resort.by=NULL,...)
 #	Summary table of top genes
 #	Gordon Smyth
-#	21 Nov 2002. Last revised 13 Jan 2006.
+#	21 Nov 2002. Last revised 27 Mar 2007.
 {
 	if(is.null(eb)) {
 		fit$coefficients <- as.matrix(fit$coefficients)[,coef]
@@ -68,10 +68,12 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 	tstat <- as.matrix(eb$t)[,coef]
 	P.Value <- as.matrix(eb$p.value)[,coef]
 	B <- as.matrix(eb$lods)[,coef]
-	sort.by <- match.arg(sort.by,c("M","A","P","p","T","t","B"))
+	sort.by <- match.arg(sort.by,c("logFC","M","A","Amean","AveExpr","P","p","T","t","B"))
+	if(sort.by=="M") sort.by="logFC"
+	if(sort.by=="A" || sort.by=="Amean") sort.by <- "AveExpr"
 	ord <- switch(sort.by,
-		M=order(abs(M),decreasing=TRUE),
-		A=order(A,decreasing=TRUE),
+		logFC=order(abs(M),decreasing=TRUE),
+		AveExpr=order(A,decreasing=TRUE),
 		P=order(P.Value,decreasing=FALSE),
 		p=order(P.Value,decreasing=FALSE),
 		T=order(abs(tstat),decreasing=TRUE),
@@ -92,15 +94,17 @@ toptable <- function(fit,coef=1,number=10,genelist=NULL,A=NULL,eb=NULL,adjust.me
 	tab <- data.frame(tab,t=tstat[top],P.Value=P.Value[top],adj.P.Val=adj.P.Value[top],B=B[top])
 	rownames(tab) <- as.character(1:length(M))[top]
 	if(!is.null(resort.by)) {
-		resort.by <- match.arg(resort.by,c("M","A","P","p","T","t","B"))
+		resort.by <- match.arg(resort.by,c("logFC","M","A","Amean","AveExpr","P","p","T","t","B"))
+		if(resort.by=="M") resort.by <- "logFC"
+		if(resort.by=="A" || resort.by=="Amean") resort.by <- "AveExpr"
+		if(resort.by=="p") resort.by <- "P"
+		if(resort.by=="T") resort.by <- "t"
 		ord <- switch(resort.by,
-			M=order(tab$M,decreasing=TRUE),
-			A=order(tab$A,decreasing=TRUE),
+			logFC=order(tab$logFC,decreasing=TRUE),
+			AveExpr=order(tab$AveExpr,decreasing=TRUE),
 			P=order(tab$P.Value,decreasing=FALSE),
-			p=order(tab$P.Value,decreasing=FALSE),
-			T=order(tab$t,decreasing=TRUE),
 			t=order(tab$t,decreasing=TRUE),
-			B=order(tab$lods,decreasing=TRUE)
+			B=order(tab$B,decreasing=TRUE)
 		)
 		tab <- tab[ord,]
 	}

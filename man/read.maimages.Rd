@@ -3,7 +3,7 @@
 \alias{read.imagene}
 \title{Read RGList from Image Analysis Output Files}
 \description{
-Reads an RGList from a series of microarray image analysis output files
+Reads an RGList from a series of two-color microarray image analysis output files
 }
 \usage{
 read.maimages(files=NULL,source="generic",path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL,annotation=NULL,wt.fun=NULL,verbose=TRUE,sep="\t",quote=NULL,\dots)
@@ -28,7 +28,7 @@ read.imagene(files,path=NULL,ext=NULL,names=NULL,columns=NULL,other.columns=NULL
   \item{\dots}{any other arguments are passed to \code{read.table}}
 }
 \details{
-This is the main data input function for the LIMMA package.
+This is the main data input function for the LIMMA package for two-color microarray data.
 It extracts the foreground and background intensities from a series of files, produced by an image analysis program, and assembles them into the components of one list.
 The image analysis programs Agilent Feature Extraction, ArrayVision, BlueFuse, GenePix, ImaGene, QuantArray (Version 3 or later), Stanford Microarray Database (SMD) and SPOT are supported explicitly.
 Data from some other image analysis programs can be read if the appropriate column names containing the foreground and background intensities are specified using the \code{columns} argument.

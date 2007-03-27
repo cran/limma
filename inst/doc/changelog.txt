@@ -1,3 +1,20 @@
+27 Mar 2007: limma 2.9.16
+
+- new tests for topTable() added to limma-Tests.R
+- bug fix to topTable(). sort="M" and resort.by="M" needed to be
+  updated to sort="logFC" and resort.by="logFC".
+
+26 Mar 2007: limma 2.9.15
+
+- bug fix to read.columns, to read SPOT files with a leading column
+  of row numbers. Was failing because the number of headers was
+  less than the number of columns.
+
+10 Mar 2007: limma 2.9.14
+
+- lmFit() was giving error with marrayNorm object, because of
+  incorrect setting of Amean. Fixed.
+
 24 Feb 2007: limma 2.9.13
 
 - write.fit() was using write ambiguous column names for the coef,
