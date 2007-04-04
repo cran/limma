@@ -42,6 +42,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		if(source2=="generic") stop("must specify columns for generic input")
 		columns <- switch(source,
 			agilent = list(G="gMeanSignal",Gb="gBGMedianSignal",R="rMeanSignal",Rb="rBGMedianSignal"),
+			arrayvision = list(G="MTM Dens - Levels",Gb="Bkgd",R="MTM Dens - Levels",Rb="Bkgd"),
 			bluefuse = list(G="AMPCH1",R="AMPCH2"),
 			genepix = list(R="F635 Mean",G="F532 Mean",Rb="B635 Median",Gb="B532 Median"),
 			genepix.median = list(R="F635 Median",G="F532 Median",Rb="B635 Median",Gb="B532 Median"),
@@ -96,8 +97,13 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 		if(length(fg) != 2) stop(paste("Cannot find foreground columns in",fullname))
 		bg <- grep("^Bkgd$",cn)
 		if(length(bg) != 2) stop(paste("Cannot find background columns in",fullname))
+#		Note that entries for columns for ArrayVision are now numeric
 		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])
-		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,fill=TRUE,comment.char="",colClasses=colClasses,flush=TRUE,...)
+		obj <- read.columns(fullname,required.col,text.to.search,skip=skip,sep=sep,quote=quote,as.is=TRUE,fill=TRUE,flush=TRUE,...)
+#		obj <- read.table(fullname,skip=skip,header=TRUE,sep=sep,quote=quote,as.is=TRUE,check.names=FALSE,fill=TRUE,comment.char="",flush=TRUE,...)
+		fg <- grep(" Dens - ",names(obj))
+		bg <- grep("^Bkgd$",names(obj))
+		columns <- list(R=fg[1],Rb=bg[1],G=fg[2],Gb=bg[2])
 		nspots <- nrow(obj)
 	}, bluefuse = {
 		skip <- readGenericHeader(fullname,columns=c(columns$G,columns$R))$NHeaderRecords
@@ -213,7 +219,7 @@ read.maimages <- function(files=NULL,source="generic",path=NULL,ext=NULL,names=N
 read.columns <- function(file,required.col=NULL,text.to.search="",sep="\t",quote="\"",skip=0,fill=TRUE,blank.lines.skip=TRUE,comment.char="",allowEscapes=FALSE,...)
 #	Read specified columns from a delimited text file with header line
 #	Gordon Smyth
-#	3 Feb 2007. Last modified 27 Mar 2007.
+#	3 Feb 2007. Last modified 3 Apr 2007.
 {
 #	Default is to read all columns
 	if(is.null(required.col)) return(read.table(file=file,header=TRUE,check.names=FALSE,sep=sep,quote=quote,skip=skip,fill=fill,blank.lines.skip=blank.lines.skip,comment.char=comment.char,allowEscapes=allowEscapes,...))
@@ -233,7 +239,7 @@ read.columns <- function(file,required.col=NULL,text.to.search="",sep="\t",quote
 	}
 
 #	Search for column names in text
-	for (i in 1:ncn) {
+	if(text.to.search != "") for (i in 1:ncn) {
 		if(length(grep(protectMetachar(allcnames[i]),text.to.search))) colClasses[i] <- NA
 	}
 

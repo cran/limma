@@ -1,8 +1,14 @@
+4 Apr 2007: limma 2.9.17
+
+- bug fix to read.maimages() for source="arrayvision". Now reads
+  arrayvision files again for the first time since version 2.3.1.
+
 27 Mar 2007: limma 2.9.16
 
 - new tests for topTable() added to limma-Tests.R
 - bug fix to topTable(). sort="M" and resort.by="M" needed to be
-  updated to sort="logFC" and resort.by="logFC".
+  updated to sort="logFC" and resort.by="logFC". Also sort="AveExpr"
+  and resort.by="AveExpr" are now allowed.
 
 26 Mar 2007: limma 2.9.15
 
