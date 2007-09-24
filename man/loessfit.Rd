@@ -19,12 +19,13 @@ loessFit(y, x, weights=NULL, span=0.3, bin=0.01/(2-is.null(weights)), iterations
 }
 
 \details{
-This function is a low-level equivalent to \code{lowess} in the stats package if \code{weights} is null and to \code{loess} otherwise.
-It is intended to give a streamlined common interface to the two functions for use in \code{\link{normalizeWithinArrays}}.
-Note that, while \code{lowess} has fewer features than \code{loess}, it is faster, uses less memory and uses a more accurate interpolation scheme than \code{loess}, so it is desirable to use \code{lowess} whenever the extra features of \code{loess} are not required.
+This is a wrapper function to the Fortran and C code in the stats package which underlies the \code{lowess} and \code{loess} functions.
+Its is to give a streamlined common interface to \code{lowess} and \code{loess} for use in \code{\link{normalizeWithinArrays}}.
+When \code{weights} is null, this function is in effect a call to \code{lowess} in the stats package, with appropropriate choice of tuning parameters.
+When \code{weights} is non-null, it is in effect a call to \code{loess}.
+See the help pages for those functions for references and credits.
 
-There are a couple of key differences between \code{loessFit} and \code{loess} when \code{weights} is non-NULL.
-One difference is that \code{loessFit} returns a linear regression fit if there are insufficient observations to estimate the loess curve, whereas \code{loess} will return an error.
+Note tha \code{lowess} is faster, needs less memory and is able to use a more accurate interpolation scheme than \code{loess}, so it is desirable to use \code{lowess} whenever \code{loess} is not needed to handle quantitative weights.
 
 The arguments \code{span}, \code{cell} and \code{iterations} here have the same meaning as in \code{loess}.
 \code{span} is equivalent to the argument \code{f} of \code{lowess} and \code{iterations} is equivalent to \code{iter+1}.
@@ -33,6 +34,7 @@ The parameter \code{bin} is intended to give a simple uniform interface to the \
 
 Unlike \code{lowess}, \code{loessFit} returns values in original rather than sorted order.
 Also unlike \code{lowess}, \code{loessFit} allows missing values, the treatment being analogous to \code{na.exclude}.
+Unlike \code{loess}, \code{loessFit} returns a linear regression fit if there are insufficient observations to estimate the loess curve.
 }
 \value{
 A list with components
@@ -40,12 +42,12 @@ A list with components
 \item{residuals}{numeric vector of same length as \code{x} giving residuals from the fit}
 }
 
-\author{Gordon Smyth}
+\author{Gordon Smyth, based on code from \code{lowess} and \code{loess} by BD Ripley}
 
 \seealso{
-An overview of LIMMA functions for normalization is given in \link{05.Normalization}.
+See \code{\link[stats]{lowess}} and \code{\link[stats]{loess}} in the stats package.
 
-See also \code{\link[stats]{lowess}} and \code{\link[stats]{loess}} in the stats package.
+See \link{05.Normalization} for an outline of the limma package normalization functions.
 }
 
 \examples{

@@ -63,5 +63,4 @@ boxplot(all.correlations)
 fit <- lmFit(MA, design, ndups=2, correlation=corfit$consensus)
 }
 }
-}
 \keyword{multivariate}

@@ -7,11 +7,12 @@
 Extract a subset of an \code{RGList}, \code{MAList} or \code{MArrayLM} object.
 }
 \usage{
-object[i, j]
+\method{[}{RGList}(object, i, j, \ldots)
 }
 \arguments{
   \item{object}{object of class \code{RGList}, \code{MAList} or \code{MArrayLM}}
   \item{i,j}{elements to extract. \code{i} subsets the genes or spots while \code{j} subsets the arrays}
+  \item{\ldots}{not used}
 }
 \details{
 \code{i,j} may take any values acceptable for the matrix components of \code{object}.

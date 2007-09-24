@@ -11,7 +11,7 @@ A matrix-based class for storing the results of simultanous tests.
 }
 
 \usage{
-\S3method{summary}{TestResults}(object, ...)}
+\S3method{summary}{TestResults}(object, ...)
 }
 
 \arguments{

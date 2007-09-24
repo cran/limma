@@ -45,12 +45,13 @@ This function summarizes a linear model fit object produced by \code{lmFit}, \co
 \code{topTable()} assumes that the linear model fit has already been processed by \code{eBayes()}.
 
 The p-values for the coefficient/contrast of interest are adjusted for multiple testing by a call to \code{\link[stats]{p.adjust}}.
-The \code{"holm"} method is the default because it is conservative and valid for any type of dependence between the p-values.
-In most microarray contexts however the less conservative Benjamini and Hochberg method \code{"fdr"} may be more suitable.
+The \code{"BH"} method, which controls the expected false discovery rate (FDR) below the specified value, is the default adjustment method because it is the most likely to be appropriate for microarray studies.
+Note that the adjusted p-values from this method are bounds on the FDR rather than p-values in the usual sense.
+Because they relate to FDRs rather than rejection probabilities, they are sometimes called q-values.
 See \code{help("p.adjust")} for more information.
+
 Note, if there is no good evidence for differential expression in the experiment, that it is quite possible for all the adjusted p-values to be large, even for all of them to be equal to one.
 It is quite possible for all the adjusted p-values to be equal to one if the smallest p-value is no smaller than \code{1/ngenes} where \code{ngenes} is the number of genes with non-missing p-values.
-Note that p-values adjusted to control the false discovery rate are often called q-values.
 
 The \code{sort.by} argument specifies the criterion used to select the top genes.
 The choices are: \code{"logFC"} to sort by the (absolute) coefficient representing the log-fold-change; \code{"A"} to sort by average expression level (over all arrays) in descending order; \code{"T"} or \code{"t"} for absolute t-statistic; \code{"P"} or \code{"p"} for p-values; or \code{"B"} for the \code{lods} or B-statistic.

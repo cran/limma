@@ -25,7 +25,6 @@ The proportion of true null hypotheses is often denoted pi0.
 \value{
 Numeric value in the interval [0,1] representing he estimated proportion of true null hypotheses.
 }
-}
 \references{
 Ferkingstad, E., Langaas, M., and Lindqvist, B. (2005).
 Estimating the proportion of true null hypotheses, with application

@@ -23,11 +23,11 @@ setMethod("show","TestResults",function(object) {
 decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05,lfc=0)
 #	Accept or reject hypothesis tests across genes and contrasts
 #	Gordon Smyth
-#	17 Aug 2004. Last modified 2 September 2006.
+#	17 Aug 2004. Last modified 24 June 2007.
 {
 	if(!is(object,"MArrayLM")) stop("Need MArrayLM object")
 	if(is.null(object$t)) object <- eBayes(object)
-	method <- match.arg(method,c("separate","global","heirarchical","nestedF"))
+	method <- match.arg(method,c("separate","global","hierarchical","nestedF"))
 	adjust.method <- match.arg(adjust.method,c("none","bonferroni","holm","BH","fdr","BY"))
 	if(adjust.method=="fdr") adjust.method <- "BH"
 	switch(method,separate={
@@ -44,7 +44,7 @@ decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05
 		o <- !is.na(p)
 		p[o] <- p.adjust(p[o],method=adjust.method)
 		results <- new("TestResults",sign(tstat)*(p<p.value))
-	},heirarchical={
+	},hierarchical={
 		if(any(is.na(object$F.p.value))) stop("Can't handle NA p-values yet")
 		sel <- p.adjust(object$F.p.value,method=adjust.method) < p.value
 		i <- sum(sel,na.rm=TRUE)
@@ -58,7 +58,7 @@ decideTests <- function(object,method="separate",adjust.method="BH",p.value=0.05
 		)
 		results <- new("TestResults",array(0,dim(object$t)))
 		dimnames(results) <- dimnames(object$coefficients)
-		if(any(sel)) results[sel,] <- classifyTestsP(object[sel,],p.value=p.value*a)
+		if(any(sel)) results[sel,] <- classifyTestsP(object[sel,],p.value=p.value*a,method=adjust.method)
 	},nestedF={
 		if(any(is.na(object$F.p.value))) stop("nestedF method can't handle NA p-values",call.=FALSE)
 		sel <- p.adjust(object$F.p.value,method=adjust.method) < p.value

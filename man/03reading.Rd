@@ -31,20 +31,25 @@ The function \link{as.MAList} can be used to convert a \code{marrayNorm} object 
 
 \section{Reading the Gene List}{
 
-Many image analysis program provide gene IDs as columns in the image analysis output files, for example ArrayVision, Imagene and the Stanford Microarray Database.
-In other cases you may have the probe ID and annotation information in a separate file.
-The function \code{\link{readGAL}} reads information from a GenePix Array List (GAL) file.
-It produces a data frame with known column names.
-If the probe IDs or names consist of multiple strings separated by a delimiter, then \code{\link{strsplit2}} may be used to separate the name and annotation information into separate vectors.
-
-The functions \code{\link{readSpotTypes}} and \code{\link{controlStatus}} assist with separating control spots from ordinary genes in the analysis and data exploration.
+Most image analysis software programs provide gene IDs as part of the intensity output files, for example GenePix, Imagene and the Stanford Microarray Database do this.
+In other cases the probe ID and annotation information may be in a separate file.
+The most common format for the probe annotation file is the GenePix Array List (GAL) file format.
+The function \code{\link{readGAL}} reads information from a GAL file and produces a data frame with standard column names.
 
 The function \code{\link{getLayout}} extracts from the GAL-file data frame the print layout information for a spotted array.
 The functions \code{\link{gridr}}, \code{\link{gridc}}, \code{\link{spotr}} and \code{\link{spotc}} use the extracted layout to compute grid positions and spot positions within each grid for each spot.
 The function \code{\link{printorder}} calculates the printorder, plate number and plate row and column position for each spot given information about the printing process.
 The utility function \code{\link{getSpacing}} converts character strings specifying spacings of duplicate spots to numeric values.
 
-If each probe is printed more than once of the arrays, then \code{\link{uniquegenelist}} will remove duplicate names from the gal-file or gene list.
+The Australian Genome Research Facility in Australia often produces GAL files with composite probe IDs or names consisting of multiple strings separated by a delimiter.
+These can be separated into name and annotation information using \code{\link{strsplit2}}.
+
+If each probe is printed more than once of the arrays in a regular pattern, then \code{\link{uniquegenelist}} will remove duplicate names from the gal-file or gene list.
+}
+
+\section{Identifying Control Spots}{
+
+The functions \code{\link{readSpotTypes}} and \code{\link{controlStatus}} assist with separating control spots from ordinary genes in the analysis and data exploration.
 }
 
 \section{Manipulating Data Objects}{

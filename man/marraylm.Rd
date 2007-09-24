@@ -23,7 +23,7 @@ Objects are normally created by \code{\link{lmFit}}.
     \item{\code{genes}:}{\code{data.frame} containing gene names and annotation}
     \item{\code{design}:}{design \code{matrix} of full column rank}
     \item{\code{contrasts}:}{\code{matrix} defining contrasts of coefficients for which results are desired}
-    \item{\code{F.stat}:}{\code{numeric} vector giving moderated F-statistics for testing all contrasts equal to zero}
+    \item{\code{F}:}{\code{numeric} vector giving moderated F-statistics for testing all contrasts equal to zero}
     \item{\code{F.p.value}:}{\code{numeric} vector giving p-value corresponding to \code{F.stat}}
     \item{\code{s2.prior}:}{\code{numeric} value giving empirical Bayes estimated prior value for residual variances}
     \item{\code{df.prior}:}{\code{numeric} vector giving empirical Bayes estimated degrees of freedom associated with \code{s2.prior} for each gene}

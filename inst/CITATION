@@ -1,4 +1,4 @@
-citHeader("Citing limma in publications will usually involve citing one or more of the methodology papers that the software is based on as well as citing the software package itself. For the methodology papers, see http://bioinf.wehi.edu.au/limma.  The software itself can be cited as:")
+citHeader("Citing limma in publications will usually involve citing one or more of the methodology papers that the software is based on as well as citing the software package itself. For the methodology papers, see Section 2.1 of the limma User's Guide.  The software itself can be cited as:")
 
 citEntry(entry="inbook",
     title = "Limma: linear models for microarray data",

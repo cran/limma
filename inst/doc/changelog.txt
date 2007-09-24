@@ -1,3 +1,57 @@
+24 Sep 2007: limma 2.10.7
+
+- non-ascii European characters removed from Rd files
+- loessFit.Rd edited to make it clearer that this a wrapper
+  function to the lowess and loess functions.
+- decideTests(method="hierarchical") now passes the adjust.method down
+  to the second (t-test) level of testing.  Previously the second level
+  testing was always "holm".  The spelling is also corrected from
+  "heirarchical" to "hierarchical".
+
+Non-visible:
+- "[" now formally documented as S3 method
+
+19 Sep 2007: limma 2.10.6
+
+- bug fix for as.matrix.vsn
+
+30 May 2007: limma 2.10.5 and 2.11.5
+
+- as.matrix method for vsn objects added.
+
+18 May 2007: limma 2.10.4 and 2.11.4
+
+- as.matrix methods for ExpressionSet and LumiBatch added to the
+  limma NAMESPACE.
+
+17 May 2007: limma 2.10.3 and 2.11.3
+
+- added as.matrix method for LumiBatch class
+- corrected as.matrix method for ExpressionSet class to allow that
+  the assayData slot may be a list instead of an environment.
+
+16 May 2007: limma 2.11.2
+
+- fixed some non-matching braces '}' in .Rd files. (Not user-visible.)
+
+1 May 2007: limma 2.11.1
+
+- Bug fix to read.columns() to stop spurious warning message
+  when text.to.search has length greater than one.
+
+Bioconductor Developmental Version 2.1: limma 2.11.0
+Bioconductor Release 2.0: limma 2.10.0
+
+24 Apr 2007: limma 2.9.19
+
+- Minor documentation bug fix: 'F.stat' to 'F' in MArrayLM.Rd
+
+18 Apr 2007: limma 2.9.18
+
+- User's Guide case studies updated for current version of limma.
+  A couple of changes to Weaver case study: multiple testing method
+  is now "global" instead of "nestedF", and heat diagram is removed. 
+
 4 Apr 2007: limma 2.9.17
 
 - bug fix to read.maimages() for source="arrayvision". Now reads
